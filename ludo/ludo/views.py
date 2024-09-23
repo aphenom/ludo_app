@@ -3,6 +3,8 @@ from django.conf import settings
 from allauth.socialaccount.models import SocialAccount
 
 from core.models import Mise
+from ludo.enum import Visibilite
+from player.models import Partie
 
 
 def custom_login_redirect(request):
@@ -27,7 +29,15 @@ def custom_login_redirect(request):
 
 
 def index(request):
-    list_mise = Mise.objects.filter(etat_validation=True, etat_suppression=False)
+    liste_mises = Mise.objects.filter(etat_validation=True, etat_suppression=False)
+    # parcourons les mises pour creer des parties ou recuperons celles en attentes
+    for mise in liste_mises:
+        for nb_participants in range(mise.nombre_minimum,5):
+            if nb_participants >= 2 and nb_participants <= 4:
+                partie = Partie.objects.filter(nombre_participants=nb_participants,
+                                               montant_mise = mise.montant, 
+                                               visibilite = Visibilite.Public, 
+                                               etat_validation=True, etat_suppression=False)
     return render(request, 'index.html', locals())
 
 

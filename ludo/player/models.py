@@ -96,7 +96,7 @@ class Partie(models.Model):
     date_fin = models.DateTimeField('date fin', null=True, blank=True)
     
     etat_demarrage = models.BooleanField('état démarrage', default=False)
-    etat_fin = models.DateTimeField('état fin', default=False, null=True, blank=True)
+    etat_fin = models.BooleanField('état fin', default=False)
 
     mise = models.ForeignKey(Mise, models.SET_NULL, null=True, blank=True, related_name='mise_parties', related_query_name="mise_partie", verbose_name = "mise")
     taux_comission = models.ForeignKey(TauxCommission, models.SET_NULL, null=True, blank=True, related_name='taux_comission_parties', related_query_name="taux_comission_partie", verbose_name = "taux de comission")
@@ -147,10 +147,10 @@ class Participation(models.Model):
     date_fin = models.DateTimeField('date fin', null=True, blank=True)
     
     etat_demarrage = models.BooleanField('état démarrage', default=False)
-    etat_fin = models.DateTimeField('état fin', default=False, null=True, blank=True)
+    etat_fin = models.BooleanField('état fin', default=False)
 
     etat_exclusion = models.BooleanField('état exclusion', default=False)
-    etat_victoire = models.DateTimeField('état victoire', default=False, null=True, blank=True)
+    etat_victoire = models.BooleanField('état victoire', default=False)
 
     partie = models.ForeignKey(Partie, models.SET_NULL, null=True, blank=True, related_name='partie_participations', related_query_name="partie_participation", verbose_name = "partie")
     profil = models.ForeignKey(Profil, models.SET_NULL, null=True, blank=True, related_name='profil_participations', related_query_name="profil_participation", verbose_name = "profil")

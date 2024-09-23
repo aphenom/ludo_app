@@ -1,2 +1,4 @@
 env/
 .env
+.cpython-311
+.pyc
