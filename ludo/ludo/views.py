@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from django.conf import settings
 from allauth.socialaccount.models import SocialAccount
 
+from core.models import Mise
+
 
 def custom_login_redirect(request):
     
@@ -25,6 +27,7 @@ def custom_login_redirect(request):
 
 
 def index(request):
+    list_mise = Mise.objects.filter(etat_validation=True, etat_suppression=False)
     return render(request, 'index.html', locals())
 
 

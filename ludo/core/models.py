@@ -20,7 +20,7 @@ class TauxTransaction(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
     
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     modifie_par = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='modifie_taux_transactions', related_query_name="modifie_taux_transaction", verbose_name = "modifié par")
    
@@ -61,7 +61,7 @@ class TauxCommission(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
     
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     modifie_par = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='modifie_taux_commissions', related_query_name="modifie_taux_commission", verbose_name = "modifié par")
    
@@ -101,7 +101,7 @@ class Mise(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
     
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     modifie_par = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='modifie_mises', related_query_name="modifie_mise", verbose_name = "modifié par")
    
@@ -175,7 +175,7 @@ class Config(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
     
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     modifie_par = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='modifie_configs', related_query_name="modifie_config", verbose_name = "modifié par")
 

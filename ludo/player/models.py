@@ -33,7 +33,7 @@ class Profil(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
     
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account_profil', verbose_name = "profil")
     modifie_par = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='modifie_profils', related_query_name="modifie_profil", verbose_name = "modifié par")
@@ -90,7 +90,7 @@ class Partie(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
 
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
 
     date_demarrage = models.DateTimeField('date démarrage', null=True, blank=True)
     date_fin = models.DateTimeField('date fin', null=True, blank=True)
@@ -141,7 +141,7 @@ class Participation(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
 
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
 
     date_demarrage = models.DateTimeField('date démarrage', null=True, blank=True)
     date_fin = models.DateTimeField('date fin', null=True, blank=True)
@@ -211,7 +211,7 @@ class Transaction(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
 
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     taux_frais_genere = models.ForeignKey(TauxTransaction, models.SET_NULL, null=True, blank=True, related_name='taux_frais_transactions', related_query_name="taux_frais_transaction", verbose_name = "taux de frais")
     config = models.ForeignKey(Config, models.SET_NULL, null=True, blank=True, related_name='config_transactions', related_query_name="config_transaction", verbose_name = "configuration")
@@ -250,7 +250,7 @@ class Transaction(models.Model):
 
 class Observation(models.Model):
 
-    observation = HTMLField("observation", unique=True, editable=False)
+    observation = HTMLField("observation", blank=True, null=True)
     
     date_creation = models.DateTimeField('date création', auto_now_add=True)
     date_modification = models.DateTimeField('date modification', null=True, blank=True, auto_now=True)
@@ -258,7 +258,7 @@ class Observation(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
 
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     transaction = models.ForeignKey(Transaction, models.SET_NULL, null=True, blank=True, related_name='transaction_observations', related_query_name="transaction_observation", verbose_name = "transaction")
     participation = models.ForeignKey(Participation, models.SET_NULL, null=True, blank=True, related_name='participation_observations', related_query_name="participation_observation", verbose_name = "participation")
@@ -308,7 +308,7 @@ class Observation(models.Model):
 class HistoriqueNotification(models.Model):
    
     objet = models.CharField('objet', max_length=255, null=True, blank=True)
-    message = HTMLField("message", unique=True, editable=False)
+    message = HTMLField("message", blank=True, null=True)
     
     date_creation = models.DateTimeField('date création', auto_now_add=True)
     date_modification = models.DateTimeField('date modification', null=True, blank=True, auto_now=True)
@@ -316,13 +316,13 @@ class HistoriqueNotification(models.Model):
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
 
     etat_validation = models.BooleanField('état validation', default=True)
-    etat_suppression = models.DateTimeField('état suppression', default=False, null=True, blank=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
     
     profil = models.ForeignKey(Profil, models.SET_NULL, null=True, blank=True, related_name='profil_historique_notifications', related_query_name="profil_historique_notification", verbose_name = "profil")
     
     class Meta:
         ordering = ['-date_creation']
-        verbose_name = "historique notification"  
+        verbose_name = "historique notification"
     
     def __str__(self):
         return ("{} - {}".format(self.profil, self.objet))
