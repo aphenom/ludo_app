@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BetLudo</title>
+
+    <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/plugin/nice-select.css">
+    <link rel="stylesheet" href="assets/css/ara-font.css">
+    <link rel="stylesheet" href="assets/css/plugin/animate.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- start preloader -->
+    <div class="preloader" id="preloader"></div>
+    <!-- end preloader -->
+
+    <!-- Scroll To Top Start-->
+    <a href="javascript:void(0)" class="scrollToTop"><i class="fas fa-angle-double-up"></i></a>
+    <!-- Scroll To Top End -->
+
+    <!-- header-section start -->
+    <header class="header-section body-collapse">
+        <div class="overlay">
+            <div class="container-fruid">
+                <div class="row d-flex header-area">
+                    <div class="navbar-area d-flex align-items-center justify-content-between">
+                        <div class="close-btn d-none">
+                            <i class="fas fa-bars"></i>
+                        </div>
+                        <form action="#">
+                            <div class="form-group input-area d-flex align-items-center invisible">
+                                <img src="assets/images/icon/search.png" alt="icon">
+                                <input type="text" placeholder="Search">
+                            </div>
+                        </form>
+                        <div class="dashboard-nav">
+                            <div class="single-item massage-area invisible">
+                                <a href="chat.html" class="massage-btn btn-head dot">
+                                    <img src="assets/images/icon/massage.png" class="massage-icon" alt="icon">
+                                </a>
+                            </div>
+                            <div class="single-item notifications-area invisible">
+                                <div class="notifications-btn btn-head dot">
+                                    <img src="assets/images/icon/notification.png" class="bell-icon" alt="icon">
+                                </div>
+                                <div class="main-area notifications-content">
+                                    <div class="head-area d-flex justify-content-between">
+                                        <h5>Notifications</h5>
+                                        <span class="mdr">4</span>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void(0)" class="d-flex">
+                                                <div class="img-area">
+                                                    <img src="assets/images/user-1.png" class="max-un" alt="image">
+                                                </div>
+                                                <div class="text-area">
+                                                    <p class="mdr">You received a payment of <b>$134.00</b> from <b>Anna
+                                                            Green</b></p>
+                                                    <p class="mdr time-area">09.39AM</p>
+                                                </div>
+                                            </a>
+                                            <i class="fa-solid fa-caret-right"></i>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="d-flex">
+                                                <div class="img-area">
+                                                    <img src="assets/images/user-2.png" class="max-un" alt="image">
+                                                </div>
+                                                <div class="text-area">
+                                                    <p class="mdr"><b>James Deed</b> requested a payment of
+                                                        <b>£890.00</b>
+                                                    </p>
+                                                    <p class="mdr time-area">08.09AM</p>
+                                                </div>
+                                            </a>
+                                            <i class="fa-solid fa-caret-right"></i>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="d-flex">
+                                                <div class="img-area">
+                                                    <img src="assets/images/master-card.png" class="max-un" alt="image">
+                                                </div>
+                                                <div class="text-area">
+                                                    <p class="mdr">Your new payment method has beed added successfully
+                                                    </p>
+                                                    <p class="mdr time-area">09.39AM</p>
+                                                </div>
+                                            </a>
+                                            <i class="fa-solid fa-caret-right"></i>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="d-flex">
+                                                <div class="img-area">
+                                                    <img src="assets/images/user-3.png" class="max-un" alt="image">
+                                                </div>
+                                                <div class="text-area">
+                                                    <p class="mdr">You received a payment of <b>$250.00</b> from Goerge
+                                                        Michael</p>
+                                                    <p class="mdr time-area">Yesterday</p>
+                                                </div>
+                                            </a>
+                                            <i class="fa-solid fa-caret-right"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="single-item setting-area invisible">
+                                <div class="setting-btn">
+                                    <img src="assets/images/icon/setting.png" class="setting-icon" alt="icon">
+                                </div>
+                            </div>
+                            <div class="single-item user-area">
+                                <div class="profile-area d-flex align-items-center">
+                                    <span class="user-profile">
+                                        <img src="assets/images/user-1.png" alt="User">
+                                    </span>
+                                    <i class="fa-solid fa-sort-down"></i>
+                                </div>
+                                <div class="main-area user-content">
+                                    <div class="head-area d-flex align-items-center">
+                                        <div class="profile-img">
+                                            <img src="assets/images/user-1.png" alt="User">
+                                        </div>
+                                        <div class="profile-head">
+                                            <a href="javascript:void(0)">
+                                                <h5>Katie Mamini</h5>
+                                            </a>
+                                            <p class="wallet-id">ID: 6264849965</p>
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <li class="border-area d-none">
+                                            <a href="account.html"><i class="fas fa-cog"></i>Settings</a>
+                                        </li>
+                                        <li>
+                                            <a href="../index.html"><i class="fas fa-sign-out"></i>Déconnexion</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar-wrapper">
+                        <div class="close-btn">
+                            <i class="fas fa-bars"></i>
+                        </div>
+                        <div class="sidebar-logo">
+                            <a href="dashboard.html"><img src="assets/images/logo.png" alt="logo"></a>
+                        </div>
+                        <div class="sidebar-link mt-60">
+                            <div class="profile-info text-center">
+                                <div class="profile-info-content">
+                                    <img src="assets/images/profile-1.png" alt="image">
+                                    <h5>Katie Mamini</h5>
+                                    <p class="mdr">Inscrite le 20/01/2024</p>
+                                </div>
+                                <ul>
+                                    <li class="active">
+                                        <a href="dashboard.html">
+                                            <img src="assets/images/icon/wallet.png" alt="wallet"> <span>Portefeuille</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="profile.html">
+                                            <img src="assets/images/icon/profile.png" alt="profile"> <span>Profil</span>
+                                        </a>
+									<!-- 
+                                    </li>
+                                    <li>
+                                        <a href="bonuses.html">
+                                            <img src="assets/images/icon/bonuses.png" alt="bonuses"> <span>Bonuses</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="chat.html">
+                                            <img src="assets/images/icon/massage.png" alt="chat"> <span>Chat</span>
+                                        </a>
+                                    </li> 
+									-->
+                                </ul>
+                            </div>
+                            <ul class="bottom-item">
+                                <li>
+                                    <a href="../index.html">
+                                        <img src="assets/images/icon/logout.png" alt="logout"> <span>Déconnexion</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-area">
+                    <div class="top-info-bar">
+                        <h5 class="m-0">Portefeuille </h5>
+                        <div class="right-area">
+                            <p>Solde : 20 500 FCFA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-section end -->
+
+    <!-- Dashboard Section start -->
+    <section class="dashboard-section body-collapse">
+        <div class="overlay pt-120">
+            <div class="container-fruid">
+                <div class="row">
+                    <ul class="nav mb-40 dashboard-nav" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="balance-tab" data-bs-toggle="tab" data-bs-target="#balance" type="button"
+                                role="tab" aria-controls="balance" aria-selected="true">Mes parties</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit" type="button"
+                                role="tab" aria-controls="deposit" aria-selected="false">Dépôt</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button"
+                                role="tab" aria-controls="withdraw" aria-selected="false">Retrait</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="transaction-tab" data-bs-toggle="tab" data-bs-target="#transaction"
+                                type="button" role="tab" aria-controls="transaction" aria-selected="false">Mes transactions</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-0">
+                        <div class="tab-pane fade show active" id="balance" role="tabpanel" aria-labelledby="balance-tab">
+                            <div class="transaction-box">
+                                <div class="top-filter d-flex align-items-end d-none">
+                                    <div class="single-filter">
+                                        <p>Month</p>
+                                        <input type="text" placeholder="2023/01">
+                                    </div>
+                                    <div class="single-filter">
+                                        <p>Type</p>
+                                        <select>
+                                            <option value="0">All</option>
+                                            <option value="1">Type 1</option>
+                                            <option value="2">Type 2</option>
+                                            <option value="3">Type 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-filter">
+                                        <p>Currency</p>
+                                        <select>
+                                            <option value="0">All</option>
+                                            <option value="1">Currency 1</option>
+                                            <option value="2">Currency 2</option>
+                                            <option value="3">Currency 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-btn">
+                                        <button class="cmn-btn">Filter</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive mt-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date/Heure</th>
+                                                <th scope="col">Partie</th>
+                                                <th scope="col">Mise</th>
+                                                <th scope="col">Gains</th>
+                                                <th scope="col">Résultat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>22-01-2024  07:17:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>3 participants</p>
+                                                </td>
+                                                <td>
+                                                    <p>5 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>12 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Victoire</p>
+                                                </td>
+											</tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  17:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>1 contre 1</p>
+                                                </td>
+                                                <td>
+                                                    <p>10 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>16 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Victoire</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  15:12:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>4 participants</p>
+                                                </td>
+                                                <td>
+                                                    <p>2 500</p>
+                                                </td>
+                                                <td>
+                                                    <p>8 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Echec</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  13:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>1 contre 1</p>
+                                                </td>
+                                                <td>
+                                                    <p>10 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>16 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Victoire</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
+                            <div class="deposit-box">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="deposit-currency">
+                                            <div class="balance-area">
+                                                <div class="single-area d-none">
+                                                    <p>Deposit Currency</p>
+                                                    <select>
+                                                        <option>Select Currency</option>
+                                                        <option value="1">EUR</option>
+                                                        <option value="2">ETH</option>
+                                                        <option value="3">USD</option>
+                                                    </select>
+                                                </div>
+                                                <div class="single-area">
+                                                    <p>Solde</p>
+                                                    <h6 class="m-0">20 500 FCFA</h6>
+                                                </div>
+                                            </div>
+                                            <div class="first-deposit-bonus mt-30 mb-30 d-none">
+                                                <div class="head-area d-flex justify-content-between">
+                                                    <h6 class="m-0">First Deposit Bonus</h6>
+                                                    <a href="javascript:void(0)">More</a>
+                                                </div>
+                                                <div class="deposit-bonus-content mt-1 d-flex align-items-center d-none">
+                                                    <div class="item-single">
+                                                        <h5>$30(or above to get bonus)</h5>
+                                                        <p class="mdr">≈ 0.01664502 ETH</p>
+                                                    </div>
+                                                    <div class="item-single d-flex align-items-center justify-content-center">
+                                                        <img src="assets/images/icon/coin.png" alt="icon">
+                                                        <p>+80%Bonus</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="payment-system d-none">
+                                                <div class="head-area mb-2 d-flex justify-content-between">
+                                                    <h6 class="m-0">Select Payment System</h6>
+                                                </div>
+                                                <div class="payment-processor d-flex flex-wrap cus-mar">
+                                                    <div class="single-box active">
+                                                        <img src="assets/images/payment-1.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-2.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-3.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-4.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-5.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-6.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-7.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-8.png" alt="icon">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="deposit-amount mb-10">
+                                            <h5>Faire un dépôt</h5>
+                                            <!-- <p>Montant minimum : 500 FCFA <span class="mdr d-none">Instant | Min: 5 • Max: 6,000</span></p> -->
+                                            <ul class="quick-value d-none">
+                                                <li><h5>25</h5></li>
+                                                <li><h5 class="active">50</h5></li>
+                                                <li><h5>100</h5></li>
+                                                <li><h5>200</h5></li>
+                                                <li><h5>500</h5></li>
+                                            </ul>
+                                        </div>
+                                        <form action="#">
+                                            <div class="col-12">
+                                                <div class="single-input">
+                                                    <label for="dAmount">Montant</label>
+                                                    <input type="text" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
+                                                </div>
+                                                <div class="single-input d-none">
+                                                    <label for="dEmail">Email</label>
+                                                    <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
+                                                </div>
+                                                <div class="btn-area text-center mt-3">
+                                                    <button class="cmn-btn w-100">Déposer</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+                            <div class="deposit-box">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="deposit-currency">
+                                            <div class="balance-area">
+                                                <div class="single-area d-none">
+                                                    <p>Deposit Currency</p>
+                                                    <select>
+                                                        <option>Select Currency</option>
+                                                        <option value="1">EUR</option>
+                                                        <option value="2">ETH</option>
+                                                        <option value="3">USD</option>
+                                                    </select>
+                                                </div>
+                                                <div class="single-area">
+                                                    <p>Solde</p>
+                                                    <h6 class="m-0">20 500 FCFA</h6>
+                                                </div>
+                                            </div>
+                                            <div class="first-deposit-bonus mt-30 mb-30 d-none">
+                                                <div class="head-area d-flex justify-content-between">
+                                                    <h6 class="m-0">First Deposit Bonus</h6>
+                                                    <a href="javascript:void(0)">More</a>
+                                                </div>
+                                                <div class="deposit-bonus-content mt-1 d-flex align-items-center d-none">
+                                                    <div class="item-single">
+                                                        <h5>$30(or above to get bonus)</h5>
+                                                        <p class="mdr">≈ 0.01664502 ETH</p>
+                                                    </div>
+                                                    <div class="item-single d-flex align-items-center justify-content-center">
+                                                        <img src="assets/images/icon/coin.png" alt="icon">
+                                                        <p>+80%Bonus</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="payment-system d-none">
+                                                <div class="head-area mb-2 d-flex justify-content-between">
+                                                    <h6 class="m-0">Select Payment System</h6>
+                                                </div>
+                                                <div class="payment-processor d-flex flex-wrap cus-mar">
+                                                    <div class="single-box active">
+                                                        <img src="assets/images/payment-1.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-2.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-3.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-4.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-5.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-6.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-7.png" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="assets/images/payment-8.png" alt="icon">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="deposit-amount mb-10">
+                                            <h5>Faire un retrait</h5>
+                                            <!-- <p>Montant minimum : 500 FCFA <span class="mdr d-none">Instant | Min: 5 • Max: 6,000</span></p> -->
+                                            <ul class="quick-value d-none">
+                                                <li><h5>25</h5></li>
+                                                <li><h5 class="active">50</h5></li>
+                                                <li><h5>100</h5></li>
+                                                <li><h5>200</h5></li>
+                                                <li><h5>500</h5></li>
+                                            </ul>
+                                        </div>
+                                        <form action="#">
+                                            <div class="col-12">
+                                                <div class="single-input">
+                                                    <label for="dAmount">Montant</label>
+                                                    <input type="text" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
+                                                </div>
+                                                <div class="single-input d-none">
+                                                    <label for="dEmail">Email</label>
+                                                    <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
+                                                </div>
+                                                <div class="btn-area text-center mt-3">
+                                                    <button class="cmn-btn w-100">Retirer</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="transaction" role="tabpanel" aria-labelledby="transaction-tab">
+                            <div class="transaction-box">
+                                <div class="top-filter d-flex align-items-end">
+                                    <div class="single-filter">
+                                        <p>Mois</p>
+                                        <input type="text" placeholder="01/2024">
+                                    </div>
+                                    <div class="single-filter">
+                                        <p>Type</p>
+                                        <select>
+                                            <option value="0">Tout</option>
+                                            <option value="1">Dépôt</option>
+                                            <option value="2">Retrait</option>
+                                            <option value="3">Gains</option>
+                                            <!-- <option value="4">Retrait</option> -->
+                                        </select>
+                                    </div>
+                                    <div class="single-filter d-none">
+                                        <p>Currency</p>
+                                        <select>
+                                            <option value="0">All</option>
+                                            <option value="1">Currency 1</option>
+                                            <option value="2">Currency 2</option>
+                                            <option value="3">Currency 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-btn">
+                                        <button class="cmn-btn">Filtrer</button>
+                                    </div>
+                                </div>
+                                 <div class="table-responsive mt-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date/Heure</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Montant</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  15:12:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>Retrait</p>
+                                                </td>
+                                                <td>
+                                                    <p>- 21 500</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>22-01-2024  07:17:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>Gains</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 12 000</p>
+                                                </td>
+											</tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  17:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>Gains</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 16 000</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  15:12:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>Retrait</p>
+                                                </td>
+                                                <td>
+                                                    <p>- 2 500</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  13:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>Gains</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 16 000</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>20-01-2024  18:11:17</p>
+                                                </th>
+                                                <td>
+                                                    <p>Dépôt</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 500</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Dashboard Section end -->
+
+    <!--==================================================================-->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery-ui.js"></script>
+    <script src="assets/js/plugin/jquery.nice-select.min.js"></script>
+    <script src="assets/js/plugin/waypoint.min.js"></script>
+    <script src="assets/js/plugin/wow.min.js"></script>
+    <script src="assets/js/plugin/plugin.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

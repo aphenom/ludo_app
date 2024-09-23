@@ -15,8 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from .views import custom_login_redirect, index
+
 
 urlpatterns = [
+
+    path('', index, name='index'),
+
+    # Django admin
     path('admin/', admin.site.urls),
+
+    # Rediriger la connexion normale vers Facebook
+    path('accounts/login/', custom_login_redirect),
+
+    # Allauth URLs pour l'authentification
+    path('accounts/', include('allauth.urls')),
+
+    path('tinymce/', include('tinymce.urls')),
 ]

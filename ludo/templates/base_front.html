@@ -1,0 +1,793 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}BetLudo{% endblock %}</title>
+
+    <!-- opengraph -->
+    <meta property="og:title" content={% block meta-og-title %} "Titre Benepub" {% endblock %}>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content={% block meta-og-url %} "https://www.benepub.com{{ request.get_full_path }}" {% endblock %}>
+    <meta property="og:image" content={% block meta-og-image %} "https://www.benepub.com{{ costum_parallax }}" {% endblock %}>
+    <meta property="og:description" content={% block meta-og-description %} "Description page Benepub"{% endblock %}>
+    <meta property="og:video" content={% block meta-og-video %} "" {% endblock %}>
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Balise META">
+    <!--  -->
+
+
+    <link rel="shortcut icon" href="{% static 'front/images/fav.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'front/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/plugin/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/plugin/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/plugin/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/ara-font.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/plugin/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/style.css' %}">
+</head>
+
+<body>
+    <!-- start preloader -->
+    <div class="preloader" id="preloader"></div>
+    <!-- end preloader -->
+
+    <!-- Scroll To Top Start-->
+    <a href="javascript:void(0)" class="scrollToTop"><i class="fas fa-angle-double-up"></i></a>
+    <!-- Scroll To Top End -->
+
+    <!-- header-section start -->
+    {% block header %}
+    <header class="header-section">
+        <div class="overlay">
+            <div class="container">
+                <div class="row d-flex header-area">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="{% static 'front/images/fav.png' %}" class="fav d-none d-lg-block d-xl-none" alt="fav">
+                            <img src="{% static 'front/images/logo.png' %}" class="logo d-block d-lg-none d-xl-block" alt="logo">
+                        </a>
+                        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbar-content">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbar-content">
+                            <ul class="navbar-nav mr-auto mb-2 mb-lg-0 invisible">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="index.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="games.html">Games</a>
+                                </li>
+                                <li class="nav-item dropdown main-navbar">
+                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Lottery</a>
+                                    <ul class="dropdown-menu main-menu shadow">
+                                        <li><a class="nav-link" href="lottery.html">Lottery</a></li>
+                                        <li><a class="nav-link" href="lottery-details.html">Lottery Details</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown main-navbar">
+                                    <a class="nav-link dropdown-toggle active" href="javascript:void(0)"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Pages</a>
+                                    <ul class="dropdown-menu main-menu shadow">
+                                        <li><a class="nav-link" href="about-us.html">About Us</a></li>
+                                        <li class="dropend sub-navbar">
+                                            <a href="javascript:void(0)" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown" data-bs-auto-close="outside">Promotions</a>
+                                            <ul class="dropdown-menu sub-menu shadow">
+                                                <li><a class="nav-link" href="promotions.html">Promotions</a></li>
+                                                <li><a class="nav-link" href="promotions-details.html">Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropend sub-navbar">
+                                            <a href="javascript:void(0)" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown" data-bs-auto-close="outside">Tournaments</a>
+                                            <ul class="dropdown-menu sub-menu shadow">
+                                                <li><a class="nav-link" href="tournaments.html">Tournaments</a></li>
+                                                <li><a class="nav-link" href="tournaments-result.html">Result</a></li>
+                                                <li><a class="nav-link" href="tournaments-details.html">Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a class="nav-link" href="terms-conditions.html">Terms Conditions</a></li>
+                                        <li><a class="nav-link" href="privacy-policy.html">Privacy Policy</a></li>
+                                        <li><a class="nav-link" href="error.html">Error</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown main-navbar">
+                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Blog</a>
+                                    <ul class="dropdown-menu main-menu shadow">
+                                        <li><a class="nav-link" href="blog.html">Blog</a></li>
+                                        <li><a class="nav-link" href="blog-2.html">Blog Second</a></li>
+                                        <li><a class="nav-link" href="blog-details.html">Blog Details</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="contact.html">Contact</a>
+                                </li>
+                            </ul>
+                            <div class="right-area header-action d-flex align-items-center max-un">
+                                <button type="button" class="login" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                    Connexion
+                                </button>
+                                <button type="button" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                    Inscription
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    {% endblock %}
+    <!-- header-section end -->
+
+    {% block content %}
+    <!-- Login Registration start -->
+    <div class="log-reg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="modal fade" id="loginMod">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header justify-content-center">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <ul class="nav log-reg-btn d-none justify-content-around">
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link" id="regArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#regArea" type="button" role="tab" aria-controls="regArea"
+                                            aria-selected="false">
+                                            INSCRIPTION
+                                        </button>
+                                    </li>
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link active" id="loginArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#loginArea" type="button" role="tab"
+                                            aria-controls="loginArea" aria-selected="true">
+                                            CONNEXION
+                                        </button>
+                                    </li>
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link active" id="miseArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#miseArea" type="button" role="tab"
+                                            aria-controls="miseArea" aria-selected="true">
+                                            MISE
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="loginArea" role="tabpanel"
+                                        aria-labelledby="loginArea-tab">
+                                        <div class="login-reg-content">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h3 class="title">Content de te revoir</h3>
+                                                            <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/email-icon.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Email ou Numéro de téléphone">
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Mot de passe">
+                                                        </div>
+                                                        <div class="checkbox-item d-flex justify-content-between">
+                                                            <label class="checkbox-single d-flex align-items-center">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>Se rappeler de moi</span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <a href="javascript:void(0)">Mot de passe oublié</a>
+                                                        </div>
+                                                        <div class="btn-area text-center">
+                                                            <a href="javascript:void(0)" class="cmn-btn mt-4 mise-btn">Se connecter
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="regArea" role="tabpanel"
+                                        aria-labelledby="regArea-tab">
+                                        <div class="login-reg-content regMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h5 class="sub-title">Prêt(e) à commencer ?</h5>
+                                                            <!--<h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>-->
+                                                            <p>Tu as déjà un compte ? <a href="javascript:void(0)" class="log-btn">Connexion</a></p>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/email-icon.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Email ou Numéro de téléphone">
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Mot de passe">
+                                                        </div>
+                                                        <div class="sidebar-single-item">
+                                                            <label class="checkbox-single d-flex">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox" checked="checked">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>J'ai au moins 18 ans et j'ai lu,
+                                                                            accepté et je suis en accord avec la <u><a href="javascript:void(0)">Politique de Confidentialité</a> et les 
+																			<a href="javascript:void(0)">Termes et Conditions</a></u>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <label class="checkbox-single d-flex align-items-center d-none">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>I want to receive promotions by e-mail.</span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <div class="btn-area text-center">
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-4 mise-btn">Commencez Maintenant
+                                                                    <i class="icon-d-right-arrow-2"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="miseArea" role="tabpanel"
+                                        aria-labelledby="miseArea-tab">
+                                        <div class="login-reg-content miseMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h3 class="title">Fais ta mise</h3>
+                                                            <!-- <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p> -->
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
+                                                            <input type="text" value="10 000" readonly>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center d-none">
+                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Mot de passe">
+                                                        </div>
+                                                        <div class="checkbox-item d-flex justify-content-between d-none">
+                                                            <label class="checkbox-single d-flex align-items-center">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>Se rappeler de moi</span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <a href="javascript:void(0)">Mot de passe oublié</a>
+                                                        </div>
+                                                        <div class="btn-area text-center">
+                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login Registration end -->
+
+    <!-- Banner Section start -->
+    <section class="banner-section inner-banner tournaments d-none">
+        <div class="overlay">
+            <div class="banner-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-10">
+                            <div class="main-content">
+                                <h1>Tournaments</h1>
+                                <div class="breadcrumb-area">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb d-flex align-items-center">
+                                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript:void(0)">Pages</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">Tournaments</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section end -->
+
+    <!-- Tournaments start -->
+    <section class="tournaments">
+        <div class="overlay pt-120 pb-120">
+            <div class="container cus-mar">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="lottery-content">
+                            <div class="section-text text-center">
+                                <h5 class="sub-title">Joue ta meilleure partie</h5>
+                                <h2 class="title">Parties de Ludo</h2>
+                                <p>Joue dans une partie multi-joueurs ou en un contre un pour raffler les récompenses !</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-none">
+                    <div class="col-lg-12 nav-head mb-40 gap-4 d-flex align-items-center justify-content-between">
+                        <div class="input-field">
+                            <select>
+                                <option value="1">Upcoming</option>
+                                <option value="2">Upcoming 1</option>
+                                <option value="3">Upcoming 2</option>
+                                <option value="4">Upcoming 3</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <select>
+                                <option value="1">Select Team Size</option>
+                                <option value="2">1</option>
+                                <option value="3">2</option>
+                                <option value="4">3</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <select>
+                                <option value="1">Select Entry Fee</option>
+                                <option value="2">1</option>
+                                <option value="3">2</option>
+                                <option value="4">3</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <div class="input-area d-flex align-items-center">
+                                <img src="{% static 'front/images/icon/search-icon-2.png' %}" alt="icon">
+                                <input type="text" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-box">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <img src="{% static 'front/images/betludo-1-1.png' %}" alt="image">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="single-content">
+                                <h5>1 contre 1</h5>
+                                  <div class="count-area mt-4 mb-4 text-center">
+                                    <h6>Mise / Participant : 10 000 FCFA</h6>
+                                    <div class="countdown mt-2 d-flex align-items-center justify-content-center d-none">
+                                        <h6>
+                                            <span class="days">00</span><span class="ref">D :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="hours">00</span><span class="ref">H :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="minutes">00</span><span class="ref">M :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="seconds">00</span><span class="ref">S</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="prize-pool">
+                                    <p class="mdr">Gains :</p>
+                                    <h5>16 000 FCFA</h5>
+                                </div>
+                                <div class="btn-area mt-4">
+                                    <a href="#" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">Participer</a>
+                                </div>
+                                <div class="abs-area">
+                                    <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-box">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <img src="{% static 'front/images/betludo-3-opponents.png' %}" alt="image">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="single-content">
+                                <h5>3 participants</h5>
+                                <div class="count-area mt-4 mb-4 text-center">
+                                    <h6>Mise / Participant : 5 000 FCFA</h6>
+                                    <div class="countdown mt-2 d-flex align-items-center justify-content-center d-none">
+                                        <h6>
+                                            <span class="days">00</span><span class="ref">D :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="hours">00</span><span class="ref">H :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="minutes">00</span><span class="ref">M :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="seconds">00</span><span class="ref">S</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="prize-pool">
+                                    <p class="mdr">Gains :</p>
+                                    <h5>12 000 FCFA</h5>
+                                </div>
+                                <div class="btn-area mt-4">
+                                    <a href="#" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">Participer</a>
+                                </div>
+                                <div class="abs-area">
+                                    <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-box d-none">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <img src="{% static 'front/images/tournament-img-3.png' %}" alt="image">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="single-content">
+                                <h5>The Wild Week</h5>
+                                <div class="count-area mt-4 mb-4 text-center">
+                                    <h6>Ends in:</h6>
+                                    <div class="countdown mt-2 d-flex align-items-center justify-content-center">
+                                        <h6>
+                                            <span class="days">00</span><span class="ref">D :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="hours">00</span><span class="ref">H :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="minutes">00</span><span class="ref">M :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="seconds">00</span><span class="ref">S</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="prize-pool">
+                                    <p class="mdr">Prize pool:</p>
+                                    <h5>€10,000</h5>
+                                </div>
+                                <div class="btn-area mt-4">
+                                    <a href="tournaments-details.html" class="cmn-btn">Participate</a>
+                                </div>
+                                <div class="abs-area">
+                                    <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-box">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <img src="{% static 'front/images/betludo-4-opponents.png' %}" alt="image">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="single-content">
+                                <h5>4 participants</h5>
+                                <div class="count-area mt-4 mb-4 text-center">
+                                    <h6>Mise / Participant : 2 500 FCFA</h6>
+                                    <div class="countdown mt-2 d-flex align-items-center justify-content-center d-none">
+                                        <h6>
+                                            <span class="days">00</span><span class="ref">D :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="hours">00</span><span class="ref">H :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="minutes">00</span><span class="ref">M :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="seconds">00</span><span class="ref">S</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="prize-pool">
+                                    <p class="mdr">Gains :</p>
+                                    <h5>8 000 FCFA</h5>
+                                </div>
+                                <div class="btn-area mt-4">
+                                    <a href="#" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">Participer</a>
+                                </div>
+                                <div class="abs-area">
+                                    <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Tournaments end -->
+
+    <!-- Finished Tournaments start -->
+    <section class="finished-tournaments d-none">
+        <div class="overlay pt-120 pb-120">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="con-lg-8">
+                        <div class="section-text text-center">
+                            <h2 class="title">Finished Tournaments</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cus-mar">
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="single-box">
+                            <div class="img-area">
+                                <img src="{% static 'front/images/finished-tournaments-img-1.png' %}" alt="image">
+                                <div class="abs-area">
+                                    <span class="mdr">Finished</span>
+                                </div>
+                            </div>
+                            <div class="text-area">
+                                <h5>Gamzix</h5>
+                                <p class="mdr">19.05 - 27.05</p>
+                                <div class="prize-pool">
+                                    <p class="mdr">Prize pool:</p>
+                                    <h5>€10,000</h5>
+                                </div>
+                                <a href="javascript:void(0)">Result</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="single-box">
+                            <div class="img-area">
+                                <img src="{% static 'front/images/finished-tournaments-img-2.png' %}" alt="image">
+                                <div class="abs-area">
+                                    <span class="mdr">Finished</span>
+                                </div>
+                            </div>
+                            <div class="text-area">
+                                <h5>Gamzix</h5>
+                                <p class="mdr">19.05 - 27.05</p>
+                                <div class="prize-pool">
+                                    <p class="mdr">Prize pool:</p>
+                                    <h5>€10,000</h5>
+                                </div>
+                                <a href="javascript:void(0)">Result</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="single-box">
+                            <div class="img-area">
+                                <img src="{% static 'front/images/finished-tournaments-img-3.png' %}" alt="image">
+                                <div class="abs-area">
+                                    <span class="mdr">Finished</span>
+                                </div>
+                            </div>
+                            <div class="text-area">
+                                <h5>Gamzix</h5>
+                                <p class="mdr">19.05 - 27.05</p>
+                                <div class="prize-pool">
+                                    <p class="mdr">Prize pool:</p>
+                                    <h5>€10,000</h5>
+                                </div>
+                                <a href="javascript:void(0)">Result</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="single-box">
+                            <div class="img-area">
+                                <img src="{% static 'front/images/finished-tournaments-img-4.png' %}" alt="image">
+                                <div class="abs-area">
+                                    <span class="mdr">Finished</span>
+                                </div>
+                            </div>
+                            <div class="text-area">
+                                <h5>Gamzix</h5>
+                                <p class="mdr">19.05 - 27.05</p>
+                                <div class="prize-pool">
+                                    <p class="mdr">Prize pool:</p>
+                                    <h5>€10,000</h5>
+                                </div>
+                                <a href="javascript:void(0)">Result</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Finished Tournaments end -->
+
+    <!-- Players of Week start -->
+    <section class="players-of-week d-none">
+        <div class="overlay pb-120">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="con-lg-8">
+                        <div class="section-header text-center">
+                            <h2 class="title">Players of The Week</h2>
+                            <p>We take a look at the best player of the week awarded </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cus-mar">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="single-box">
+                            <div class="abs-area d-flex align-items-center justify-content-center">
+                                <span class="xlr">1</span>
+                            </div>
+                            <div class="img-area d-flex align-items-center justify-content-center">
+                                <img src="{% static 'front/images/players-circle.png' %}" class="img-bg" alt="image">
+                                <img src="{% static 'front/images/players-img-1.png' %}" class="img-1" alt="image">
+                            </div>
+                            <div class="text-area mt-4">
+                                <h5>Darin Allison</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="single-box">
+                            <div class="abs-area d-flex align-items-center justify-content-center">
+                                <span class="xlr">2</span>
+                            </div>
+                            <div class="img-area d-flex align-items-center justify-content-center">
+                                <img src="{% static 'front/images/players-circle.png' %}" class="img-bg" alt="image">
+                                <img src="{% static 'front/images/players-img-2.png' %}" class="img-1" alt="image">
+                            </div>
+                            <div class="text-area mt-4">
+                                <h5>Don Gomez</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="single-box">
+                            <div class="abs-area d-flex align-items-center justify-content-center">
+                                <span class="xlr">3</span>
+                            </div>
+                            <div class="img-area d-flex align-items-center justify-content-center">
+                                <img src="{% static 'front/images/players-circle.png' %}" class="img-bg" alt="image">
+                                <img src="{% static 'front/images/players-img-3.png' %}" class="img-1" alt="image">
+                            </div>
+                            <div class="text-area mt-4">
+                                <h5>Ron Nichols</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Players of Week end -->
+    {% endblock %}
+
+    <!-- Footer Area Start -->
+    {% block footer %}
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row justify-content-center d-none">
+                <div class="col-lg-10">
+                    <div class="footer-form">
+                        <div class="section-area mb-30 text-center">
+                            <h4 class="title">To Get Exclusive Benefits</h4>
+                        </div>
+                        <form action="#">
+                            <div class="form-group input-area d-flex align-items-center">
+                                <input type="text" placeholder="Enter your email address">
+                                <button class="btn-area"><img src="{% static 'front/images/icon/send-icon.png' %}" alt="icon"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-area pt-120">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="footer-top d-flex align-items-center justify-content-between">
+                            <a href="index.html">
+                                <img src="{% static 'front/images/logo.png' %}" class="logo" alt="logo">
+                            </a>
+                            <div class="footer-box d-none">
+                                <ul class="footer-link d-flex align-items-center gap-4">
+                                    <li><a href="about-us.html">About Us</a></li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                                    <li><a href="terms-conditions.html">Terms of Service</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-lg-7 d-flex justify-content-center justify-content-lg-start order-lg-0 order-1">
+                            <div class="copyright text-center">
+                                <p>© BetLudo, 2024 | Design by <a href="#">BetLudo.</a> All rights reserved.</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-5 d-flex justify-content-center justify-content-lg-end">
+                            <div class="social">
+                                <ul class="footer-link gap-2 d-flex align-items-center">
+                                    <li><a href="javascript:void(0)"><i class="fb fab fa-facebook-f"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="ins fab fa-instagram"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="tw fab fa-twitter"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="in fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    <!-- Footer Area End -->
+
+    <!--==================================================================-->
+    {% block script %}
+    <script src="{% static 'front/js/jquery.min.js' %}"></script>
+    <script src="{% static 'front/js/jquery-ui.js' %}"></script>
+    <script src="{% static 'front/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'front/js/fontawesome.js' %}"></script>
+    <script src="{% static 'front/js/plugin/slick.js' %}"></script>
+    <script src="{% static 'front/js/plugin/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'front/js/plugin/counter.js"></script>
+    <script src="{% static 'front/js/plugin/jquery.downCount.js' %}"></script>
+    <script src="{% static 'front/js/plugin/waypoint.min.js' %}"></script>
+    <script src="{% static 'front/js/plugin/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'front/js/plugin/wow.min.js' %}"></script>
+    <script src="{% static 'front/js/plugin/plugin.js' %}"></script>
+    <script src="{% static 'front/js/main.js' %}"></script>
+    {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BetLudo</title>
+
+    <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/plugin/nice-select.css">
+    <link rel="stylesheet" href="assets/css/plugin/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/plugin/slick.css">
+    <link rel="stylesheet" href="assets/css/ara-font.css">
+    <link rel="stylesheet" href="assets/css/plugin/animate.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- start preloader -->
+    <div class="preloader" id="preloader"></div>
+    <!-- end preloader -->
+
+    <!-- Scroll To Top Start-->
+    <a href="javascript:void(0)" class="scrollToTop"><i class="fas fa-angle-double-up"></i></a>
+    <!-- Scroll To Top End -->
+
+    <!-- header-section start -->
+    <header class="header-section">
+        <div class="overlay">
+            <div class="container">
+                <div class="row d-flex header-area">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="assets/images/fav.png" class="fav d-none d-lg-block d-xl-none" alt="fav">
+                            <img src="assets/images/logo.png" class="logo d-block d-lg-none d-xl-block" alt="logo">
+                        </a>
+                        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbar-content">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbar-content">
+                            <ul class="navbar-nav mr-auto mb-2 mb-lg-0 invisible">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="index.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="games.html">Games</a>
+                                </li>
+                                <li class="nav-item dropdown main-navbar">
+                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Lottery</a>
+                                    <ul class="dropdown-menu main-menu shadow">
+                                        <li><a class="nav-link" href="lottery.html">Lottery</a></li>
+                                        <li><a class="nav-link" href="lottery-details.html">Lottery Details</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown main-navbar">
+                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Pages</a>
+                                    <ul class="dropdown-menu main-menu shadow">
+                                        <li><a class="nav-link" href="about-us.html">About Us</a></li>
+                                        <li class="dropend sub-navbar">
+                                            <a href="javascript:void(0)" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown" data-bs-auto-close="outside">Promotions</a>
+                                            <ul class="dropdown-menu sub-menu shadow">
+                                                <li><a class="nav-link" href="promotions.html">Promotions</a></li>
+                                                <li><a class="nav-link" href="promotions-details.html">Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropend sub-navbar">
+                                            <a href="javascript:void(0)" class="dropdown-item dropdown-toggle"
+                                                data-bs-toggle="dropdown" data-bs-auto-close="outside">Tournaments</a>
+                                            <ul class="dropdown-menu sub-menu shadow">
+                                                <li><a class="nav-link" href="tournaments.html">Tournaments</a></li>
+                                                <li><a class="nav-link" href="tournaments-result.html">Result</a></li>
+                                                <li><a class="nav-link" href="tournaments-details.html">Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a class="nav-link" href="terms-conditions.html">Terms Conditions</a></li>
+                                        <li><a class="nav-link" href="privacy-policy.html">Privacy Policy</a></li>
+                                        <li><a class="nav-link" href="error.html">Error</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown main-navbar">
+                                    <a class="nav-link dropdown-toggle active" href="javascript:void(0)"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Blog</a>
+                                    <ul class="dropdown-menu main-menu shadow">
+                                        <li><a class="nav-link" href="blog.html">Blog</a></li>
+                                        <li><a class="nav-link" href="blog-2.html">Blog Second</a></li>
+                                        <li><a class="nav-link" href="blog-details.html">Blog Details</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="contact.html">Contact</a>
+                                </li>
+                            </ul>
+                            <div class="right-area header-action d-flex align-items-center max-un">
+                                <button type="button" class="login d-none" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                    Sign In
+                                </button>
+                                <a type="button" class="cmn-btn" href="dashboard/dashboard.html">
+                                    Mon compte
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-section end -->
+
+    <!-- Login Registration start -->
+    <div class="log-reg d-none">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="modal fade" id="loginMod">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header justify-content-center">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <ul class="nav log-reg-btn d-none justify-content-around">
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link" id="regArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#regArea" type="button" role="tab" aria-controls="regArea"
+                                            aria-selected="false">
+                                            SIGN UP
+                                        </button>
+                                    </li>
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link active" id="loginArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#loginArea" type="button" role="tab"
+                                            aria-controls="loginArea" aria-selected="true">
+                                            LOGIN
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="loginArea" role="tabpanel"
+                                        aria-labelledby="loginArea-tab">
+                                        <div class="login-reg-content">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h3 class="title">Welcome Back</h3>
+                                                            <p>Not a member ? <a href="javascript:void(0)" class="reg-btn">Register</a></p>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="assets/images/icon/email-icon.png" alt="icon">
+                                                            <input type="text" placeholder="Email">
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="assets/images/icon/security.png" alt="icon">
+                                                            <input type="text" placeholder="Password">
+                                                        </div>
+                                                        <div class="checkbox-item d-flex justify-content-between">
+                                                            <label class="checkbox-single d-flex align-items-center">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>Remember me</span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <a href="javascript:void(0)">Forget Password</a>
+                                                        </div>
+                                                        <div class="btn-area text-center">
+                                                            <a href="javascript:void(0)" class="cmn-btn mt-4">Login
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="regArea" role="tabpanel"
+                                        aria-labelledby="regArea-tab">
+                                        <div class="login-reg-content regMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h5 class="sub-title">Ready to get started?</h5>
+                                                            <h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>
+                                                            <p>Already have an member ? <a href="javascript:void(0)" class="log-btn">Login</a></p>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="assets/images/icon/email-icon.png" alt="icon">
+                                                            <input type="text" placeholder="Email">
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="assets/images/icon/security.png" alt="icon">
+                                                            <input type="text" placeholder="Password">
+                                                        </div>
+                                                        <div class="sidebar-single-item">
+                                                            <label class="checkbox-single d-flex">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox" checked="checked">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>I am at least 18 years of age and I have read,
+                                                                            accepted and agreed to the <u><a href="javascript:void(0)">Privacy Policy</a>,
+                                                                                Bonus T&C, <a href="javascript:void(0)">Terms and Conditions</a></u>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <label class="checkbox-single d-flex align-items-center">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>I want to receive promotions by e-mail.</span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <div class="btn-area text-center">
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-4">Get Start Now
+                                                                    <i class="icon-d-right-arrow-2"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login Registration end -->
+
+    <!-- Banner Section start -->
+    <section class="banner-section inner-banner blog details">
+        <div class="overlay">
+            <div class="banner-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-10">
+                            <div class="main-content">
+                                <h1>1 contre 1</h1>
+                                <div class="breadcrumb-area">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb d-flex align-items-center">
+                                            <li class="breadcrumb-item"><a href="index.html">Gains</a></li>
+                                            <li class="breadcrumb-item active text-success font-weight-bold" aria-current="page"><strong>10 000 FCFA</strong></li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section end -->
+
+    <!-- Blog Details start -->
+    <section class="blog-details">
+        <div class="overlay">
+            <div class="container pb-120">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="img-area">
+							<center>
+                            <img src="assets/images/plate-ludo.png" width="50%" alt="image">
+							</center>
+						</div>
+                        <div class="mt-40 row justify-content-between d-none">
+                            <div class="col-lg-4 col-md-6 col-sm-9">
+                                <div class="sidebar-area text-center position-sticky">
+                                    <div class="img-area">
+                                        <img src="assets/images/profile-image.png" alt="image">
+                                    </div>
+                                    <h5>Sophie Moore</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                                    <div class="mt-30 d-flex justify-content-center">
+                                        <div class="social">
+                                            <ul class="footer-link gap-2 d-flex align-items-center">
+                                                <li><a href="javascript:void(0)"><i class="fb fab fa-facebook-f"></i></a></li>
+                                                <li><a href="javascript:void(0)"><i class="ins fab fa-instagram"></i></a></li>
+                                                <li><a href="javascript:void(0)"><i class="tw fab fa-twitter"></i></a></li>
+                                                <li><a href="javascript:void(0)"><i class="in fab fa-linkedin-in"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="single-item mb-60">
+                                    <h3>8 Tips On How To Make Money crypto Casino Games</h3>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
+                                </div>
+                                <div class="single-item mb-60">
+                                    <h4>Online Gambling: Bitcoin vs Ethereum</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Euismod pellentesque cursus non sed morbi at gravida non. Aliquet lectus eget <u>varius nec dictum.</u></p>
+                                    <ul>
+                                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tristique nulla blandit</li>
+                                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                        <li>Lorem ipsum dolor sit amet, consectetur ristique nulla blandit tincidunt.</li>
+                                    </ul>
+                                </div>
+                                <div class="single-item mb-60">
+                                    <h4>Crypto Games: Do They Exist?</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
+                                    <div class="item-image text-center">
+                                        <div class="img-area">
+                                            <img src="assets/images/blog-post-image-6.png" alt="image">
+                                        </div>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                    </div>
+                                </div>
+                                <div class="single-item mb-60">
+                                    <h4>Guide: Best Bitcoin Gambling Wallets</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Euismod pellentesque cursus non sed morbi at gravida non. Aliquet lectus eget <u>varius nec dictum.</u></p>
+                                    <ul>
+                                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tristique nulla blandit</li>
+                                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                        <li>Lorem ipsum dolor sit amet, consectetur ristique nulla blandit tincidunt.</li>
+                                    </ul>
+                                    <div class="item-image text-center">
+                                        <div class="img-area">
+                                            <img src="assets/images/blog-post-image-7.png" alt="image">
+                                        </div>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                    </div>
+                                </div>
+                                <div class="single-item mb-60">
+                                    <h4>Bitcoin Gambling with Online Casinos</h4>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Euismod pellentesque cursus non sed morbi at gravida non. Aliquet lectus eget <u>varius nec dictum.</u></p>
+                                </div>
+                                <div class="single-item mb-60">
+                                    <div class="quotation">
+                                        <p class="xlr">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+                                    </div>
+                                </div>
+                                <div class="single-item">
+                                    <h5>Getting Started With Crypto Casino Game</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Euismod pellentesque cursus non sed morbi at gravida non. Aliquet lectus eget <u>varius nec dictum.</u></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details end -->
+
+    <!-- Blog Post start -->
+    <section class="blog-post d-none">
+        <div class="overlay pt-120 pb-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-text d-flex flex-wrap gap-3 align-items-center justify-content-between">
+                            <h3>Latest Articles</h3>
+                            <a href="blog.html">View All Articles</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cus-mar">
+                    <div class="col-lg-6">
+                        <div class="single-box">
+                            <div class="img-area">
+                                <img src="assets/images/blog-post-image-3.png" alt="image">
+                            </div>
+                            <div class="text-area">
+                                <h6>Casino game -- <span class="date">July 15,2023</span></h6>
+                                <a href="blog-details.html"><h4>Next Generation Dice and tips, tricks how to win crypto game</h4></a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, tempor incididunt ut labore et dolore magna aliqua. </p>
+                                <div class="btn-area">
+                                    <a href="blog-details.html">
+                                        Read More
+                                        <div class="icon-area">
+                                            <img src="assets/images/icon/right-arrow-2.png" alt="icon">
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="single-box">
+                            <div class="img-area">
+                                <img src="assets/images/blog-post-image-4.png" alt="image">
+                            </div>
+                            <div class="text-area">
+                                <h6>Casino game -- <span class="date">May 4,2023</span></h6>
+                                <a href="blog-details.html"><h4>8 Tips On How To Make Money crypto Casino Games</h4></a>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, tempor incididunt ut labore et dolore magna aliqua. </p>
+                                <div class="btn-area">
+                                    <a href="blog-details.html">
+                                        Read More
+                                        <div class="icon-area">
+                                            <img src="assets/images/icon/right-arrow-2.png" alt="icon">
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Post end -->
+
+    <!-- Footer Area Start -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row justify-content-center d-none">
+                <div class="col-lg-10">
+                    <div class="footer-form">
+                        <div class="section-area mb-30 text-center">
+                            <h4 class="title">To Get Exclusive Benefits</h4>
+                        </div>
+                        <form action="#">
+                            <div class="form-group input-area d-flex align-items-center">
+                                <input type="text" placeholder="Enter your email address">
+                                <button class="btn-area"><img src="assets/images/icon/send-icon.png" alt="icon"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-area pt-120">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="footer-top d-flex align-items-center justify-content-between">
+                            <a href="index.html">
+                                <img src="assets/images/logo.png" class="logo" alt="logo">
+                            </a>
+                            <div class="footer-box d-none">
+                                <ul class="footer-link d-flex align-items-center gap-4">
+                                    <li><a href="about-us.html">About Us</a></li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                                    <li><a href="terms-conditions.html">Terms of Service</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-lg-7 d-flex justify-content-center justify-content-lg-start order-lg-0 order-1">
+                            <div class="copyright text-center">
+                                <p>© BetLudo, 2024 | Design by <a href="#">BetLudo.</a> All rights reserved.</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-5 d-flex justify-content-center justify-content-lg-end">
+                            <div class="social">
+                                <ul class="footer-link gap-2 d-flex align-items-center">
+                                    <li><a href="javascript:void(0)"><i class="fb fab fa-facebook-f"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="ins fab fa-instagram"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="tw fab fa-twitter"></i></a></li>
+                                    <li><a href="javascript:void(0)"><i class="in fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Area End -->
+
+    <!--==================================================================-->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery-ui.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/fontawesome.js"></script>
+    <script src="assets/js/plugin/slick.js"></script>
+    <script src="assets/js/plugin/jquery.nice-select.min.js"></script>
+    <script src="assets/js/plugin/counter.js"></script>
+    <script src="assets/js/plugin/jquery.downCount.js"></script>
+    <script src="assets/js/plugin/waypoint.min.js"></script>
+    <script src="assets/js/plugin/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/plugin/wow.min.js"></script>
+    <script src="assets/js/plugin/plugin.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
