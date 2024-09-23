@@ -4,6 +4,7 @@ from allauth.socialaccount.models import SocialAccount
 
 from core.models import Mise
 from ludo.enum import Visibilite
+from ludo.utils import CurrentConfig, CurrentTauxCommission, DetermineCagnotte, DetermineCommission
 from player.models import Partie
 
 
@@ -29,15 +30,40 @@ def custom_login_redirect(request):
 
 
 def index(request):
+    
+    # determinons l'ensemble des mises possibles
     liste_mises = Mise.objects.filter(etat_validation=True, etat_suppression=False)
-    # parcourons les mises pour creer des parties ou recuperons celles en attentes
+    
+    # parcourons les mises pour creer des parties ou recuperons celles en attentes en fonction
     for mise in liste_mises:
-        for nb_participants in range(mise.nombre_minimum,5):
-            if nb_participants >= 2 and nb_participants <= 4:
-                partie = Partie.objects.filter(nombre_participants=nb_participants,
+        for nombre_participants in range(mise.nombre_minimum,5):
+            if nombre_participants >= 2 and nombre_participants <= 4:
+                partie = Partie.objects.filter(nombre_participants=nombre_participants,
                                                montant_mise = mise.montant, 
                                                visibilite = Visibilite.Public, 
-                                               etat_validation=True, etat_suppression=False)
+                                               etat_demarrage = False,
+                                               etat_validation=True, etat_suppression=False).first()
+                if partie:
+                    # partie deja existante donc en ligne
+                    pass
+                else:
+                    partie = Partie()
+                    partie.config = CurrentConfig()
+                    partie.delai_tour = CurrentConfig().delai_tour if CurrentConfig() and CurrentConfig().delai_tour else None
+                    partie.mise = mise
+                    partie.montant_mise = mise.montant
+                    partie.nombre_participants = nombre_participants
+                    partie.montant_cagnotte = DetermineCagnotte(mise, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
+                    partie.montant_commission = DetermineCommission(mise, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
+                    partie.taux_comission = CurrentTauxCommission()
+                    partie.save()
+    
+    # recuperons les parties valides pretes a recevoir des joueurs
+    liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False)
+
+    # partie privee pour utilisateur connecté
+    
+
     return render(request, 'index.html', locals())
 
 
