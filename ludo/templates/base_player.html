@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -8,14 +9,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BetLudo</title>
 
-    <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-    <link rel="stylesheet" href="assets/css/jquery-ui.css">
-    <link rel="stylesheet" href="assets/css/plugin/nice-select.css">
-    <link rel="stylesheet" href="assets/css/ara-font.css">
-    <link rel="stylesheet" href="assets/css/plugin/animate.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="{% static 'dashboard/images/fav.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/plugin/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/ara-font.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/plugin/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
 </head>
 
 <body>
@@ -28,6 +29,7 @@
     <!-- Scroll To Top End -->
 
     <!-- header-section start -->
+    {% block header %}
     <header class="header-section body-collapse">
         <div class="overlay">
             <div class="container-fruid">
@@ -38,19 +40,19 @@
                         </div>
                         <form action="#">
                             <div class="form-group input-area d-flex align-items-center invisible">
-                                <img src="assets/images/icon/search.png" alt="icon">
+                                <img src="{% static 'dashboard/images/icon/search.png' %}" alt="icon">
                                 <input type="text" placeholder="Search">
                             </div>
                         </form>
                         <div class="dashboard-nav">
                             <div class="single-item massage-area invisible">
                                 <a href="chat.html" class="massage-btn btn-head dot">
-                                    <img src="assets/images/icon/massage.png" class="massage-icon" alt="icon">
+                                    <img src="{% static 'dashboard/images/icon/massage.png' %}" class="massage-icon" alt="icon">
                                 </a>
                             </div>
                             <div class="single-item notifications-area invisible">
                                 <div class="notifications-btn btn-head dot">
-                                    <img src="assets/images/icon/notification.png" class="bell-icon" alt="icon">
+                                    <img src="{% static 'dashboard/images/icon/notification.png' %}" class="bell-icon" alt="icon">
                                 </div>
                                 <div class="main-area notifications-content">
                                     <div class="head-area d-flex justify-content-between">
@@ -61,7 +63,7 @@
                                         <li>
                                             <a href="javascript:void(0)" class="d-flex">
                                                 <div class="img-area">
-                                                    <img src="assets/images/user-1.png" class="max-un" alt="image">
+                                                    <img src="{% static 'dashboard/images/user-1.png' %}" class="max-un" alt="image">
                                                 </div>
                                                 <div class="text-area">
                                                     <p class="mdr">You received a payment of <b>$134.00</b> from <b>Anna
@@ -74,7 +76,7 @@
                                         <li>
                                             <a href="javascript:void(0)" class="d-flex">
                                                 <div class="img-area">
-                                                    <img src="assets/images/user-2.png" class="max-un" alt="image">
+                                                    <img src="{% static 'dashboard/images/user-2.png' %}" class="max-un" alt="image">
                                                 </div>
                                                 <div class="text-area">
                                                     <p class="mdr"><b>James Deed</b> requested a payment of
@@ -88,7 +90,7 @@
                                         <li>
                                             <a href="javascript:void(0)" class="d-flex">
                                                 <div class="img-area">
-                                                    <img src="assets/images/master-card.png" class="max-un" alt="image">
+                                                    <img src="{% static 'dashboard/images/master-card.png' %}" class="max-un" alt="image">
                                                 </div>
                                                 <div class="text-area">
                                                     <p class="mdr">Your new payment method has beed added successfully
@@ -101,7 +103,7 @@
                                         <li>
                                             <a href="javascript:void(0)" class="d-flex">
                                                 <div class="img-area">
-                                                    <img src="assets/images/user-3.png" class="max-un" alt="image">
+                                                    <img src="{% static 'dashboard/images/user-3.png' %}" class="max-un" alt="image">
                                                 </div>
                                                 <div class="text-area">
                                                     <p class="mdr">You received a payment of <b>$250.00</b> from Goerge
@@ -116,20 +118,20 @@
                             </div>
                             <div class="single-item setting-area invisible">
                                 <div class="setting-btn">
-                                    <img src="assets/images/icon/setting.png" class="setting-icon" alt="icon">
+                                    <img src="{% static 'dashboard/images/icon/setting.png' %}" class="setting-icon" alt="icon">
                                 </div>
                             </div>
                             <div class="single-item user-area">
                                 <div class="profile-area d-flex align-items-center">
                                     <span class="user-profile">
-                                        <img src="assets/images/user-1.png" alt="User">
+                                        <img src="{% static 'dashboard/images/user-1.png' %}" alt="User">
                                     </span>
                                     <i class="fa-solid fa-sort-down"></i>
                                 </div>
                                 <div class="main-area user-content">
                                     <div class="head-area d-flex align-items-center">
                                         <div class="profile-img">
-                                            <img src="assets/images/user-1.png" alt="User">
+                                            <img src="{% static 'dashboard/images/user-1.png' %}" alt="User">
                                         </div>
                                         <div class="profile-head">
                                             <a href="javascript:void(0)">
@@ -155,35 +157,35 @@
                             <i class="fas fa-bars"></i>
                         </div>
                         <div class="sidebar-logo">
-                            <a href="dashboard.html"><img src="assets/images/logo.png" alt="logo"></a>
+                            <a href="dashboard.html"><img src="{% static 'dashboard/images/logo.png' %}" alt="logo"></a>
                         </div>
                         <div class="sidebar-link mt-60">
                             <div class="profile-info text-center">
                                 <div class="profile-info-content">
-                                    <img src="assets/images/profile-1.png" alt="image">
+                                    <img src="{% static 'dashboard/images/profile-1.png' %}" alt="image">
                                     <h5>Katie Mamini</h5>
                                     <p class="mdr">Inscrite le 20/01/2024</p>
                                 </div>
                                 <ul>
                                     <li class="active">
                                         <a href="dashboard.html">
-                                            <img src="assets/images/icon/wallet.png" alt="wallet"> <span>Portefeuille</span>
+                                            <img src="{% static 'dashboard/images/icon/wallet.png' %}" alt="wallet"> <span>Portefeuille</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="profile.html">
-                                            <img src="assets/images/icon/profile.png" alt="profile"> <span>Profil</span>
+                                            <img src="{% static 'dashboard/images/icon/profile.png' %}" alt="profile"> <span>Profil</span>
                                         </a>
 									<!-- 
                                     </li>
                                     <li>
                                         <a href="bonuses.html">
-                                            <img src="assets/images/icon/bonuses.png" alt="bonuses"> <span>Bonuses</span>
+                                            <img src="{% static 'dashboard/images/icon/bonuses.png" alt="bonuses"> <span>Bonuses</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="chat.html">
-                                            <img src="assets/images/icon/massage.png" alt="chat"> <span>Chat</span>
+                                            <img src="{% static 'dashboard/images/icon/massage.png" alt="chat"> <span>Chat</span>
                                         </a>
                                     </li> 
 									-->
@@ -192,7 +194,7 @@
                             <ul class="bottom-item">
                                 <li>
                                     <a href="../index.html">
-                                        <img src="assets/images/icon/logout.png" alt="logout"> <span>Déconnexion</span>
+                                        <img src="{% static 'dashboard/images/icon/logout.png' %}" alt="logout"> <span>Déconnexion</span>
                                     </a>
                                 </li>
                             </ul>
@@ -210,9 +212,11 @@
             </div>
         </div>
     </header>
+    {% endblock %}
     <!-- header-section end -->
 
     <!-- Dashboard Section start -->
+    {% block content %}
     <section class="dashboard-section body-collapse">
         <div class="overlay pt-120">
             <div class="container-fruid">
@@ -381,7 +385,7 @@
                                                         <p class="mdr">≈ 0.01664502 ETH</p>
                                                     </div>
                                                     <div class="item-single d-flex align-items-center justify-content-center">
-                                                        <img src="assets/images/icon/coin.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/icon/coin.png' %}" alt="icon">
                                                         <p>+80%Bonus</p>
                                                     </div>
                                                 </div>
@@ -392,28 +396,28 @@
                                                 </div>
                                                 <div class="payment-processor d-flex flex-wrap cus-mar">
                                                     <div class="single-box active">
-                                                        <img src="assets/images/payment-1.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-1.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-2.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-2.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-3.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-3.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-4.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-4.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-5.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-5.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-6.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-6.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-7.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-7.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-8.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-8.png' %}" alt="icon">
                                                     </div>
                                                 </div>
                                             </div>
@@ -481,7 +485,7 @@
                                                         <p class="mdr">≈ 0.01664502 ETH</p>
                                                     </div>
                                                     <div class="item-single d-flex align-items-center justify-content-center">
-                                                        <img src="assets/images/icon/coin.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/icon/coin.png' %}" alt="icon">
                                                         <p>+80%Bonus</p>
                                                     </div>
                                                 </div>
@@ -492,28 +496,28 @@
                                                 </div>
                                                 <div class="payment-processor d-flex flex-wrap cus-mar">
                                                     <div class="single-box active">
-                                                        <img src="assets/images/payment-1.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-1.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-2.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-2.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-3.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-3.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-4.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-4.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-5.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-5.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-6.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-6.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-7.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-7.png' %}" alt="icon">
                                                     </div>
                                                     <div class="single-box">
-                                                        <img src="assets/images/payment-8.png" alt="icon">
+                                                        <img src="{% static 'dashboard/images/payment-8.png' %}" alt="icon">
                                                     </div>
                                                 </div>
                                             </div>
@@ -666,17 +670,20 @@
             </div>
         </div>
     </section>
+    {% endblock %}
     <!-- Dashboard Section end -->
 
     <!--==================================================================-->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/jquery-ui.js"></script>
-    <script src="assets/js/plugin/jquery.nice-select.min.js"></script>
-    <script src="assets/js/plugin/waypoint.min.js"></script>
-    <script src="assets/js/plugin/wow.min.js"></script>
-    <script src="assets/js/plugin/plugin.js"></script>
-    <script src="assets/js/main.js"></script>
+    {% block script %}
+    <script src="{% static 'dashboard/js/jquery.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/jquery-ui.js' %}"></script>
+    <script src="{% static 'dashboard/js/plugin/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/plugin/waypoint.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/plugin/wow.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/plugin/plugin.js' %}"></script>
+    <script src="{% static 'dashboard/js/main.js' %}"></script>
+    {% endblock %}
 </body>
 
 </html>

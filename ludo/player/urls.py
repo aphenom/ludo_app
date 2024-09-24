@@ -1,0 +1,9 @@
+from django.urls import path
+
+from . import views # import views so we can use them in urls.
+
+app_name = 'player'
+urlpatterns = [
+    path('dashboard', views.dashboard, name='player_dashboard'),
+    path('profil', views.profil, name='player_profil'),
+]
