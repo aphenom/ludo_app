@@ -3,3 +3,4 @@ env/
 *.cpython-311
 *.cpython-312
 *.pyc
+.cpython-311.pyc

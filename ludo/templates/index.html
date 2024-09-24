@@ -14,9 +14,113 @@
 <!-- load static -->
 {% load static %}
 <!---->
-
+{% load humanize %}
 <!-- MainContent -->
 
+    {% block tournaments %}
+    <section class="tournaments">
+        <div class="overlay pt-120 pb-120">
+            <div class="container cus-mar">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="lottery-content">
+                            <div class="section-text text-center">
+                                <h5 class="sub-title">Joue ta meilleure partie</h5>
+                                <h2 class="title">Parties de Ludo</h2>
+                                <p>Joue dans une partie multi-joueurs ou en un contre un pour raffler les récompenses !</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-none">
+                    <div class="col-lg-12 nav-head mb-40 gap-4 d-flex align-items-center justify-content-between">
+                        <div class="input-field">
+                            <select>
+                                <option value="1">Upcoming</option>
+                                <option value="2">Upcoming 1</option>
+                                <option value="3">Upcoming 2</option>
+                                <option value="4">Upcoming 3</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <select>
+                                <option value="1">Select Team Size</option>
+                                <option value="2">1</option>
+                                <option value="3">2</option>
+                                <option value="4">3</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <select>
+                                <option value="1">Select Entry Fee</option>
+                                <option value="2">1</option>
+                                <option value="3">2</option>
+                                <option value="4">3</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <div class="input-area d-flex align-items-center">
+                                <img src="{% static 'front/images/icon/search-icon-2.png' %}" alt="icon">
+                                <input type="text" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% for partie in liste_parties %}
+                <div class="single-box">
+                    <div class="row">
+                        <div class="col-lg-8">
+                        {% if partie.nombre_participants == 2 %}
+                            <img src="{% static 'front/images/betludo-1-1.png' %}" alt="image">
+                        {% endif %}
+                        {% if partie.nombre_participants == 3 %}
+                            <img src="{% static 'front/images/betludo-3-opponents.png' %}" alt="image">
+                        {% endif %}
+                        {% if partie.nombre_participants == 4 %}
+                            <img src="{% static 'front/images/betludo-4-opponents.png' %}" alt="image">
+                        {% endif %}
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="single-content">
+                                <h5>{% if partie.nombre_participants > 2 %} {{ partie.nombre_participants }} participants {% else %} 1 contre 1 {% endif %}</h5>
+                                  <div class="count-area mt-4 mb-4 text-center">
+                                    <h6>Mise / Participant : {{ partie.montant_mise|floatformat:-2|intcomma }} FCFA</h6>
+                                    <div class="countdown mt-2 d-flex align-items-center justify-content-center d-none">
+                                        <h6>
+                                            <span class="days">00</span><span class="ref">D :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="hours">00</span><span class="ref">H :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="minutes">00</span><span class="ref">M :</span>
+                                        </h6>
+                                        <h6>
+                                            <span class="seconds">00</span><span class="ref">S</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="prize-pool">
+                                    <p class="mdr">Gains :</p>
+                                    <h5>{{ partie.montant_cagnotte|floatformat:-2|intcomma }} FCFA</h5>
+                                </div>
+                                <div class="btn-area mt-4">
+                                    <a href="#" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">Participer</a>
+                                </div>
+                                <div class="abs-area">
+                                    <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+    {% endblock %}
 
 
 <!--  -->

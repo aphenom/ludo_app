@@ -53,8 +53,8 @@ def index(request):
                     partie.mise = mise
                     partie.montant_mise = mise.montant
                     partie.nombre_participants = nombre_participants
-                    partie.montant_cagnotte = DetermineCagnotte(mise, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
-                    partie.montant_commission = DetermineCommission(mise, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
+                    partie.montant_cagnotte = DetermineCagnotte(mise.montant, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
+                    partie.montant_commission = DetermineCommission(mise.montant, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
                     partie.taux_comission = CurrentTauxCommission()
                     partie.save()
     
@@ -62,7 +62,7 @@ def index(request):
     liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False)
 
     # partie privee pour utilisateur connecté
-    
+
 
     return render(request, 'index.html', locals())
 

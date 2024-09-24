@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'tinymce', 
     "phonenumber_field",
     'cities_light',
+    'django.contrib.humanize',
     # Votre app custom pour gérer les utilisateurs
     'player', 
     'core', 

@@ -1,3 +1,4 @@
+from decimal import Decimal
 import string
 import random
 from django.conf import settings
@@ -26,12 +27,12 @@ def DetermineCagnotte(mise, nombre_participants, taux_commission):
     montant = None
     if taux_commission is None:
         taux_commission = 0
-    montant = mise*nombre_participants*(1-(taux_commission/100))
+    montant = mise*nombre_participants*Decimal(1-(taux_commission/100))
     return round(montant)
      
 def DetermineCommission(mise, nombre_participants, taux_commission):
     montant = None
     if taux_commission is None:
         taux_commission = 0
-    montant = mise*nombre_participants*(taux_commission/100)
+    montant = mise*nombre_participants*Decimal(taux_commission/100)
     return round(montant)
