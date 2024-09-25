@@ -5,10 +5,19 @@ from allauth.socialaccount.models import SocialAccount
 from core.models import Mise
 from ludo.enum import Visibilite
 from ludo.utils import CurrentConfig, CurrentTauxCommission, DetermineCagnotte, DetermineCommission
-from player.models import Partie
+from player.models import Participation, Partie, Profil
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 def custom_login_redirect(request):
+
+    user = User.objects.all().first()
+
+    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])   
+
+    return redirect('index')      
     
     # Récupérer l'utilisateur connecté
     user = request.user
@@ -29,6 +38,7 @@ def custom_login_redirect(request):
     return redirect('/accounts/facebook/login/')
 
 
+#@login_required
 def index(request):
     
     # determinons l'ensemble des mises possibles
@@ -62,7 +72,24 @@ def index(request):
     liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False)
 
     # partie privee pour utilisateur connecté
+    # Récupérer l'utilisateur connecté
+    user = request.user
+    # Si l'utilisateur est authentifié via Facebook
+    if user.is_authenticated:
+        try:
+            # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
+            profil = Profil.objects.get(user=user)
 
+            partie_privee = Partie.objects.filter(organise_par=profil, visibilite = Visibilite.Privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first()
+
+            participation_en_cours = Participation.objects.filter(partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
+            
+            if participation_en_cours:
+                partie_en_cours = participation_en_cours.partie
+            # Afficher les informations du compte social
+            print(profil)
+        except Profil.DoesNotExist:
+            print("L'utilisateur n'a pas de compte social lié à Facebook")
 
     return render(request, 'index.html', locals())
 

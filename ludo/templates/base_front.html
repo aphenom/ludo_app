@@ -114,12 +114,21 @@
                                 </li>
                             </ul>
                             <div class="right-area header-action d-flex align-items-center max-un">
+                                {% if user.is_authenticated %}
+                                <button type="button" class="login privateChoice" data-bs-toggle="modal" data-bs-target="#privateChoiceMod">
+                                    <b><i class="fa fa-lock"></i> Jeu Privé</b>
+                                </button>
+                                <button type="button" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                    Compte
+                                </button>
+                                {% else %}
                                 <button type="button" class="login" data-bs-toggle="modal" data-bs-target="#loginMod">
                                     Connexion
                                 </button>
                                 <button type="button" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">
                                     Inscription
                                 </button>
+                                {% endif %}
                             </div>
                         </div>
                     </nav>
@@ -301,6 +310,87 @@
                                                             <a href="partie-details.html" class="cmn-btn mt-4">Payer
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="privateChoiceMod">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header justify-content-center">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <ul class="nav log-reg-btn d-none justify-content-around">
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link active" id="privateChoiceArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#privateChoiceArea" type="button" role="tab"
+                                            aria-controls="privateChoiceArea" aria-selected="true">
+                                            PRIVATECHOICE
+                                        </button>
+                                    </li>
+                                    <li class="bottom-area" role="presentation">
+                                        <button class="nav-link active" id="privateCreateArea-tab" data-bs-toggle="tab"
+                                            data-bs-target="#privateCreate" type="button" role="tab"
+                                            aria-controls="privateCreate" aria-selected="true">
+                                            PRIVATECREATE
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="privateChoiceArea" role="tabpanel"
+                                        aria-labelledby="privateChoiceArea-tab">
+                                        <div class="login-reg-content privateChoiceMod">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h5 class="sub-title">Voulez vous jouer entre connaissances ?</h5>
+                                                            <!--<h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>-->
+                                                            <p>Tu n'as pas de code d'invitation ? <a href="javascript:void(0)" class="log-btn" data-bs-toggle="modal" data-bs-target="#privateCreateMod">Crée une partie privée</a></p>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Entre le code d'invitation reçu">
+                                                        </div>
+                                                        <div class="sidebar-single-item">
+                                                            <div class="btn-area text-center">
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-4 privateCreate-btn">Rejoindre la partie privée
+                                                                    <i class="icon-d-right-arrow-2"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="tab-pane fade" id="privateCreateArea" role="tabpanel"
+                                        aria-labelledby="privateCreateArea-tab">
+                                        <div class="login-reg-content privateCreateMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h5 class="sub-title">Voulez vous jouer entre connaissances ?</h5>
+                                                            <!--<h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>-->
+                                                            <p>Tu n'as pas de code d'invitation ? <a href="javascript:void(0)" class="log-btn">Crée une partie privée</a></p>
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Entre le code d'invitation reçu">
+                                                        </div>
+                                                        <div class="sidebar-single-item">
+                                                            <div class="btn-area text-center">
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-4 mise-btn">Rejoindre la partie privée
+                                                                    <i class="icon-d-right-arrow-2"></i>
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </form>
                                                 </div>

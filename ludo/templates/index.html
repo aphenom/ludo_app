@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="prize-pool">
                                     <p class="mdr">Gains :</p>
-                                    <h5>{{ partie.montant_cagnotte|floatformat:-2|intcomma }} FCFA</h5>
+                                    <h5>{{ partie.montant_cagnotte|floatformat:-2|intcomma }} {{ config.currency|default:"F CFA" }}</h5>
                                 </div>
                                 <div class="btn-area mt-4">
                                     <a href="#" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">Participer</a>
