@@ -7,7 +7,7 @@ from ludo.enum import TypeTransaction
 # Create your models here.
 class TauxTransaction(models.Model):
 
-    type = models.CharField(max_length=20, choices=TypeTransaction, null=True, blank=True, verbose_name = "type transaction")
+    type = models.CharField(max_length=20, choices=TypeTransaction.choices, null=True, blank=True, verbose_name = "type transaction")
     taux = models.DecimalField('taux', max_digits=10, decimal_places=2, null=True, blank=True)
     debut = models.DateTimeField('date début')
     fin = models.DateTimeField('date fin', null=True, blank=True)

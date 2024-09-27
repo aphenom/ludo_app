@@ -9,10 +9,11 @@ from player.models import Participation, Partie, Profil
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django_dump_die.middleware import dd
 
 
 def custom_login_redirect(request):
-
+    return redirect('/accounts/facebook/login/')
     user = User.objects.all().first()
 
     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])   
@@ -41,6 +42,7 @@ def custom_login_redirect(request):
 #@login_required
 def index(request):
     
+    dd(request)
     # determinons l'ensemble des mises possibles
     liste_mises = Mise.objects.filter(etat_validation=True, etat_suppression=False)
     

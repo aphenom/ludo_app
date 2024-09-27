@@ -17,7 +17,7 @@ class Profil(models.Model):
     id_facebook = models.CharField(max_length=25, unique=True, editable=False)
     nom = models.CharField('nom', max_length=255, null=True, blank=True)
     prenom = models.CharField('prénom(s)', max_length=255, null=True, blank=True)
-    genre = models.CharField(max_length=20, choices=Genre, null=True, blank=True, verbose_name = "genre")
+    genre = models.CharField(max_length=20, choices=Genre.choices, null=True, blank=True, verbose_name = "genre")
     contact = PhoneNumberField("numéro principal", null=True, blank=True)
     contact_retrait = PhoneNumberField("numéro retrait", null=True, blank=True)
     email = models.EmailField("email", max_length=100, null=True, blank=True, unique=True)
@@ -80,7 +80,7 @@ class Partie(models.Model):
     montant_cagnotte = models.DecimalField('montant cagnotte', max_digits=10, decimal_places=2, null=True, blank=True)
     montant_commission = models.DecimalField('montant commission', max_digits=10, decimal_places=2, null=True, blank=True)
 
-    visibilite = models.CharField(max_length=20, choices=Visibilite, default=Visibilite.Public, null=True, blank=True, verbose_name = "visibilité")
+    visibilite = models.CharField(max_length=20, choices=Visibilite.choices, default=Visibilite.Public, null=True, blank=True, verbose_name = "visibilité")
 
     delai_tour = models.PositiveIntegerField('délai tour par joueur (sec)', null=True, blank=True)
     
@@ -189,7 +189,7 @@ class Transaction(models.Model):
 
     code = models.CharField(max_length=25, unique=True, editable=False)
     
-    type = models.CharField(max_length=20, choices=TypeTransaction, null=True, blank=True, verbose_name = "type transaction")
+    type = models.CharField(max_length=20, choices=TypeTransaction.choices, null=True, blank=True, verbose_name = "type transaction")
 
     montant = models.DecimalField('montant', max_digits=10, decimal_places=2, null=True, blank=True)
     frais_genere = models.DecimalField('frais généré', max_digits=10, decimal_places=2, null=True, blank=True)

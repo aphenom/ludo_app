@@ -169,8 +169,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 if config('ENVIRONMENT', 'DEV') == 'PROD':
-    STATIC_ROOT = config('STATIC_ROOT', '/var/www/clients/client0/web8/web/static/')
-    MEDIA_ROOT = config('MEDIA_ROOT', '/var/www/clients/client0/web8/web/media/')
+    STATIC_ROOT = config('STATIC_ROOT', '/var/www/clients/client0/web13/web/static/')
+    MEDIA_ROOT = config('MEDIA_ROOT', '/var/www/clients/client0/web13/web/media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
