@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import custom_login_redirect, index
+from .views import custom_login_redirect, facebook_login_with_state, index
 
 
 urlpatterns = [
@@ -26,8 +26,14 @@ urlpatterns = [
     # Django admin
     path('admin/', admin.site.urls),
 
+    # path('facebook-login/', facebook_login_with_state, name='facebook_login_with_state'),
+    
+    path('accounts/login/', facebook_login_with_state, name='facebook_login_with_state'),
+
+    path('accounts/login-redirect/', custom_login_redirect, name='custom_login_redirect'),
+    
     # Rediriger la connexion normale vers Facebook
-    path('accounts/login/', custom_login_redirect),
+    # path('accounts/login/', custom_login_redirect),
 
     # Allauth URLs pour l'authentification
     path('accounts/', include('allauth.urls')),

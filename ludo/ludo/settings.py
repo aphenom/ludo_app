@@ -193,7 +193,7 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_LOGOUT_ON_GET = False  # Ne pas déconnecter l'utilisateur sur GET request
 
 # Redirections après connexion
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/login-redirect/'
 LOGOUT_REDIRECT_URL = '/'
 
 SOCIALACCOUNT_PROVIDERS = {

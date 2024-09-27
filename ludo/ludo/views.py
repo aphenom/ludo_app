@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.conf import settings
 from allauth.socialaccount.models import SocialAccount
@@ -10,33 +11,40 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django_dump_die.middleware import dd
+from urllib.parse import urlencode
+
+
+def facebook_login_with_state(request):
+    # Ajouter des paramètres que tu souhaites passer dans l'URL de redirection
+    next_url = request.GET.get('next', '/')
+    custom_variable = 'custom_value'  # Variable que tu veux passer
+    custom_variable = request.GET.get('custom_variable', custom_variable)
+    state = urlencode({'next': next_url, 'custom_variable': custom_variable})
+    
+    # Rediriger vers l'URL de login de Facebook avec le paramètre `state`
+    facebook_login_url = f'/accounts/facebook/login/?{state}'
+    return redirect(facebook_login_url)
 
 
 def custom_login_redirect(request):
-    return redirect('/accounts/facebook/login/')
-    user = User.objects.all().first()
+    # Récupérer les paramètres de `state` dans la requête
+    next_url = request.GET.get('next', '/')
+    custom_variable = request.GET.get('custom_variable', '')
 
-    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])   
-
-    return redirect('index')      
-    
-    # Récupérer l'utilisateur connecté
-    user = request.user
-    # Si l'utilisateur est authentifié via Facebook
-    if user.is_authenticated:
+    # Exemple d'utilisation : récupérer l'utilisateur connecté via Facebook
+    if request.user.is_authenticated:
         try:
-            # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
-            social_account = SocialAccount.objects.get(user=user, provider='facebook')
-
-            # Afficher les informations du compte social
-            print(social_account.extra_data)
+            social_account = SocialAccount.objects.get(user=request.user, provider='facebook')
+            # Tu peux accéder aux données du profil Facebook de l'utilisateur ici
+            facebook_data = social_account.extra_data
+            name = facebook_data.get('name')
+            email = facebook_data.get('email')
+            # Ajoute ici tes traitements en fonction de `custom_variable` ou des données utilisateur
         except SocialAccount.DoesNotExist:
-            print("L'utilisateur n'a pas de compte social lié à Facebook")
+            return HttpResponse("Erreur: aucun compte Facebook trouvé.", status=404)
 
-    # dd(request)
-    print("ici")
-    # Si l'utilisateur essaie d'accéder à la page de connexion normale, on le redirige vers Facebook
-    return redirect('/accounts/facebook/login/')
+    # Rediriger vers la page souhaitée avec les informations supplémentaires
+    return redirect(next_url)
 
 
 #@login_required
