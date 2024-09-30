@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.config',
             ],
         },
     },
@@ -193,7 +194,7 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_LOGOUT_ON_GET = False  # Ne pas déconnecter l'utilisateur sur GET request
 
 # Redirections après connexion
-LOGIN_REDIRECT_URL = '/accounts/login-redirect/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 SOCIALACCOUNT_PROVIDERS = {

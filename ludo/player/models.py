@@ -8,6 +8,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from cities_light.models import Country
 from core.models import Config, Mise, TauxCommission, TauxTransaction
 from ludo.enum import Genre, TypeTransaction, Visibilite
+from ludo.utils import CodeGenerator
 
 # Create your models here.
 
@@ -24,7 +25,6 @@ class Profil(models.Model):
     pays_residence = models.ForeignKey(Country, models.SET_NULL, null=True, blank=True, related_name="pays_profils", related_query_name="pays_profil", verbose_name = "pays")
     photo = models.FileField(upload_to='uploaded_media/photo_player', verbose_name="photo", null=True, blank=True)
     
-    code = models.CharField(max_length=25, unique=True, editable=False)
     code_invite_par = models.CharField(max_length=25, null=True, blank=True)
 
     date_creation = models.DateTimeField('date création', auto_now_add=True)
@@ -54,7 +54,7 @@ class Profil(models.Model):
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         if not self.id:
-            self.code = timezone.now().strftime('%d%m%Y%H%M%S%f')
+            self.code = CodeGenerator(Profil, "U{:%y}".format(timezone.now()), "{:%m%d}".format(timezone.now()))
             # self.email = self.user.email
             # phone = PhoneNumber.objects.filter(user=self.user).first()
             # if phone:
@@ -64,9 +64,14 @@ class Profil(models.Model):
                 self.date_validation = timezone.now()
         if self.etat_suppression != self._init_etat_suppression:
             if self.etat_suppression == True:
+                self.user.is_active = False
                 self.date_suppression = timezone.now()                             
-        self.user.last_name = self.nom
-        self.user.first_name = self.prenom
+        if self.user.last_name != self.nom:
+            self.user.last_name = self.nom
+        if self.user.first_name != self.prenom:
+            self.user.first_name = self.prenom
+        if self.user.email != self.email:
+            self.user.email = self.email
         self.user.save()
         return super(Profil, self).save(*args, **kwargs)        
 
@@ -119,7 +124,7 @@ class Partie(models.Model):
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         if not self.id:
-            self.code = timezone.now().strftime('%d%m%Y%H%M%S%f')
+            self.code = CodeGenerator(Partie, "J{:%y}".format(timezone.now()), "{:%m%d}".format(timezone.now()))
             # self.email = self.user.email
             # phone = PhoneNumber.objects.filter(user=self.user).first()
             # if phone:
@@ -234,7 +239,7 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         if not self.id:
-            self.code = timezone.now().strftime('%d%m%Y%H%M%S%f')
+            self.code = CodeGenerator(Transaction, "T{:%y}".format(timezone.now()), "{:%m%d}".format(timezone.now()))
             # self.email = self.user.email
             # phone = PhoneNumber.objects.filter(user=self.user).first()
             # if phone:

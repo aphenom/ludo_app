@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load socialaccount %}
 <html lang="en">
 
 <head>
@@ -58,59 +59,9 @@
                             <i class="fas fa-bars"></i>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbar-content">
-                            <ul class="navbar-nav mr-auto mb-2 mb-lg-0 invisible">
+                            <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="index.html">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="games.html">Games</a>
-                                </li>
-                                <li class="nav-item dropdown main-navbar">
-                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Lottery</a>
-                                    <ul class="dropdown-menu main-menu shadow">
-                                        <li><a class="nav-link" href="lottery.html">Lottery</a></li>
-                                        <li><a class="nav-link" href="lottery-details.html">Lottery Details</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item dropdown main-navbar">
-                                    <a class="nav-link dropdown-toggle active" href="javascript:void(0)"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Pages</a>
-                                    <ul class="dropdown-menu main-menu shadow">
-                                        <li><a class="nav-link" href="about-us.html">About Us</a></li>
-                                        <li class="dropend sub-navbar">
-                                            <a href="javascript:void(0)" class="dropdown-item dropdown-toggle"
-                                                data-bs-toggle="dropdown" data-bs-auto-close="outside">Promotions</a>
-                                            <ul class="dropdown-menu sub-menu shadow">
-                                                <li><a class="nav-link" href="promotions.html">Promotions</a></li>
-                                                <li><a class="nav-link" href="promotions-details.html">Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropend sub-navbar">
-                                            <a href="javascript:void(0)" class="dropdown-item dropdown-toggle"
-                                                data-bs-toggle="dropdown" data-bs-auto-close="outside">Tournaments</a>
-                                            <ul class="dropdown-menu sub-menu shadow">
-                                                <li><a class="nav-link" href="tournaments.html">Tournaments</a></li>
-                                                <li><a class="nav-link" href="tournaments-result.html">Result</a></li>
-                                                <li><a class="nav-link" href="tournaments-details.html">Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="nav-link" href="terms-conditions.html">Terms Conditions</a></li>
-                                        <li><a class="nav-link" href="privacy-policy.html">Privacy Policy</a></li>
-                                        <li><a class="nav-link" href="error.html">Error</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item dropdown main-navbar">
-                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="outside">Blog</a>
-                                    <ul class="dropdown-menu main-menu shadow">
-                                        <li><a class="nav-link" href="blog.html">Blog</a></li>
-                                        <li><a class="nav-link" href="blog-2.html">Blog Second</a></li>
-                                        <li><a class="nav-link" href="blog-details.html">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="contact.html">Contact</a>
+                                    {% if user.is_authenticated %}<input type="text" value="Solde : 1 000 000 FCFA" readonly="" autocomplete="off">{% endif %}
                                 </li>
                             </ul>
                             <div class="right-area header-action d-flex align-items-center max-un">
@@ -118,16 +69,24 @@
                                 <button type="button" class="login privateChoice" data-bs-toggle="modal" data-bs-target="#privateChoiceMod">
                                     <b><i class="fa fa-lock"></i> Jeu Privé</b>
                                 </button>
-                                <button type="button" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                <a href="{% url 'player:player_dashboard' %}" class="cmn-btn">
                                     Compte
-                                </button>
+                                </a>
                                 {% else %}
-                                <button type="button" class="login" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                <a href="{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login" class="login">
                                     Connexion
-                                </button>
-                                <button type="button" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                </a>
+                                <a href="{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=connect" class="cmn-btn">
                                     Inscription
-                                </button>
+                                </a>
+                                <!-- 
+                                    <button type="button" class="login" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                        Connexion
+                                    </button>
+                                    <button type="button" class="cmn-btn reg" data-bs-toggle="modal" data-bs-target="#loginMod">
+                                        Inscription
+                                    </button> 
+                                -->
                                 {% endif %}
                             </div>
                         </div>
@@ -152,6 +111,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
+                                <!--
                                 <ul class="nav log-reg-btn d-none justify-content-around">
                                     <li class="bottom-area" role="presentation">
                                         <button class="nav-link" id="regArea-tab" data-bs-toggle="tab"
@@ -175,7 +135,9 @@
                                         </button>
                                     </li>
                                 </ul>
+                                -->
                                 <div class="tab-content">
+                                    <!--
                                     <div class="tab-pane fade show active" id="loginArea" role="tabpanel"
                                         aria-labelledby="loginArea-tab">
                                         <div class="login-reg-content">
@@ -226,7 +188,6 @@
                                                     <form action="#">
                                                         <div class="section-text text-center">
                                                             <h5 class="sub-title">Prêt(e) à commencer ?</h5>
-                                                            <!--<h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>-->
                                                             <p>Tu as déjà un compte ? <a href="javascript:void(0)" class="log-btn">Connexion</a></p>
                                                         </div>
                                                         <div class="input-area d-flex align-items-center">
@@ -274,7 +235,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="miseArea" role="tabpanel"
+                                    -->
+                                    <div class="tab-pane fade show active" id="miseArea" role="tabpanel"
                                         aria-labelledby="miseArea-tab">
                                         <div class="login-reg-content miseMode">
                                             <div class="modal-body">
@@ -288,6 +250,12 @@
                                                             <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
                                                             <input type="text" value="10 000" readonly>
                                                         </div>
+                                                        <p>Mise : 1 000 FCFA</p>
+                                                        <p>Nombre de joueurs : 2</p>
+                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
+                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge" data-bs-toggle="modal" data-bs-target="#loginMod">recharger ton compte</a> avant de continuer !</p>
+                                                        <!--
                                                         <div class="input-area d-flex align-items-center d-none">
                                                             <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
                                                             <input type="text" placeholder="Mot de passe">
@@ -306,8 +274,59 @@
                                                             </label>
                                                             <a href="javascript:void(0)">Mot de passe oublié</a>
                                                         </div>
+                                                        -->
                                                         <div class="btn-area text-center">
-                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer
+                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer et Jouer
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="rechargeArea" role="tabpanel"
+                                        aria-labelledby="rechargeArea-tab">
+                                        <div class="login-reg-content rechargeMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h3 class="title">Recharge ton compte</h3>
+                                                            <!-- <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p> -->
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
+                                                            <input type="text" value="10 000" readonly>
+                                                        </div>
+                                                        <p>Mise : 1 000 FCFA</p>
+                                                        <p>Nombre de joueurs : 2</p>
+                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
+                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn">recharger ton compte</a> avant de continuer !</p>
+                                                        <!--
+                                                        <div class="input-area d-flex align-items-center d-none">
+                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
+                                                            <input type="text" placeholder="Mot de passe">
+                                                        </div>
+                                                        <div class="checkbox-item d-flex justify-content-between d-none">
+                                                            <label class="checkbox-single d-flex align-items-center">
+                                                                <span class="content-area">
+                                                                    <span class="checkbox-area d-flex">
+                                                                        <input type="checkbox">
+                                                                        <span class="checkmark"></span>
+                                                                    </span>
+                                                                    <span class="item-title d-flex align-items-center">
+                                                                        <span>Se rappeler de moi</span>
+                                                                    </span>
+                                                                </span>
+                                                            </label>
+                                                            <a href="javascript:void(0)">Mot de passe oublié</a>
+                                                        </div>
+                                                        -->
+                                                        <div class="btn-area text-center">
+                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer et Jouer
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                         </div>
@@ -327,6 +346,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
+                                <!--
                                 <ul class="nav log-reg-btn d-none justify-content-around">
                                     <li class="bottom-area" role="presentation">
                                         <button class="nav-link active" id="privateChoiceArea-tab" data-bs-toggle="tab"
@@ -343,6 +363,7 @@
                                         </button>
                                     </li>
                                 </ul>
+                                -->
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="privateChoiceArea" role="tabpanel"
                                         aria-labelledby="privateChoiceArea-tab">
@@ -353,41 +374,53 @@
                                                         <div class="section-text text-center">
                                                             <h5 class="sub-title">Voulez vous jouer entre connaissances ?</h5>
                                                             <!--<h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>-->
-                                                            <p>Tu n'as pas de code d'invitation ? <a href="javascript:void(0)" class="log-btn" data-bs-toggle="modal" data-bs-target="#privateCreateMod">Crée une partie privée</a></p>
+                                                            <!--<p>Tu n'as pas de code d'invitation ? <a href="javascript:void(0)" class="log-btn" data-bs-toggle="modal" data-bs-target="#privateCreateMod">Crée une partie privée</a></p>-->
                                                         </div>
                                                         <div class="input-area d-flex align-items-center">
                                                             <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
-                                                            <input type="text" placeholder="Entre le code d'invitation reçu">
+                                                            <input type="text" name="code_partie_privee" id="code_partie_privee" placeholder="Entre le code d'invitation reçu">
                                                         </div>
+                                                        <p>Mise : 1 000 FCFA</p>
+                                                        <p>Nombre de joueurs : 2</p>
+                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
+                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="#">recharger ton compte</a> avant de continuer !</p>
+                                                        <p>Désolé, ce code ne correspond à aucune partie privée active !</p>
                                                         <div class="sidebar-single-item">
                                                             <div class="btn-area text-center">
-                                                                <a href="javascript:void(0)" class="cmn-btn mt-4 privateCreate-btn">Rejoindre la partie privée
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-auto mb-4 privateCreate-btn">Rejoindre la partie privée
                                                                     <i class="icon-d-right-arrow-2"></i>
                                                                 </a>
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <div class="tab-pane fade" id="privateCreateArea" role="tabpanel"
-                                        aria-labelledby="privateCreateArea-tab">
-                                        <div class="login-reg-content privateCreateMode">
-                                            <div class="modal-body">
-                                                <div class="form-area">
-                                                    <form action="#">
-                                                        <div class="section-text text-center">
-                                                            <h5 class="sub-title">Voulez vous jouer entre connaissances ?</h5>
+                                                        <div class="section-text text-center mt-2">
+                                                            <!--<h5 class="sub-title">Voulez vous jouer entre connaissances ?</h5>-->
                                                             <!--<h3 class="title">Welcome Bonus €1,500 + 270 FS</h3>-->
-                                                            <p>Tu n'as pas de code d'invitation ? <a href="javascript:void(0)" class="log-btn">Crée une partie privée</a></p>
+                                                            <p>Ou<br/>Tu veux créer une nouvelle partie privée ? <!--<a href="javascript:void(0)" class="log-btn" data-bs-toggle="modal" data-bs-target="#privateCreateMod">Crée une partie privée</a>--></p>
                                                         </div>
-                                                        <div class="input-area d-flex align-items-center">
-                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
-                                                            <input type="text" placeholder="Entre le code d'invitation reçu">
-                                                        </div>
-                                                        <div class="sidebar-single-item">
+                                                        <!--<div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/games-tab-icon-5.png' %}" alt="icon">
+                                                            
+                                                        </div>-->
+                                                        <select name="choix_partie_privee" id="choix_partie_privee">
+                                                            <option value="">Choisis ton type de partie privée </option>
+                                                            {% for choix_partie_privee in choix_parties_privees_triees %}
+                                                            <option value="{{choix_partie_privee.valeur_option}}" 
+                                                            data-mise="{{ choix_partie_privee.mise.pk }}" 
+                                                            data-nombre_participants="{{ choix_partie_privee.nombre_participants }}"
+                                                            data-montant_cagnotte="{{ choix_partie_privee.montant_cagnotte }}">
+                                                                {{choix_partie_privee.texte_option}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <p>Mise : 1 000 FCFA</p>
+                                                        <p>Nombre de joueurs : 2</p>
+                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
+                                                        <p>Tu seras debité de :pour votre mise !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="#">recharger ton compte</a> ou de choisir un autre type de partie privée !</p>
+                                                        <div class="sidebar-single-item mt-4">
                                                             <div class="btn-area text-center">
-                                                                <a href="javascript:void(0)" class="cmn-btn mt-4 mise-btn">Rejoindre la partie privée
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-auto privateCreate-btn">Créer la partie privée
                                                                     <i class="icon-d-right-arrow-2"></i>
                                                                 </a>
                                                             </div>
@@ -396,7 +429,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 								</div>
                             </div>
                         </div>
