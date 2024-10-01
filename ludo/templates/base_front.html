@@ -61,16 +61,18 @@
                         <div class="collapse navbar-collapse justify-content-between" id="navbar-content">
                             <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    {% if user.is_authenticated %}<input type="text" value="Solde : 1 000 000 FCFA" readonly="" autocomplete="off">{% endif %}
+                                    {% if user.is_authenticated %}
+                                    <span><img src="{% static 'front/images/icon/games-tab-icon-4.png' %}" alt="icon"> Solde : 1 000 000 FCFA</span>
+                                    {% endif %}
                                 </li>
                             </ul>
                             <div class="right-area header-action d-flex align-items-center max-un">
                                 {% if user.is_authenticated %}
                                 <button type="button" class="login privateChoice" data-bs-toggle="modal" data-bs-target="#privateChoiceMod">
-                                    <b><i class="fa fa-lock"></i> Jeu Privé</b>
+                                    <b><img src="{% static 'front/images/icon/games-tab-icon-5.png' %}" alt="icon"> Jeu Privé</b>
                                 </button>
                                 <a href="{% url 'player:player_dashboard' %}" class="cmn-btn">
-                                    Compte
+                                   Mon Compte
                                 </a>
                                 {% else %}
                                 <a href="{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login" class="login">
@@ -254,57 +256,8 @@
                                                         <p>Nombre de joueurs : 2</p>
                                                         <p>Gain : <a href="#">1 000 FCFFA</a></p>
                                                         <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge" data-bs-toggle="modal" data-bs-target="#loginMod">recharger ton compte</a> avant de continuer !</p>
-                                                        <!--
-                                                        <div class="input-area d-flex align-items-center d-none">
-                                                            <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
-                                                            <input type="text" placeholder="Mot de passe">
-                                                        </div>
-                                                        <div class="checkbox-item d-flex justify-content-between d-none">
-                                                            <label class="checkbox-single d-flex align-items-center">
-                                                                <span class="content-area">
-                                                                    <span class="checkbox-area d-flex">
-                                                                        <input type="checkbox">
-                                                                        <span class="checkmark"></span>
-                                                                    </span>
-                                                                    <span class="item-title d-flex align-items-center">
-                                                                        <span>Se rappeler de moi</span>
-                                                                    </span>
-                                                                </span>
-                                                            </label>
-                                                            <a href="javascript:void(0)">Mot de passe oublié</a>
-                                                        </div>
-                                                        -->
-                                                        <div class="btn-area text-center">
-                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer et Jouer
-                                                                <i class="icon-d-right-arrow-2"></i>
-                                                            </a>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane fade" id="rechargeArea" role="tabpanel"
-                                        aria-labelledby="rechargeArea-tab">
-                                        <div class="login-reg-content rechargeMode">
-                                            <div class="modal-body">
-                                                <div class="form-area">
-                                                    <form action="#">
-                                                        <div class="section-text text-center">
-                                                            <h3 class="title">Recharge ton compte</h3>
-                                                            <!-- <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p> -->
-                                                        </div>
-                                                        <div class="input-area d-flex align-items-center">
-                                                            <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
-                                                            <input type="text" value="10 000" readonly>
-                                                        </div>
-                                                        <p>Mise : 1 000 FCFA</p>
-                                                        <p>Nombre de joueurs : 2</p>
-                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
-                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn">recharger ton compte</a> avant de continuer !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
+                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> avant de continuer !</p>
                                                         <!--
                                                         <div class="input-area d-flex align-items-center d-none">
                                                             <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
@@ -339,6 +292,48 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="rechargeMod">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header justify-content-center">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="rechargeArea" role="tabpanel"
+                                        aria-labelledby="rechargeArea-tab">
+                                        <div class="login-reg-content rechargeMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <form action="#">
+                                                        <div class="section-text text-center">
+                                                            <h3 class="title">Recharge ton compte</h3>
+                                                            <!-- <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p> -->
+                                                        </div>
+                                                        <div class="input-area d-flex align-items-center">
+                                                            <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
+                                                            <input type="text" value="10000" class="money_field">
+                                                        </div>
+                                                        <p>Mise : 1 000 FCFA</p>
+                                                        <p>Nombre de joueurs : 2</p>
+                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
+                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
+                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> avant de continuer !</p>
+                                                        <div class="btn-area text-center">
+                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer et Jouer
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal fade" id="privateChoiceMod">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -346,24 +341,6 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <!--
-                                <ul class="nav log-reg-btn d-none justify-content-around">
-                                    <li class="bottom-area" role="presentation">
-                                        <button class="nav-link active" id="privateChoiceArea-tab" data-bs-toggle="tab"
-                                            data-bs-target="#privateChoiceArea" type="button" role="tab"
-                                            aria-controls="privateChoiceArea" aria-selected="true">
-                                            PRIVATECHOICE
-                                        </button>
-                                    </li>
-                                    <li class="bottom-area" role="presentation">
-                                        <button class="nav-link active" id="privateCreateArea-tab" data-bs-toggle="tab"
-                                            data-bs-target="#privateCreate" type="button" role="tab"
-                                            aria-controls="privateCreate" aria-selected="true">
-                                            PRIVATECREATE
-                                        </button>
-                                    </li>
-                                </ul>
-                                -->
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="privateChoiceArea" role="tabpanel"
                                         aria-labelledby="privateChoiceArea-tab">
@@ -384,7 +361,8 @@
                                                         <p>Nombre de joueurs : 2</p>
                                                         <p>Gain : <a href="#">1 000 FCFFA</a></p>
                                                         <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="#">recharger ton compte</a> avant de continuer !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
+                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> avant de continuer !</p>
                                                         <p>Désolé, ce code ne correspond à aucune partie privée active !</p>
                                                         <div class="sidebar-single-item">
                                                             <div class="btn-area text-center">
@@ -417,7 +395,8 @@
                                                         <p>Nombre de joueurs : 2</p>
                                                         <p>Gain : <a href="#">1 000 FCFFA</a></p>
                                                         <p>Tu seras debité de :pour votre mise !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="#">recharger ton compte</a> ou de choisir un autre type de partie privée !</p>
+                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
+                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> ou de choisir un autre type de partie privée !</p>
                                                         <div class="sidebar-single-item mt-4">
                                                             <div class="btn-area text-center">
                                                                 <a href="javascript:void(0)" class="cmn-btn mt-auto privateCreate-btn">Créer la partie privée
@@ -911,6 +890,32 @@
     <script src="{% static 'front/js/plugin/wow.min.js' %}"></script>
     <script src="{% static 'front/js/plugin/plugin.js' %}"></script>
     <script src="{% static 'front/js/main.js' %}"></script>
+    <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    
+    <script>
+
+    $(document).ready(function () {
+
+		//appliquer le mask de saisie sur les champs montant
+		Inputmask("currency", {
+			prefix: "",
+			groupSeparator: " ",
+			alias: "numeric",
+			digits: 0, //2 nombre de caractère après la virgule
+			onKeyDown: function(event) {
+				var key = event.keyCode || event.charCode;
+
+				// Empêcher la saisie du signe négatif
+				if (key === 189 || key === 109) { // Les codes 189 et 109 correspondent au signe moins (-)
+					event.preventDefault();
+					return false;
+				}
+			}
+		}).mask('.money_field');
+    });   
+
+    </script>
+    
     {% endblock %}
 </body>
 
