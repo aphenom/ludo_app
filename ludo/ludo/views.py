@@ -127,8 +127,8 @@ def index(request):
                     "nombre_participants":nombre_participants,
                     "montant_cagnotte":montant_cagnotte,
                     "montant_commission":montant_commission,
-                    "texte_option":"Mise : {} {} | {} : {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "", "1 contre 1" if nombre_participants < 3 else "joueurs", nombre_participants, intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else ""),
-                    "valeur_option":"Mise : {} {} | {} : {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "", "1 contre 1" if nombre_participants < 3 else "joueurs", nombre_participants, intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else "")
+                    "texte_option":"Mise : {} {} | {} : {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "", "1 contre 1" if nombre_participants < 3 else "Joueurs", nombre_participants, intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else ""),
+                    "valeur_option":"Mise : {} {} | {} : {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "", "1 contre 1" if nombre_participants < 3 else "Joueurs", nombre_participants, intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else "")
                 })
 
                 #gerons les parties par defaut

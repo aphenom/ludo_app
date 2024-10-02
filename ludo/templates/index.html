@@ -123,6 +123,9 @@
                 </div>
                 {% endfor %}
 
+                <button onclick="requestNotificationPermission()" class="d-none">Activer les notifications</button>
+                <button onclick="sendNotification()" class="d-none">Envoyer une notification</button>
+
             </div>
         </div>
     </section>
@@ -137,6 +140,8 @@
         <script>
             $(document).ready(function() {
                 const separateur = "";
+
+                // choix de jeu public
                 $(document).on("click", ".jeu-action", function(e) {
                     // alert("here");
                     // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
@@ -173,6 +178,52 @@
 
                 });
 
+                // selection partie privee
+                $(document).on("change", "#choix_partie_privee", function(e) {
+                    // alert("here");
+                    // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+                    // let partie = $(this).data('partie');
+                    console.log($(".nice-select>.current").html());
+                    if($(this).find(":selected").val() != ""){
+                        let mise = Number(String($(this).data('mise')).replace(/\s/g, ''));
+                        let nombre_participants = $(this).data('nombre_participants');
+                        let gain = Number(String($(this).data('gain')).replace(/\s/g, ''));
+                        let solde = Number(String($(this).data('solde')).replace(/\s/g, ''));
+                        let currency = $(this).data('currency');
+                        let difference_solde_mise = solde - mise;
+                        let minimum_depot = Number(String($(this).data('minimum_depot')).replace(/\s/g, ''));
+                        
+                        // remplissons le modal
+                        $("#choix_partie_privee-input").val(numStr(mise, separateur));    
+                        $("#choix_partie_privee-mise").html(numStr(mise, separateur));    
+                        $("#choix_partie_privee-nombre_participants").html(nombre_participants);    
+                        $("#choix_partie_privee-gain").html(numStr(gain, separateur));    
+                        $("#choix_partie_privee-solde").html(numStr(solde, separateur));  
+                        
+                        $(".choix_partie_privee-resume").show();
+
+                        if(difference_solde_mise >= 0){
+                            $(".choix_partie_privee-solde-bon").show();
+                            $(".choix_partie_privee-solde-mauvais").hide();
+                        }  
+                        else{
+                            $(".choix_partie_privee-solde-bon").hide();
+                            $(".choix_partie_privee-solde-mauvais").show();
+                            //$('#recharge-input').attr('data-difference_solde_mise', Math.abs(difference_solde_mise));
+                            //$('#recharge-input').attr('data-minimum_depot', minimum_depot);
+                            //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
+                            $('#recharge-input').remove();
+                            $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                            applyMoneyFieldMask();
+                        }
+                    }
+                    else{
+                        $(".choix_partie_privee-resume").hide();
+                    }
+
+                });
+
+                // box rechargement 
                 $(document).on("change keyup", "#recharge-input", function(e) {
                     // alert("here");
                     // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
@@ -209,8 +260,5 @@
 
             });
 
-            function remplirFormRetrait(valeur_init, valeur_min){
-                alert(valeur_init);
-            }
         </script>
     {% endblock %}
