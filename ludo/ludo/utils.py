@@ -20,6 +20,8 @@ def ContextConfig(request):
 
     next = request.session.get('next', '')
 
+    solde = 0 
+
     """ 
     if config.parallax and hasattr(config.parallax, 'url'):
         costum_parallax = config.parallax.url
@@ -44,7 +46,13 @@ def ContextConfig(request):
     else:
         notification_messages = None
     """
-    return {'config' : config, 'my_current_url' : my_current_url, 'code_invitation' : code_invitation, 'next' : next}      
+    return {
+        'config' : config, 
+        'my_current_url' : my_current_url, 
+        'code_invitation' : code_invitation, 
+        'next' : next,
+        'solde' : solde
+        }      
     # return {'config' : config, 'costum_parallax' : costum_parallax, 'my_current_url':my_current_url, 'notification_messages':notification_messages, 'gtag':settings.GTAG}      
 
 

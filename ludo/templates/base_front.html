@@ -59,7 +59,7 @@
                             <i class="fas fa-bars"></i>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbar-content">
-                            <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                            <ul class="navbar-nav mr-auto mb-2 mb-lg-0 h-auto">
                                 <li class="nav-item">
                                     {% if user.is_authenticated %}
                                     <span><img src="{% static 'front/images/icon/games-tab-icon-4.png' %}" alt="icon"> Solde : 1 000 000 FCFA</span>
@@ -250,14 +250,16 @@
                                                         </div>
                                                         <div class="input-area d-flex align-items-center">
                                                             <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
-                                                            <input type="text" value="10 000" readonly>
+                                                            <input type="text" id="mise-input" readonly>
                                                         </div>
-                                                        <p>Mise : 1 000 FCFA</p>
-                                                        <p>Nombre de joueurs : 2</p>
-                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
-                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
-                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> avant de continuer !</p>
+                                                        <p>Mise : <span id="mise-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
+                                                        <p>Nombre de joueurs : <span id="mise-nombre_participants">2</span></p>
+                                                        <p>Gain : <a href="#"><span id="mise-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
+                                                        <p class="mise-solde-bon">Tu seras debité de : <span id="mise-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
+                                                        <p class="mise-solde-mauvais">Ton solde (<span id="mise-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
+                                                        <!--<input type="hidden" id="mise-recharge" data-difference_solde_mise="0" data-minimum_depot="0">-->
+                                                        <a href="javascript:void(0)" class="recharge-btn recharge" id="mise-link-recharge"  data-bs-dismiss="modal"
+                                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> avant de continuer !</p>
                                                         <!--
                                                         <div class="input-area d-flex align-items-center d-none">
                                                             <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
@@ -279,7 +281,11 @@
                                                         </div>
                                                         -->
                                                         <div class="btn-area text-center">
-                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer et Jouer
+                                                            <a href="partie-details.html" class="cmn-btn mt-4 mise-solde-bon">Payer et Jouer
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                            <a href="javascript:void(0)" class="cmn-btn mt-4 mise-solde-mauvais recharge" id="mise-btn-recharge"  data-bs-dismiss="modal"
+                                                        aria-label="Close" data-bs-toggle="modal"data-bs-target="#rechargeMod">Recharger mon compte
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                         </div>
@@ -305,25 +311,19 @@
                                         <div class="login-reg-content rechargeMode">
                                             <div class="modal-body">
                                                 <div class="form-area">
-                                                    <form action="#">
+                                                    <form action="#" method="GET">
                                                         <div class="section-text text-center">
                                                             <h3 class="title">Recharge ton compte</h3>
                                                             <!-- <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p> -->
                                                         </div>
-                                                        <div class="input-area d-flex align-items-center">
+                                                        <div class="input-area d-flex align-items-center" id="recharge-input-container">
                                                             <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
-                                                            <input type="text" value="10000" class="money_field">
+                                                            <input type="text" id="recharge-input" class="money_field" value="0">
                                                         </div>
-                                                        <p>Mise : 1 000 FCFA</p>
-                                                        <p>Nombre de joueurs : 2</p>
-                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
-                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
-                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> avant de continuer !</p>
                                                         <div class="btn-area text-center">
-                                                            <a href="partie-details.html" class="cmn-btn mt-4">Payer et Jouer
+                                                            <button type="submit"id="recharge-button" class="cmn-btn mt-4 disabled">Recharger
                                                                 <i class="icon-d-right-arrow-2"></i>
-                                                            </a>
+                                                            </button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -361,7 +361,7 @@
                                                         <p>Nombre de joueurs : 2</p>
                                                         <p>Gain : <a href="#">1 000 FCFFA</a></p>
                                                         <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
+                                                        <p>Ton solde () est inférieur à la mise attendue. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
                                         aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> avant de continuer !</p>
                                                         <p>Désolé, ce code ne correspond à aucune partie privée active !</p>
                                                         <div class="sidebar-single-item">
@@ -395,7 +395,7 @@
                                                         <p>Nombre de joueurs : 2</p>
                                                         <p>Gain : <a href="#">1 000 FCFFA</a></p>
                                                         <p>Tu seras debité de :pour votre mise !</p>
-                                                        <p>Ton solde () est inférieur à la mise souhaitée. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
+                                                        <p>Ton solde () est inférieur à la mise attendue. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
                                         aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> ou de choisir un autre type de partie privée !</p>
                                                         <div class="sidebar-single-item mt-4">
                                                             <div class="btn-area text-center">
@@ -875,6 +875,23 @@
     {% endblock %}
     <!-- Footer Area End -->
 
+    <style>
+        /* Styles CSS pour personnaliser le bouton */
+
+        .cmn-btn {
+            background-color: transparent;
+        }
+ 
+        .error-section {
+            background-size: auto;
+        }
+
+        .error-section .cmn-btn i {
+            transform: none;
+            margin-right: 10px;
+        }
+    </style>
+
     <!--==================================================================-->
     {% block script %}
     <script src="{% static 'front/js/jquery.min.js' %}"></script>
@@ -912,8 +929,49 @@
 				}
 			}
 		}).mask('.money_field');
+
     });   
 
+
+    // Fonction pour appliquer Inputmask sur les champs ayant la classe .money_field
+    function applyMoneyFieldMask() {
+        Inputmask("currency", {
+            prefix: "",
+            groupSeparator: " ",
+            alias: "numeric",
+            digits: 0, // Nombre de caractères après la virgule
+            onKeyDown: function(event) {
+                var key = event.keyCode || event.charCode;
+
+                // Empêcher la saisie du signe négatif
+                if (key === 189 || key === 109) { // Les codes 189 et 109 correspondent au signe moins (-)
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        }).mask('.money_field');
+    }
+    
+    // separateur de millier
+    function numStr(a, b) {
+        a = '' + a;
+        b = b || ' ';
+        var c = '',
+            d = 0;
+        while (a.match(/^0[0-9]/)) {
+            a = a.substr(1);
+        }
+        for (var i = a.length-1; i >= 0; i--) {
+            c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+            d++;
+        }
+        return c;
+    }
+
+    function multipleSuperieur(a, b) {
+        // Trouver le multiple de b le plus proche de a mais supérieur ou égal à a
+        return Math.ceil(a / b) * b;
+    }
     </script>
     
     {% endblock %}

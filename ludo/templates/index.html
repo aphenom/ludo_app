@@ -107,7 +107,12 @@
                                     <h5>{{ partie.montant_cagnotte|floatformat:-2|intcomma }} {{ config.currency|default:"F CFA" }}</h5>
                                 </div>
                                 <div class="btn-area mt-4">
-                                    <a href=" {% if user.is_authenticated %}#{% else %}{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login{% endif %}" class="cmn-btn mise" data-bs-toggle="modal" data-bs-target="#loginMod">Jouer</a>
+                                    <a href="{% if user.is_authenticated %}#{% else %}{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login{% endif %}" 
+                                    class="cmn-btn mise jeu-action" data-bs-toggle="modal" data-bs-target="#loginMod"
+                                    data-partie="{{partie.code}}" data-mise={{partie.montant_mise|floatformat:-2}} 
+                                    data-nombre_participants="{{ partie.nombre_participants }}" data-gain={{partie.montant_cagnotte|floatformat:-2}}
+                                    data-solde="{{solde}}" data-currency="{{ config.currency|default:'FCFA' }}"
+                                    data-minimum_depot="{{ config.minimum_depot|default:100}}">Jouer</a>
                                 </div>
                                 <div class="abs-area">
                                     <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
@@ -123,5 +128,89 @@
     </section>
     {% endblock %}
 
-
 <!--  -->
+    <!-- javascript -->
+    {% block script %}
+    <!-- parent -->
+        {{ block.super }}
+        <!-- perso lié a l'interaction  -->
+        <script>
+            $(document).ready(function() {
+                const separateur = "";
+                $(document).on("click", ".jeu-action", function(e) {
+                    // alert("here");
+                    // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+                    let partie = $(this).data('partie');
+                    let mise = Number(String($(this).data('mise')).replace(/\s/g, ''));
+                    let nombre_participants = $(this).data('nombre_participants');
+                    let gain = Number(String($(this).data('gain')).replace(/\s/g, ''));
+                    let solde = Number(String($(this).data('solde')).replace(/\s/g, ''));
+                    let currency = $(this).data('currency');
+                    let difference_solde_mise = solde - mise;
+                    let minimum_depot = Number(String($(this).data('minimum_depot')).replace(/\s/g, ''));
+                    
+                    // remplissons le modal
+                    $("#mise-input").val(numStr(mise, separateur));    
+                    $("#mise-mise").html(numStr(mise, separateur));    
+                    $("#mise-nombre_participants").html(nombre_participants);    
+                    $("#mise-gain").html(numStr(gain, separateur));    
+                    $("#mise-solde").html(numStr(solde, separateur));  
+
+                    if(difference_solde_mise >= 0){
+                        $(".mise-solde-bon").show();
+                        $(".mise-solde-mauvais").hide();
+                    }  
+                    else{
+                        $(".mise-solde-bon").hide();
+                        $(".mise-solde-mauvais").show();
+                        //$('#recharge-input').attr('data-difference_solde_mise', Math.abs(difference_solde_mise));
+                        //$('#recharge-input').attr('data-minimum_depot', minimum_depot);
+                        //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
+                        $('#recharge-input').remove();
+                        $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                        applyMoneyFieldMask();
+                    }
+
+                });
+
+                $(document).on("change keyup", "#recharge-input", function(e) {
+                    // alert("here");
+                    // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+                    valeur_input_recharge = Number(String($("#recharge-input").val()).replace(/\s/g, ''));
+                    let difference_solde_mise = Number(String($("#recharge-input").data('difference_solde_mise')).replace(/\s/g, ''));
+                    let minimum_depot = Number(String($("#recharge-input").data('minimum_depot')).replace(/\s/g, ''));
+                    
+                    $("#recharge-button").show()
+
+                    // remplissons le modal
+                    if(valeur_input_recharge >= difference_solde_mise){
+                        let check = multipleSuperieur(valeur_input_recharge, minimum_depot);
+                        if(valeur_input_recharge != check){
+                            if(e.handleObj.type == "change"){
+                                $("#recharge-input").val(check);
+                            }
+                            else{
+                                $("#recharge-button").hide()
+                            }
+                        }
+                        else{
+                            $("#recharge-button").show()
+                        }
+                    }
+                    else{
+                        if(e.handleObj.type == "change"){
+                            $("#recharge-input").val(multipleSuperieur(difference_solde_mise, minimum_depot));
+                        }
+                        else{
+                            $("#recharge-button").hide()
+                        }
+                    }
+                });
+
+            });
+
+            function remplirFormRetrait(valeur_init, valeur_min){
+                alert(valeur_init);
+            }
+        </script>
+    {% endblock %}
