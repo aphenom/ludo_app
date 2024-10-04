@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="prize-pool">
                                     <p class="mdr">Gains :</p>
-                                    <h5>{{ partie.montant_cagnotte|floatformat:-2|intcomma }} {{ config.currency|default:"F CFA" }}</h5>
+                                    <h5>{{ partie.montant_cagnotte|floatformat:-2|intcomma }} {{ config.currency|default:"FCFA" }}</h5>
                                 </div>
                                 <div class="btn-area mt-4">
                                     <a href="{% if user.is_authenticated %}#{% else %}{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login{% endif %}" 
@@ -183,15 +183,16 @@
                     // alert("here");
                     // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
                     // let partie = $(this).data('partie');
-                    console.log($(".nice-select>.current").html());
+                   // console.log($(".nice-select>ul>li.selected").data('value'));
                     if($(this).find(":selected").val() != ""){
-                        let mise = Number(String($(this).data('mise')).replace(/\s/g, ''));
-                        let nombre_participants = $(this).data('nombre_participants');
-                        let gain = Number(String($(this).data('gain')).replace(/\s/g, ''));
-                        let solde = Number(String($(this).data('solde')).replace(/\s/g, ''));
-                        let currency = $(this).data('currency');
+                        let choix_partie_privee_data = $(".nice-select>ul>li.selected").data('value').split(';');
+                        let mise = Number(String(choix_partie_privee_data[0]).replace(/\s/g, ''));
+                        let nombre_participants = choix_partie_privee_data[1];
+                        let gain = Number(String(choix_partie_privee_data[2]).replace(/\s/g, ''));
+                        let solde = Number(String(choix_partie_privee_data[3]).replace(/\s/g, ''));
+                        // let currency = $(this).data('currency');
                         let difference_solde_mise = solde - mise;
-                        let minimum_depot = Number(String($(this).data('minimum_depot')).replace(/\s/g, ''));
+                        let minimum_depot = Number(String(choix_partie_privee_data[4]).replace(/\s/g, ''));
                         
                         // remplissons le modal
                         $("#choix_partie_privee-input").val(numStr(mise, separateur));    
@@ -200,6 +201,168 @@
                         $("#choix_partie_privee-gain").html(numStr(gain, separateur));    
                         $("#choix_partie_privee-solde").html(numStr(solde, separateur));  
                         
+                        // faisons des tours des passe passe cacher / afficher
+                        // partie rejoindre partie privee
+                        $('#code_partie_privee').val("");
+                        $('.rejoindre_partie_privee-solde-bon').removeClass("d-none");
+                        $(".rejoindre_partie_privee-solde-bon").hide();
+                        $('.rejoindre_partie_privee-solde-bon').removeClass("d-none");
+                        $(".rejoindre_partie_privee-solde-bon").hide();
+                        $('.rejoindre_partie_privee-solde-mauvais').removeClass("d-none");
+                        $(".rejoindre_partie_privee-solde-mauvais").hide();
+                        $('.rejoindre_partie_privee-resume').removeClass("d-none");
+                        $(".rejoindre_partie_privee-resume").hide();
+                        // partie creer partie privee
+                        $('.choix_partie_privee-resume').removeClass("d-none");
+                        $(".choix_partie_privee-resume").show();
+                        
+                        if(difference_solde_mise >= 0){
+                            $(".choix_partie_privee-solde-bon").show();
+                            $(".choix_partie_privee-solde-mauvais").hide();
+                        }  
+                        else{
+                            $(".choix_partie_privee-solde-bon").hide();
+                            $(".choix_partie_privee-solde-mauvais").show();
+                            //$('#recharge-input').attr('data-difference_solde_mise', Math.abs(difference_solde_mise));
+                            //$('#recharge-input').attr('data-minimum_depot', minimum_depot);
+                            //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
+                            $('#recharge-input').remove();
+                            $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                            applyMoneyFieldMask();
+                        }
+                    }
+                    else{
+                        $(".choix_partie_privee-resume").hide();
+                    }
+
+                });
+
+                // selection partie privee
+                $(document).on("keyup", "#code_partie_privee", function(e) {
+                    // alert("here");
+                    // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+                    // let partie = $(this).data('partie');
+                    // faisons le menage et donnons toute la place au code
+                    //let code_partie_privee_valeur = $('#code_partie_privee').val();
+                    // $("#choix_partie_privee").val('');
+                    $('#choix_partie_privee').prop('selectedIndex',0).trigger( "change" );
+                    $(".nice-select>ul>li").removeClass("selected");
+                    $(".nice-select>ul>li").removeClass("focus");
+                    $(".nice-select>.current").html($('#choix_partie_privee').find("option[value='']").text());
+                    $('.rejoindre_partie_privee-resume').removeClass("d-none");
+                    $(".rejoindre_partie_privee-resume").hide();
+                    $('.choix_partie_privee-resume').removeClass("d-none");
+                    $(".choix_partie_privee-resume").hide();
+                    $('.rejoindre_partie_privee-solde-mauvais').removeClass("d-none");
+                    $(".rejoindre_partie_privee-solde-mauvais").hide();
+                    $('.rejoindre_partie_privee-solde-bon').removeClass("d-none");
+                    $('.rejoindre_partie_privee-code-erreur').removeClass("d-none");
+                    $(".rejoindre_partie_privee-code-erreur").hide();
+                    $("#rejoindre_partie_privee-btn-rejoindre").attr("href", "javascript:void(0)")
+                    if($("#code_partie_privee").val() != ''){
+                        $(".rejoindre_partie_privee-solde-bon").show();
+                    }
+                    else{
+                        $(".rejoindre_partie_privee-solde-bon").hide();
+                    }
+                });
+
+                // valide code partie privee
+                $(document).on("click", "#rejoindre_partie_privee-btn-rejoindre", function(e) {
+                    // alert("here");
+                    // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+                    // let partie = $(this).data('partie');
+
+                    let code_partie_privee = $("#code_partie_privee").val();
+
+                    $.ajax({
+                        url: '{% url 'api_get_partie_privee_via_by_code' %}',  // URL vers laquelle vous envoyez la requête
+                        type: 'GET',                // Méthode de la requête (POST ici)
+                        data: {                      // Les données envoyées au serveur
+                            code_partie_privee: code_partie_privee
+                        },
+                        dataType: 'json',            // Type de réponse attendue du serveur (JSON)
+                        success: function(response) { // Si la requête réussit
+                            console.log(response);
+                            if (Object.keys(response).length > 0) {  // Vérifier si le serveur a renvoyé un succès
+                                //let partie = response.partie;
+                                let mise = Number(String(response.mise).replace(/\s/g, ''));
+                                let nombre_participants = response.nombre_participants;
+                                let gain = Number(String(response.gain).replace(/\s/g, ''));
+                                let solde = Number(String(response.solde).replace(/\s/g, ''));
+                                // let currency = $(this).data('currency');
+                                let difference_solde_mise = solde - mise;
+                                let minimum_depot = Number(String(response.minimum_depot).replace(/\s/g, ''));
+                                
+                                // remplissons le modal
+                                $("#rejoindre_partie_privee-input").val(numStr(mise, separateur));    
+                                $("#rejoindre_partie_privee-mise").html(numStr(mise, separateur));    
+                                $("#rejoindre_partie_privee-nombre_participants").html(nombre_participants);    
+                                $("#rejoindre_partie_privee-gain").html(numStr(gain, separateur));    
+                                $("#rejoindre_partie_privee-solde").html(numStr(solde, separateur));  
+                                
+                                // faisons des tours des passe passe cacher / afficher
+                                $(".rejoindre_partie_privee-code-erreur").hide();
+                                $('.rejoindre_partie_privee-resume').removeClass("d-none");
+                                $(".rejoindre_partie_privee-resume").show();
+
+                                if(difference_solde_mise >= 0){
+                                    $(".rejoindre_partie_privee-solde-bon").show();
+                                    $(".rejoindre_partie_privee-solde-mauvais").hide();
+                                    $("#rejoindre_partie_privee-btn-rejoindre").attr("href", "javascript:void(0)")
+                                }  
+                                else{
+                                    $(".rejoindre_partie_privee-solde-bon").hide();
+                                    $(".rejoindre_partie_privee-solde-mauvais").show();
+                                    //$('#recharge-input').attr('data-difference_solde_mise', Math.abs(difference_solde_mise));
+                                    //$('#recharge-input').attr('data-minimum_depot', minimum_depot);
+                                    //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
+                                    $('#recharge-input').remove();
+                                    $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                                    applyMoneyFieldMask();
+                                }
+                                
+                            } else {
+                                $(".rejoindre_partie_privee-solde-bon").hide();
+                                $(".rejoindre_partie_privee-solde-mauvais").hide();
+                                $(".rejoindre_partie_privee-resume").hide();
+                                $(".rejoindre_partie_privee-code-erreur").html('Désolé, ce code ne correspond à aucune partie privée active !');
+                                $(".rejoindre_partie_privee-code-erreur").show();
+                            }
+                        },
+                        error: function(xhr, status, error) { // Si la requête échoue
+                            console.error('Erreur lors de la requête:', error);
+                            $(".rejoindre_partie_privee-solde-bon").show();
+                            $(".rejoindre_partie_privee-solde-mauvais").hide();
+                            $(".rejoindre_partie_privee-resume").hide();
+                            $(".rejoindre_partie_privee-code-erreur").html('Une erreur s\'est produite. Veuillez réessayer.');
+                            $(".rejoindre_partie_privee-code-erreur").show();
+                        }
+                    });
+                    /*
+                    console.log($(".nice-select>ul>li.selected").data('value'));
+                    let choix_partie_privee_data = $(".nice-select>ul>li.selected").data('value').split(';');
+                    if($(this).find(":selected").val() != ""){
+                        let mise = Number(String(choix_partie_privee_data[0]).replace(/\s/g, ''));
+                        let nombre_participants = choix_partie_privee_data[1];
+                        let gain = Number(String(choix_partie_privee_data[2]).replace(/\s/g, ''));
+                        let solde = Number(String(choix_partie_privee_data[3]).replace(/\s/g, ''));
+                        // let currency = $(this).data('currency');
+                        let difference_solde_mise = solde - mise;
+                        let minimum_depot = Number(String(choix_partie_privee_data[4]).replace(/\s/g, ''));
+                        
+                        // remplissons le modal
+                        $("#choix_partie_privee-input").val(numStr(mise, separateur));    
+                        $("#choix_partie_privee-mise").html(numStr(mise, separateur));    
+                        $("#choix_partie_privee-nombre_participants").html(nombre_participants);    
+                        $("#choix_partie_privee-gain").html(numStr(gain, separateur));    
+                        $("#choix_partie_privee-solde").html(numStr(solde, separateur));  
+                        
+                        // faisons des tours des passe passe cacher / afficher
+                        $('#code_partie_privee').val("");
+                        $('.rejoindre_partie_privee-resume').removeClass("d-none");
+                        $(".rejoindre_partie_privee-resume").hide();
+                        $('.choix_partie_privee-resume').removeClass("d-none");
                         $(".choix_partie_privee-resume").show();
 
                         if(difference_solde_mise >= 0){
@@ -220,6 +383,7 @@
                     else{
                         $(".choix_partie_privee-resume").hide();
                     }
+                    */
 
                 });
 

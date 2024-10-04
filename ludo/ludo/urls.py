@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import facebook_login_with_state, index
+from .views import api_get_partie_privee_via_by_code, facebook_login_with_state, index
 
 
 urlpatterns = [
@@ -29,6 +29,8 @@ urlpatterns = [
     # path('facebook-login/', facebook_login_with_state, name='facebook_login_with_state'),
     
     path('accounts/login/', facebook_login_with_state, name='facebook_login_with_state'),
+    
+    path('api/api_get_partie_privee_via_by_code/', api_get_partie_privee_via_by_code, name='api_get_partie_privee_via_by_code'),
 
     # path('accounts/facebook/login/callback/', custom_login_redirect, name='custom_login_redirect'),
 

@@ -1,5 +1,5 @@
 from datetime import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.conf import settings
 from allauth.socialaccount.models import SocialAccount
@@ -127,8 +127,8 @@ def index(request):
                     "nombre_participants":nombre_participants,
                     "montant_cagnotte":montant_cagnotte,
                     "montant_commission":montant_commission,
-                    "texte_option":"Mise : {} {} | {} : {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "", "1 contre 1" if nombre_participants < 3 else "Joueurs", nombre_participants, intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else ""),
-                    "valeur_option":"Mise : {} {} | {} : {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "", "1 contre 1" if nombre_participants < 3 else "Joueurs", nombre_participants, intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else "")
+                    "texte_option":"Mise : {} {} | {} | Gain : {} {}".format(intcomma(floatformat(mise.montant,-2)), config.currency if config and config.currency else "FCFA", "1 contre 1" if nombre_participants < 3 else "Joueurs : "+str(nombre_participants), intcomma(floatformat(montant_cagnotte,-2)), config.currency if config and config.currency else "FCFA"),
+                    "valeur_option":"{};{};{};{};{}".format(mise.montant, nombre_participants, montant_cagnotte, ContextConfig(request)['solde'], config.minimum_depot if config and config.minimum_depot else 100)
                 })
 
                 #gerons les parties par defaut
@@ -185,6 +185,30 @@ def index(request):
     return render(request, 'index.html', locals())
 
 
+'''Avoir une partie privee via code'''
+#@login_required
+def api_get_partie_privee_via_by_code(request):
+    # dd(request)
+    data = {}
+    if request.method == 'GET':
+        # no need to do this
+        # request_csrf_token = request.POST.get('csrfmiddlewaretoken', '')
+        code_partie_privee = request.GET.get('code_partie_privee')  
+        # dd(code_partie_privee)   
+        partie = Partie.objects.filter(code=code_partie_privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first() #,visibilite-=Visibilite.Privee) 
+        # answers_list = Answer.objects.filter(is_active=True, question__pub__uuid__exact=uuid).values()
+        config = CurrentConfig()
+        if partie:
+            data = {
+                'mise': partie.montant_mise,
+                'nombre_participants': partie.nombre_participants,
+                'gain': partie.montant_cagnotte,
+                'minimum_depot': config.minimum_depot if config and config.minimum_depot else 100,
+                'solde': ContextConfig(request)['solde'],
+                'currency': config.currency if config and config.currency else "FCFA",
+                # 'answers': list(answers_list),
+            }
+    return JsonResponse(data) 
 
 
 

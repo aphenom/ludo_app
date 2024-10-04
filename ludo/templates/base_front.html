@@ -321,7 +321,7 @@
                                                             <input type="text" id="recharge-input" class="money_field" value="0">
                                                         </div>
                                                         <div class="btn-area text-center">
-                                                            <button type="submit"id="recharge-button" class="cmn-btn mt-4 disabled">Recharger
+                                                            <button type="submit"id="recharge-button" class="cmn-btn mt-4">Recharger
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </button>
                                                         </div>
@@ -357,19 +357,24 @@
                                                             <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
                                                             <input type="text" name="code_partie_privee" id="code_partie_privee" placeholder="Entre le code d'invitation reçu">
                                                         </div>
-                                                        <p>Mise : 1 000 FCFA</p>
-                                                        <p>Nombre de joueurs : 2</p>
-                                                        <p>Gain : <a href="#">1 000 FCFFA</a></p>
-                                                        <p>Tu seras debité de :pour rejoindre cette partie privée !</p>
-                                                        <p>Ton solde () est inférieur à la mise attendue. Merci de <a href="javascript:void(0)" class="recharge-btn recharge"  data-bs-dismiss="modal"
-                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod" data-montant-difference="">recharger ton compte</a> avant de continuer !</p>
-                                                        <p>Désolé, ce code ne correspond à aucune partie privée active !</p>
-                                                        <div class="sidebar-single-item">
-                                                            <div class="btn-area text-center">
-                                                                <a href="javascript:void(0)" class="cmn-btn mt-auto mb-4 privateCreate-btn">Rejoindre la partie privée
-                                                                    <i class="icon-d-right-arrow-2"></i>
-                                                                </a>
-                                                            </div>
+                                                        <div class="rejoindre_partie_privee-resume d-none">
+                                                            <p>Mise : <span id="rejoindre_partie_privee-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
+                                                            <p>Nombre de joueurs : <span id="rejoindre_partie_privee-nombre_participants">2</span></p>
+                                                            <p>Gain : <a href="#"><span id="rejoindre_partie_privee-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
+                                                            <p class="rejoindre_partie_privee-solde-bon">Tu seras debité de : <span id="rejoindre_partie_priveechoix_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie privée !</p>
+                                                            <p class="rejoindre_partie_privee-solde-mauvais">Ton solde (<span id="rejoindre_partie_privee-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
+                                                            <a href="javascript:void(0)" class="recharge-btn recharge" id="rejoindre_partie_privee-link-recharge"  data-bs-dismiss="modal"
+                                                            aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> avant de continuer !</p>
+                                                        </div>
+                                                        <p class="rejoindre_partie_privee-code-erreur d-none">Désolé, ce code ne correspond à aucune partie privée active !</p>
+                                                        <div class="btn-area text-center mt-0">
+                                                            <a href="javascript:void(0)" class="cmn-btn mt-4 rejoindre_partie_privee-solde-bon d-none" id="rejoindre_partie_privee-btn-rejoindre">Rejoindre la partie privée
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
+                                                            <a href="javascript:void(0)" class="cmn-btn mt-4 rejoindre_partie_privee-solde-mauvais recharge d-none" id="rejoindre_partie_privee-btn-recharge"  data-bs-dismiss="modal"
+                                                        aria-label="Close" data-bs-toggle="modal"data-bs-target="#rechargeMod">Recharger
+                                                                <i class="icon-d-right-arrow-2"></i>
+                                                            </a>
                                                         </div>
                                                         <div class="section-text text-center mt-2">
                                                             <!--<h5 class="sub-title">Voulez vous jouer entre connaissances ?</h5>-->
@@ -909,7 +914,7 @@
     <script src="{% static 'front/js/fontawesome.js' %}"></script>
     <script src="{% static 'front/js/plugin/slick.js' %}"></script>
     <script src="{% static 'front/js/plugin/jquery.nice-select.min.js' %}"></script>
-    <script src="{% static 'front/js/plugin/counter.js"></script>
+    <script src="{% static 'front/js/plugin/counter.js' %}"></script>
     <script src="{% static 'front/js/plugin/jquery.downCount.js' %}"></script>
     <script src="{% static 'front/js/plugin/waypoint.min.js' %}"></script>
     <script src="{% static 'front/js/plugin/jquery.magnific-popup.min.js' %}"></script>

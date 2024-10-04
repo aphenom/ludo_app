@@ -106,7 +106,7 @@ class Mise(models.Model):
     modifie_par = models.ForeignKey(User, models.SET_NULL, null=True, blank=True, related_name='modifie_mises', related_query_name="modifie_mise", verbose_name = "modifié par")
    
     class Meta:
-        ordering = ['montant', '-date_creation']
+        ordering = ['-montant', '-date_creation']
         verbose_name = "mise"  
         
     def __str__(self):
