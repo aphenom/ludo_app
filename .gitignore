@@ -1,6 +1,5 @@
 env/
 .env
-*.cpython-311
-*.cpython-312
+*/__pycache__/*
+*.cpython*
 *.pyc
-.cpython-311.pyc
