@@ -4,8 +4,11 @@ import random
 from django.conf import settings
 from django.urls import resolve
 from django.utils import timezone
+from django.db.models import Q, Sum
 
 from core.models import Config, TauxCommission, TauxTransaction
+from player.models import Transaction
+from ludo.enum import TypeTransaction
 
 
 def ContextConfig(request):
@@ -20,8 +23,10 @@ def ContextConfig(request):
 
     next = request.session.get('next', '')
 
-    solde = 0 
+    solde = Transaction.objects.filter(Q((Q(type=TypeTransaction.Retrait) | Q(type=TypeTransaction.Mise)), etat_suppression=False) 
+                                       | Q((Q(type=TypeTransaction.Depot) | Q(type=TypeTransaction.Gain)), etat_validation=True)).aggregate(total=Sum('montant'))["total"]
 
+    print(solde)
     """ 
     if config.parallax and hasattr(config.parallax, 'url'):
         costum_parallax = config.parallax.url
@@ -55,23 +60,6 @@ def ContextConfig(request):
         }      
     # return {'config' : config, 'costum_parallax' : costum_parallax, 'my_current_url':my_current_url, 'notification_messages':notification_messages, 'gtag':settings.GTAG}      
 
-
-
-'''generateur code de referemce'''
-def CodeGenerator(model, start_by_text, end_by_text):
-
-    # Simuler un 'do-while' avec 'while True' et un 'break'
-    while True:
-        letters_and_digits = string.ascii_uppercase # + string.digits  # 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        code_letters = ''.join(random.choice(letters_and_digits) for _ in range(4))
-        code = str(start_by_text) + str(code_letters) + str(end_by_text)
-        count = model.objects.filter(code=code).count()
-        if count > 0:
-            pass
-        else:
-            return code
-            
-
 def CurrentConfig():
     return Config.objects.filter(etat_validation=True, etat_suppression=False).order_by("-pk").first()
 
@@ -85,12 +73,19 @@ def DetermineCagnotte(mise, nombre_participants, taux_commission):
     montant = None
     if taux_commission is None:
         taux_commission = 0
-    montant = mise*nombre_participants*Decimal(1-(taux_commission/100))
+    montant = Decimal(mise*nombre_participants)*Decimal(1-(taux_commission/100))
     return round(montant)
      
 def DetermineCommission(mise, nombre_participants, taux_commission):
     montant = None
     if taux_commission is None:
         taux_commission = 0
-    montant = mise*nombre_participants*Decimal(taux_commission/100)
+    montant = Decimal(mise*nombre_participants)*Decimal(taux_commission/100)
     return round(montant)
+
+def DetermineFraisGenere(montant, taux_frais):
+    valeur = None
+    if taux_frais is None:
+        taux_frais = 0
+    valeur = Decimal(montant)*Decimal(taux_frais/100)
+    return round(valeur)

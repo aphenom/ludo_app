@@ -8,7 +8,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from cities_light.models import Country
 from core.models import Config, Mise, TauxCommission, TauxTransaction
 from ludo.enum import Genre, TypeTransaction, Visibilite
-from ludo.utils import CodeGenerator
 
 # Create your models here.
 
@@ -204,11 +203,11 @@ class Transaction(models.Model):
     mise = models.DecimalField('montant mise', max_digits=10, decimal_places=2, null=True, blank=True)
     gain = models.DecimalField('montant gain', max_digits=10, decimal_places=2, null=True, blank=True)
 
-    description = models.CharField(max_length=225, unique=True, editable=False)
+    description = models.CharField('Observation', max_length=225, null=True, blank=True)
     
-    contact_transaction = models.CharField('contact transaction', max_length=225, unique=True, editable=False)
-    operateur = models.CharField('opérateur', max_length=225, unique=True, editable=False)
-    type_api = models.CharField('type API', max_length=225, unique=True, editable=False)
+    contact_transaction = models.CharField('contact transaction', max_length=225, null=True, blank=True)
+    operateur = models.CharField('opérateur', max_length=225, null=True, blank=True)
+    type_api = models.CharField('type API', max_length=225, null=True, blank=True)
 
     date_creation = models.DateTimeField('date création', auto_now_add=True)
     date_modification = models.DateTimeField('date modification', null=True, blank=True, auto_now=True)
@@ -367,3 +366,19 @@ def code_generator(length): # define the function and pass the length as argumen
     print(" Random string generated in Uppercase: ", result1)  
   
 code_generator(10) # define the length  
+
+
+'''generateur code de referemce'''
+def CodeGenerator(model, start_by_text, end_by_text):
+
+    # Simuler un 'do-while' avec 'while True' et un 'break'
+    while True:
+        letters_and_digits = string.ascii_uppercase # + string.digits  # 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        code_letters = ''.join(random.choice(letters_and_digits) for _ in range(4))
+        code = str(start_by_text) + str(code_letters) + str(end_by_text)
+        count = model.objects.filter(code=code).count()
+        if count > 0:
+            pass
+        else:
+            return code
+            

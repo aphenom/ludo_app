@@ -111,7 +111,7 @@
                                     class="cmn-btn mise jeu-action" data-bs-toggle="modal" data-bs-target="#loginMod"
                                     data-partie="{{partie.code}}" data-mise={{partie.montant_mise|floatformat:-2}} 
                                     data-nombre_participants="{{ partie.nombre_participants }}" data-gain={{partie.montant_cagnotte|floatformat:-2}}
-                                    data-solde="{{solde}}" data-currency="{{ config.currency|default:'FCFA' }}"
+                                    data-solde="{{solde|floatformat:-2|intcomma}}" data-currency="{{ config.currency|default:'FCFA' }}"
                                     data-minimum_depot="{{ config.minimum_depot|default:100}}">Jouer</a>
                                 </div>
                                 <div class="abs-area">
@@ -159,6 +159,7 @@
                     $("#mise-mise").html(numStr(mise, separateur));    
                     $("#mise-nombre_participants").html(nombre_participants);    
                     $("#mise-gain").html(numStr(gain, separateur));    
+                    $("#mise-debit").html(numStr(mise, separateur));    
                     $("#mise-solde").html(numStr(solde, separateur));  
 
                     if(difference_solde_mise >= 0){
@@ -173,6 +174,7 @@
                         //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
                         $('#recharge-input').remove();
                         $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                        $("#recharge-button").attr("href", $("#recharge-input-url").val().replace("complement_url_recharge", String(Math.abs(difference_solde_mise)).replace(/\s/g, '')));
                         applyMoneyFieldMask();
                     }
 
@@ -199,6 +201,7 @@
                         $("#choix_partie_privee-mise").html(numStr(mise, separateur));    
                         $("#choix_partie_privee-nombre_participants").html(nombre_participants);    
                         $("#choix_partie_privee-gain").html(numStr(gain, separateur));    
+                        $("#choix_partie_privee-debit").html(numStr(mise, separateur));    
                         $("#choix_partie_privee-solde").html(numStr(solde, separateur));  
                         
                         // faisons des tours des passe passe cacher / afficher
@@ -228,6 +231,7 @@
                             //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
                             $('#recharge-input').remove();
                             $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                            $("#recharge-button").attr("href", $("#recharge-input-url").val().replace("complement_url_recharge", String(Math.abs(difference_solde_mise)).replace(/\s/g, '')));
                             applyMoneyFieldMask();
                         }
                     }
@@ -299,6 +303,7 @@
                                 $("#rejoindre_partie_privee-mise").html(numStr(mise, separateur));    
                                 $("#rejoindre_partie_privee-nombre_participants").html(nombre_participants);    
                                 $("#rejoindre_partie_privee-gain").html(numStr(gain, separateur));    
+                                $("#rejoindre_partie_privee-debit").html(numStr(mise, separateur));    
                                 $("#rejoindre_partie_privee-solde").html(numStr(solde, separateur));  
                                 
                                 // faisons des tours des passe passe cacher / afficher
@@ -319,6 +324,7 @@
                                     //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
                                     $('#recharge-input').remove();
                                     $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
+                                    $("#recharge-button").attr("href", $("#recharge-input-url").val().replace("complement_url_recharge", String(Math.abs(difference_solde_mise)).replace(/\s/g, '')));
                                     applyMoneyFieldMask();
                                 }
                                 
@@ -394,8 +400,10 @@
                     valeur_input_recharge = Number(String($("#recharge-input").val()).replace(/\s/g, ''));
                     let difference_solde_mise = Number(String($("#recharge-input").data('difference_solde_mise')).replace(/\s/g, ''));
                     let minimum_depot = Number(String($("#recharge-input").data('minimum_depot')).replace(/\s/g, ''));
-                    
-                    $("#recharge-button").show()
+                    let base_url_recharge = $("#recharge-input-url").val();
+
+                    $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
+                    $("#recharge-button").show();
 
                     // remplissons le modal
                     if(valeur_input_recharge >= difference_solde_mise){
@@ -403,13 +411,16 @@
                         if(valeur_input_recharge != check){
                             if(e.handleObj.type == "change"){
                                 $("#recharge-input").val(check);
+                                $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
                             }
                             else{
-                                $("#recharge-button").hide()
+                                $("#recharge-button").attr("href", "javascript:void(0)");
+                                $("#recharge-button").hide();
                             }
                         }
                         else{
-                            $("#recharge-button").show()
+                            $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
+                            $("#recharge-button").show();
                         }
                     }
                     else{
@@ -417,10 +428,19 @@
                             $("#recharge-input").val(multipleSuperieur(difference_solde_mise, minimum_depot));
                         }
                         else{
-                            $("#recharge-button").hide()
+                            $("#recharge-button").attr("href", "javascript:void(0)");
+                            $("#recharge-button").hide();
                         }
                     }
                 });
+
+                // partie privee selectionnee
+                {% if rejoindre_partie_code %}
+                    $("button[class='login privateChoice']").trigger("click");
+                    //$("#code_partie_privee").val({{rejoindre_partie_code}});
+                    $("#code_partie_privee").trigger("keyup");
+                    $("#rejoindre_partie_privee-btn-rejoindre").trigger("click");
+                {% endif %}
 
             });
 

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     'cities_light',
     'django.contrib.humanize',
+    # 'cinetpay_sdk',
     # Votre app custom pour gérer les utilisateurs
     'player', 
     'core', 

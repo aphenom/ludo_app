@@ -4,6 +4,8 @@ from . import views # import views so we can use them in urls.
 
 app_name = 'player'
 urlpatterns = [
-    path('dashboard', views.dashboard, name='player_dashboard'),
-    path('profil', views.profil, name='player_profil'),
+    path('dashboard/', views.dashboard, name='player_dashboard'),
+    path('profil/', views.profil, name='player_profil'),
+    path('rechargement/<str:montant>/', views.rechargement, name='player_rechargement'),
+    path('rechargement_callback/<str:code>/', views.rechargement_callback, name='player_rechargement_callback'),
 ]

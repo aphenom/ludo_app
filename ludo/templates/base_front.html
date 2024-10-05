@@ -1,6 +1,7 @@
 <!doctype html>
 {% load static %}
 {% load socialaccount %}
+{% load humanize %}
 <html lang="en">
 
 <head>
@@ -62,7 +63,7 @@
                             <ul class="navbar-nav mr-auto mb-2 mb-lg-0 h-auto">
                                 <li class="nav-item">
                                     {% if user.is_authenticated %}
-                                    <span><img src="{% static 'front/images/icon/games-tab-icon-4.png' %}" alt="icon"> Solde : 1 000 000 FCFA</span>
+                                    <span><img src="{% static 'front/images/icon/games-tab-icon-4.png' %}" alt="icon"> Solde : {{ solde|floatformat:-2|intcomma }} {{ config.currency|default:'FCFA' }}</span>
                                     {% endif %}
                                 </li>
                             </ul>
@@ -72,7 +73,9 @@
                                     <b><img src="{% static 'front/images/icon/games-tab-icon-5.png' %}" alt="icon"> Jeu Privé</b>
                                 </button>
                                 <a href="{% url 'player:player_dashboard' %}" class="cmn-btn">
-                                   Mon Compte
+                                   Mon Compte <div class="notifications-btn btn-head dot d-none">
+                                    <img src="/static/dashboard/images/icon/notification.png" class="bell-icon" alt="icon">
+                                </div> 
                                 </a>
                                 {% else %}
                                 <a href="{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login" class="login">
@@ -318,12 +321,13 @@
                                                         </div>
                                                         <div class="input-area d-flex align-items-center" id="recharge-input-container">
                                                             <img src="{% static 'front/images/icon/counter-icon-1.png' %}" style="max-width:64px" alt="icon">
+                                                            <input type="hidden" id="recharge-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
                                                             <input type="text" id="recharge-input" class="money_field" value="0">
                                                         </div>
                                                         <div class="btn-area text-center">
-                                                            <button type="submit"id="recharge-button" class="cmn-btn mt-4">Recharger
+                                                            <a href="javascript:void(0)" id="recharge-button" class="cmn-btn mt-4">Recharger
                                                                 <i class="icon-d-right-arrow-2"></i>
-                                                            </button>
+                                                            </a>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -355,18 +359,18 @@
                                                         </div>
                                                         <div class="input-area d-flex align-items-center">
                                                             <img src="{% static 'front/images/icon/security.png' %}" alt="icon">
-                                                            <input type="text" name="code_partie_privee" id="code_partie_privee" placeholder="Entre le code d'invitation reçu">
+                                                            <input type="text" name="code_partie_privee" id="code_partie_privee" value="{{rejoindre_partie_code}}" placeholder="Entre le code d'invitation reçu">
                                                         </div>
                                                         <div class="rejoindre_partie_privee-resume d-none">
                                                             <p>Mise : <span id="rejoindre_partie_privee-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
                                                             <p>Nombre de joueurs : <span id="rejoindre_partie_privee-nombre_participants">2</span></p>
                                                             <p>Gain : <a href="#"><span id="rejoindre_partie_privee-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
-                                                            <p class="rejoindre_partie_privee-solde-bon">Tu seras debité de : <span id="rejoindre_partie_priveechoix_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie privée !</p>
+                                                            <p class="rejoindre_partie_privee-solde-bon">Tu seras debité de : <span id="rejoindre_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie privée !</p>
                                                             <p class="rejoindre_partie_privee-solde-mauvais">Ton solde (<span id="rejoindre_partie_privee-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
                                                             <a href="javascript:void(0)" class="recharge-btn recharge" id="rejoindre_partie_privee-link-recharge"  data-bs-dismiss="modal"
                                                             aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> avant de continuer !</p>
                                                         </div>
-                                                        <p class="rejoindre_partie_privee-code-erreur d-none">Désolé, ce code ne correspond à aucune partie privée active !</p>
+                                                        <p class="text-danger rejoindre_partie_privee-code-erreur d-none">Désolé, ce code ne correspond à aucune partie privée active !</p>
                                                         <div class="btn-area text-center mt-0">
                                                             <a href="javascript:void(0)" class="cmn-btn mt-4 rejoindre_partie_privee-solde-bon d-none" id="rejoindre_partie_privee-btn-rejoindre">Rejoindre la partie privée
                                                                 <i class="icon-d-right-arrow-2"></i>
@@ -392,7 +396,7 @@
                                                             data-mise="{{ choix_partie_privee.mise.pk }}" 
                                                             data-nombre_participants="{{ choix_partie_privee.nombre_participants }}"
                                                             data-gain="{{ choix_partie_privee.montant_cagnotte }}"
-                                                            data-solde="{{solde}}" data-currency="{{ config.currency|default:'FCFA' }}"
+                                                            data-solde="{{solde|floatformat:-2|intcomma}}" data-currency="{{ config.currency|default:'FCFA' }}"
                                     data-minimum_depot="{{ config.minimum_depot|default:100}}">
                                                                 {{choix_partie_privee.texte_option}}
                                                             </option>
@@ -403,7 +407,7 @@
                                                             <p>Mise : <span id="choix_partie_privee-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
                                                             <p>Nombre de joueurs : <span id="choix_partie_privee-nombre_participants">2</span></p>
                                                             <p>Gain : <a href="#"><span id="choix_partie_privee-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
-                                                            <p class="choix_partie_privee-solde-bon">Tu seras debité de : <span id="choix_partie_priveechoix_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
+                                                            <p class="choix_partie_privee-solde-bon">Tu seras debité de : <span id="choix_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
                                                             <p class="choix_partie_privee-solde-mauvais">Ton solde (<span id="choix_partie_privee-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
                                                             <a href="javascript:void(0)" class="recharge-btn recharge" id="choix_partie_privee-link-recharge"  data-bs-dismiss="modal"
                                                             aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> ou de choisir un autre type de partie privée avant de continuer !</p>

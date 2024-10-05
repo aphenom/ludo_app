@@ -40,6 +40,7 @@ def index(request):
     # Récupérer les paramètres de `state` dans la requête
     next_url = request.GET.get('next', ContextConfig(request)['next'])
     code_invitation = request.GET.get('code_invitation', ContextConfig(request)['code_invitation'])
+    rejoindre_partie_code = request.GET.get('rejoindre_partie_code')
 
     # Récupérer l'utilisateur connecté
     user = request.user
@@ -101,7 +102,7 @@ def index(request):
         if 'next' in request.session:
                 del request.session['next']
         if 'code_invitation' in request.session:
-                del request.session['code_invitation']
+                del request.session['code_invitation']              
    
     # dd(request)
     # determinons l'ensemble des mises possibles
@@ -186,7 +187,7 @@ def index(request):
 
 
 '''Avoir une partie privee via code'''
-#@login_required
+@login_required
 def api_get_partie_privee_via_by_code(request):
     # dd(request)
     data = {}
@@ -210,6 +211,12 @@ def api_get_partie_privee_via_by_code(request):
             }
     return JsonResponse(data) 
 
+
+# misons afin de participer a une partie
+@login_required
+def participer_partie(request, leurre, code):
+    facebook_login_url = None
+    return redirect(facebook_login_url)
 
 
 
