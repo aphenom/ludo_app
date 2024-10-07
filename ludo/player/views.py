@@ -74,8 +74,8 @@ def rechargement(request, montant):
         transaction.montant = montant
         transaction.frais_genere = DetermineFraisGenere(montant, CurrentTauxTransaction().taux if CurrentTauxTransaction() and CurrentTauxTransaction().taux else None)
         transaction.taux_frais_genere = CurrentTauxTransaction()
-        transaction.etat_validation = False
-        transaction.etat_actif = False
+        # a transformer en False en production
+        transaction.etat_validation = True # a transformer en False en production
         transaction.description = "Rechargement du compte"
         transaction.type = TypeTransaction.Depot
         transaction.type_api = "Cinetpay"
