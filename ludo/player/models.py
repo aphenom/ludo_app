@@ -134,7 +134,12 @@ class Partie(models.Model):
         if self.etat_suppression != self._init_etat_suppression:
             if self.etat_suppression == True:
                 self.date_suppression = timezone.now()                             
-        return super(Partie, self).save(*args, **kwargs)        
+        return super(Partie, self).save(*args, **kwargs)  
+    
+    @property
+    def places_disponibles(self):
+        participants_effectifs = self.partie_participations.filter(etat_validation=True, etat_suppression=False).count()
+        return (self.nombre_participants - participants_effectifs)     
 
 
 class Participation(models.Model):
@@ -365,7 +370,7 @@ def code_generator(length): # define the function and pass the length as argumen
     result1 = ''.join((random.choice(string.ascii_uppercase) for x in range(length))) # run the loop until the define length  
     print(" Random string generated in Uppercase: ", result1)  
   
-code_generator(10) # define the length  
+# code_generator(10) # define the length  
 
 
 '''generateur code de referemce'''

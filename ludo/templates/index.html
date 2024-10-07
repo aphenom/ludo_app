@@ -153,7 +153,8 @@
                     let currency = $(this).data('currency');
                     let difference_solde_mise = solde - mise;
                     let minimum_depot = Number(String($(this).data('minimum_depot')).replace(/\s/g, ''));
-                    
+                    let base_url_participer_partie = $('#participer-partie-input-url').val();
+
                     // remplissons le modal
                     $("#mise-input").val(numStr(mise, separateur));    
                     $("#mise-mise").html(numStr(mise, separateur));    
@@ -165,6 +166,7 @@
                     if(difference_solde_mise >= 0){
                         $(".mise-solde-bon").show();
                         $(".mise-solde-mauvais").hide();
+                        $("#participer-partie-button").attr("href", base_url_participer_partie.replace("complement_url_leurre", String(Date.now())).replace("complement_url_code", partie).replace(/\s/g, ''));
                     }  
                     else{
                         $(".mise-solde-bon").hide();
@@ -174,7 +176,7 @@
                         //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
                         $('#recharge-input').remove();
                         $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
-                        $("#recharge-button").attr("href", $("#recharge-input-url").val().replace("complement_url_recharge", String(Math.abs(difference_solde_mise)).replace(/\s/g, '')));
+                        $("#participer-partie-button").attr("href", $("#participer-partie-input-url").val().replace("complement_url_recharge", String(Math.abs(difference_solde_mise)).replace(/\s/g, '')));
                         applyMoneyFieldMask();
                     }
 

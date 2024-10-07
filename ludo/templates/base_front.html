@@ -284,7 +284,8 @@
                                                         </div>
                                                         -->
                                                         <div class="btn-area text-center">
-                                                            <a href="partie-details.html" class="cmn-btn mt-4 mise-solde-bon">Payer et Jouer
+                                                            <input type="hidden" id="participer-partie-input-url" class="d-none" value="{% url 'participer_partie' 'complement_url_leurre' 'Public' 'complement_url_code' %}">
+                                                            <a href="javascript:void(0)" id="participer-partie-button" class="cmn-btn mt-4 mise-solde-bon">Payer et Jouer
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                             <a href="javascript:void(0)" class="cmn-btn mt-4 mise-solde-mauvais recharge" id="mise-btn-recharge"  data-bs-dismiss="modal"

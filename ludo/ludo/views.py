@@ -3,11 +3,12 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.conf import settings
 from allauth.socialaccount.models import SocialAccount
+from django.urls import reverse
 
 from core.models import Mise
-from ludo.enum import Visibilite
-from ludo.utils import ContextConfig, CurrentConfig, CurrentTauxCommission, DetermineCagnotte, DetermineCommission
-from player.models import Participation, Partie, Profil
+from .enum import TypeTransaction, Visibilite
+from .utils import ContextConfig, CurrentConfig, CurrentTauxCommission, DetermineCagnotte, DetermineCommission
+from player.models import Participation, Partie, Profil, Transaction
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -40,7 +41,7 @@ def index(request):
     # Récupérer les paramètres de `state` dans la requête
     next_url = request.GET.get('next', ContextConfig(request)['next'])
     code_invitation = request.GET.get('code_invitation', ContextConfig(request)['code_invitation'])
-    rejoindre_partie_code = request.GET.get('rejoindre_partie_code')
+    rejoindre_partie_code = request.GET.get('rejoindre_partie_code', "")
 
     # Récupérer l'utilisateur connecté
     user = request.user
@@ -169,7 +170,7 @@ def index(request):
 
             partie_privee = Partie.objects.filter(organise_par=profil, visibilite = Visibilite.Privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first()
 
-            participation_en_cours = Participation.objects.filter(partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
+            participation_en_cours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
             
             if participation_en_cours:
                 partie_en_cours = participation_en_cours.partie
@@ -214,9 +215,76 @@ def api_get_partie_privee_via_by_code(request):
 
 # misons afin de participer a une partie
 @login_required
-def participer_partie(request, leurre, code):
-    facebook_login_url = None
-    return redirect(facebook_login_url)
+def participer_partie(request, leurre, type, code):
+    config = CurrentConfig()
+    profil = ContextConfig(request)['profil']
+    response = reverse('index')
+    try:
+        # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
+        partie = Partie.objects.get(code = code, visibilite = type, etat_demarrage = False, etat_validation=True, etat_suppression=False)
+        
+        # verifions le nombre de place disponible
+        if partie.places_disponibles <= 0:
+            raise ("Nombre participants atteint")
 
+        # verifions sa tresorerie
+        if ContextConfig(request)['solde'] < partie.montant_mise:
+            raise ("Solde insuffisant")
+
+        # verifions qu'il ne participe a une partie en cours
+        participation_en_cours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
+        if participation_en_cours:
+            raise ("Déjà dans une autre partie")
+
+        # ici tout est bon il a passé toutes les vérifications donc peut participer
+        participation = Participation()
+        participation.partie = partie
+        participation.profil = profil
+        participation.save()
+
+        transaction_mise = Transaction()
+        transaction_mise.config = config
+        transaction_mise.mise = partie.montant_mise
+        transaction_mise.montant = partie.montant_mise
+        transaction_mise.etat_validation = True
+        transaction_mise.description = "Mise pour partie"
+        transaction_mise.type = TypeTransaction.Mise
+        transaction_mise.type_api = "Système"
+        transaction_mise.partie = partie
+        transaction_mise.profil = profil
+        transaction_mise.save()
+        
+        response = reverse('index_partie', args=[str(timezone.now().strftime('%d%m%Y%H%M%S%f')), code])
+
+        # Afficher les informations du compte social
+        # print(profil)
+    except Partie.DoesNotExist:
+       raise print("La partie n'exsite pas")
+
+    return redirect(response)
+
+
+# accedons a la partie avec legitimite
+@login_required
+def index_partie(request, leurre, code):
+    config = CurrentConfig()
+    profil = ContextConfig(request)['profil']
+    try:
+        # Récupérer la partei
+        partie = Partie.objects.get(code = code, etat_fin = False, etat_validation=True, etat_suppression=False)
+        
+        # verifions qu'il participe a la partie en cours
+        participation_en_cours_match = Participation.objects.filter(profil = profil, partie = partie, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
+        
+        # ici tout est bon il accede à l'interface passé toutes les vérifications donc peut participer
+        if participation_en_cours_match:
+            return render(request, 'parte-details.html', locals())
+
+        raise Exception("Pas de concordance")
+
+    except Partie.DoesNotExist:
+       raise print("La partie n'exsite pas")
+
+    return redirect(reverse('index'))
 
 

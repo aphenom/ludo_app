@@ -7,12 +7,14 @@ from django.utils import timezone
 from django.db.models import Q, Sum
 
 from core.models import Config, TauxCommission, TauxTransaction
-from player.models import Transaction
+from player.models import Profil, Transaction
 from ludo.enum import TypeTransaction
 
 
 def ContextConfig(request):
+    
     config = Config.objects.filter(etat_validation=True, etat_suppression=False).first() 
+    user = request.user
 
     try:  
         my_current_url = resolve(request.path_info).url_name 
@@ -26,7 +28,17 @@ def ContextConfig(request):
     solde = Transaction.objects.filter(Q((Q(type=TypeTransaction.Retrait) | Q(type=TypeTransaction.Mise)), etat_suppression=False) 
                                        | Q((Q(type=TypeTransaction.Depot) | Q(type=TypeTransaction.Gain)), etat_validation=True)).aggregate(total=Sum('montant'))["total"]
 
-    print(solde)
+    solde = solde if solde else 0
+
+    if user.is_authenticated:
+        try:
+            # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
+            profil = Profil.objects.get(user=user)
+        except Profil.DoesNotExist:
+            print("L'utilisateur n'a pas de compte social lié à Facebook")
+            profil = None
+
+    #print(solde)
     """ 
     if config.parallax and hasattr(config.parallax, 'url'):
         costum_parallax = config.parallax.url
@@ -53,6 +65,7 @@ def ContextConfig(request):
     """
     return {
         'config' : config, 
+        'profil' : profil, 
         'my_current_url' : my_current_url, 
         'code_invitation' : code_invitation, 
         'next' : next,

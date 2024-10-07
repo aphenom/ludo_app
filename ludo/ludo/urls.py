@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import api_get_partie_privee_via_by_code, facebook_login_with_state, index
+from .views import api_get_partie_privee_via_by_code, facebook_login_with_state, index, index_partie, participer_partie
 
 
 urlpatterns = [
@@ -25,6 +25,12 @@ urlpatterns = [
 
     # Django admin
     path('admin/', admin.site.urls),
+
+    
+    path('participer_partie/<str:leurre>/<str:type>/<str:code>/', participer_partie, name='participer_partie'),
+    
+    path('index_partie/<str:leurre>/<str:code>/', index_partie, name='index_partie'),
+
 
     # path('facebook-login/', facebook_login_with_state, name='facebook_login_with_state'),
     
