@@ -176,7 +176,7 @@
                         //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
                         $('#recharge-input').remove();
                         $('#recharge-input-container').append('<input id="recharge-input" type="text" class="money_field" value ="' + Math.abs(difference_solde_mise) + '" data-difference_solde_mise="' + Math.abs(difference_solde_mise) + '" data-minimum_depot="' + minimum_depot + '">');
-                        $("#participer-partie-button").attr("href", $("#participer-partie-input-url").val().replace("complement_url_recharge", String(Math.abs(difference_solde_mise)).replace(/\s/g, '')));
+                        $("#participer-partie-button").attr("href", "javascript:void(0)");
                         applyMoneyFieldMask();
                     }
 
@@ -197,6 +197,7 @@
                         // let currency = $(this).data('currency');
                         let difference_solde_mise = solde - mise;
                         let minimum_depot = Number(String(choix_partie_privee_data[4]).replace(/\s/g, ''));
+                        let base_url_participer_partie = $('#creer-partie_privee-input-url').val();
                         
                         // remplissons le modal
                         $("#choix_partie_privee-input").val(numStr(mise, separateur));    
@@ -224,10 +225,12 @@
                         if(difference_solde_mise >= 0){
                             $(".choix_partie_privee-solde-bon").show();
                             $(".choix_partie_privee-solde-mauvais").hide();
+                            /* a voir */ $("#creer_partie_privee-btn-creer").attr("href", base_url_participer_partie.replace("complement_url_nombre", String(nombre_participants)).replace("complement_url_leurre", String(Date.now())).replace("complement_url_mise", String(mise)).replace(/\s/g, ''));
                         }  
                         else{
                             $(".choix_partie_privee-solde-bon").hide();
                             $(".choix_partie_privee-solde-mauvais").show();
+                            $("#creer_partie_privee-btn-creer").attr("href", "javascript:void(0)");
                             //$('#recharge-input').attr('data-difference_solde_mise', Math.abs(difference_solde_mise));
                             //$('#recharge-input').attr('data-minimum_depot', minimum_depot);
                             //$("#recharge-input").val(multipleSuperieur(Math.abs(difference_solde_mise), minimum_depot));  
@@ -239,6 +242,7 @@
                     }
                     else{
                         $(".choix_partie_privee-resume").hide();
+                        /* a voir */ $("#participer-partie-button").attr("href", "javascript:void(0)");
                     }
 
                 });
@@ -299,6 +303,7 @@
                                 // let currency = $(this).data('currency');
                                 let difference_solde_mise = solde - mise;
                                 let minimum_depot = Number(String(response.minimum_depot).replace(/\s/g, ''));
+                                let base_url_participer_partie = $('#rejoindre-partie_privee-input-url').val();
                                 
                                 // remplissons le modal
                                 $("#rejoindre_partie_privee-input").val(numStr(mise, separateur));    
@@ -316,7 +321,7 @@
                                 if(difference_solde_mise >= 0){
                                     $(".rejoindre_partie_privee-solde-bon").show();
                                     $(".rejoindre_partie_privee-solde-mauvais").hide();
-                                    $("#rejoindre_partie_privee-btn-rejoindre").attr("href", "javascript:void(0)")
+                                    $("#rejoindre_partie_privee-btn-rejoindre").attr("href", base_url_participer_partie.replace("complement_url_leurre", String(Date.now())).replace("complement_url_code", code_partie_privee).replace(/\s/g, ''));
                                 }  
                                 else{
                                     $(".rejoindre_partie_privee-solde-bon").hide();

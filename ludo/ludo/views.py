@@ -1,4 +1,4 @@
-from datetime import timezone
+from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.conf import settings
@@ -16,6 +16,7 @@ from django_dump_die.middleware import dd
 from urllib.parse import urlencode
 from django.template.defaultfilters import floatformat
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.contrib import messages
 
 
 def facebook_login_with_state(request):
@@ -54,47 +55,7 @@ def index(request):
     if user.is_authenticated:
         try:
             social_account = SocialAccount.objects.get(user=user, provider='facebook')
-            # Tu peux accéder aux données du profil Facebook de l'utilisateur ici
-            facebook_data = social_account.extra_data
-            name = facebook_data.get('name')
-            email = facebook_data.get('email')
-            id_facebook = facebook_data.get('id')
-            nom = facebook_data.get('last_name')
-            prenom = facebook_data.get('first_name')
-
-            # Vérifier si un profil avec cet email existe
-            try:
-                profil = Profil.objects.get(user=user)
-                # Mettre à jour le profil existant si besoin
-                if email and email is not "" and email != profil.email:
-                    profil.email = email
-                    profil.save()
-
-                if nom and nom is not "" and nom != profil.nom:   
-                    profil.nom = nom
-                    profil.save()
-
-                if prenom and prenom is not "" and prenom != profil.prenom:
-                    profil.prenom = prenom
-                    profil.save()
-            except Profil.DoesNotExist:
-                
-                # Créer un nouveau profil si l'utilisateur est nouveau
-                profil = Profil()
-                profil.user=user
-                profil.id_facebook=id_facebook
-                profil.nom=nom
-                profil.prenom=prenom
-                profil.email=email
-                profil.date_validation=timezone.now()
-
-                if code_invitation and code_invitation is not "":
-                    profil.code_invite_par = code_invitation
-                    invite_par = profil.objects.filter(code=code_invitation, etat_suppression=False).first()
-                    if invite_par:
-                        profil.invite_par = invite_par
-                
-                profil.save()
+            checking_user(user, social_account, code_invitation)
 
             # Ajoute ici tes traitements en fonction de `custom_variable` ou des données utilisateur
         except SocialAccount.DoesNotExist:
@@ -109,8 +70,268 @@ def index(request):
     # determinons l'ensemble des mises possibles
     liste_mises = Mise.objects.filter(etat_validation=True, etat_suppression=False)
 
-    choix_parties_privees = []
+    # parcourons les mises pour creer des parties ou recuperons celles en attentes en fonction et determinons les choix possibles pour les parties privees
+    choix_parties_privees = generation_parties(request)
+        
+    #trions les choix pour les parties privees 
+    choix_parties_privees_triees = sorted(choix_parties_privees, key=lambda x: x['montant_cagnotte'], reverse=True)
+    # dd(choix_parties_privees)
+
+    # recuperons les parties valides pretes a recevoir des joueurs
+    liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False)
+
+    # partie privee pour utilisateur connecté
+    # Si l'utilisateur est authentifié via Facebook
+    if user.is_authenticated:
+        try:
+            # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
+            profil = Profil.objects.get(user=user)
+
+            partie_privee = Partie.objects.filter(organise_par=profil, visibilite = Visibilite.Privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first()
+
+            participation_en_cours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
+            
+            if participation_en_cours:
+                partie_en_cours = participation_en_cours.partie
+                return redirect(reverse('index_partie', args=[timezone.now().strftime('%d%m%Y%H%M%S%f'), partie_en_cours.code]))
+            
+            # Afficher les informations du compte social
+            # print(profil)
+
+
+        except Profil.DoesNotExist:
+            print("L'utilisateur n'a pas de compte social lié à Facebook")
+
+    if next_url != '/' and next_url != '':
+        return redirect(next_url)
     
+    # messages.error(request, "La partie n'existe pas.")
+    
+    return render(request, 'index.html', locals())
+
+
+'''Avoir une partie privee via code'''
+@login_required
+def api_get_partie_privee_via_by_code(request):
+    # dd(request)
+    data = {}
+    if request.method == 'GET':
+        # no need to do this
+        # request_csrf_token = request.POST.get('csrfmiddlewaretoken', '')
+        code_partie_privee = request.GET.get('code_partie_privee')  
+        # dd(code_partie_privee)   
+        partie = Partie.objects.filter(code=code_partie_privee, etat_demarrage = False, etat_validation=True, etat_suppression=False, visibilite=Visibilite.Privee).first() #,visibilite-=Visibilite.Privee) 
+        # answers_list = Answer.objects.filter(is_active=True, question__pub__uuid__exact=uuid).values()
+        config = CurrentConfig()
+        if partie:
+            data = {
+                'mise': partie.montant_mise,
+                'nombre_participants': partie.nombre_participants,
+                'gain': partie.montant_cagnotte,
+                'minimum_depot': config.minimum_depot if config and config.minimum_depot else 100,
+                'solde': ContextConfig(request)['solde'],
+                'currency': config.currency if config and config.currency else "FCFA",
+                # 'answers': list(answers_list),
+            }
+    return JsonResponse(data) 
+
+
+# misons afin de participer a une partie
+@login_required
+def participer_partie(request, leurre, type, code):
+    config = CurrentConfig()
+    profil = ContextConfig(request)['profil']  # Assurez-vous que 'profil' existe dans ContextConfig
+    solde = ContextConfig(request)['solde']  # Stocker le solde dans une variable pour éviter d'appeler plusieurs fois
+    response = reverse('index')
+    try:
+        # Récupérer les données de la partie
+        partie = Partie.objects.get(
+            code=code, visibilite=type, etat_demarrage=False, 
+            etat_validation=True, etat_suppression=False
+        )
+
+        # Vérifier s'il y a des places disponibles
+        if partie.places_disponibles <= 0:
+            raise ValueError("Nombre de participants atteint")
+
+        # Vérifier si le profil a assez de solde pour la mise
+        if solde < partie.montant_mise:
+            raise ValueError("Solde insuffisant")
+
+        # Vérifier que l'utilisateur ne participe pas déjà à une autre partie en cours
+        participation_en_cours = Participation.objects.filter(
+            profil=profil, 
+            partie__etat_fin=False, partie__etat_validation=True, partie__etat_suppression=False, 
+            etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+        ).first()
+
+        if participation_en_cours:
+            raise ValueError("Vous participez déjà à une autre partie en cours.")
+
+        # Si tout est bon, créer une nouvelle participation
+        participation = Participation(
+            partie=partie,
+            profil=profil
+        )
+        participation.save()
+
+        # Créer une transaction de mise
+        transaction_mise = Transaction(
+            config=config,
+            mise=partie.montant_mise,
+            montant=(-1)*partie.montant_mise,
+            etat_validation=True,
+            description="Mise pour la partie",
+            type=TypeTransaction.Mise,  # Assurez-vous que TypeTransaction.Mise est bien défini
+            type_api="Système",
+            partie=partie,
+            profil=profil
+        )
+        transaction_mise.save()
+        
+        # Rediriger vers la page de la partie
+        response = reverse('index_partie', args=[timezone.now().strftime('%d%m%Y%H%M%S%f'), code])
+
+    except Partie.DoesNotExist:
+        # Gérer l'erreur si la partie n'existe pas
+        messages.error(request, "La partie n'existe pas.")
+        #return redirect('error_page')  # Redirigez vers une page d'erreur ou l'index si nécessaire
+
+    except ValueError as e:
+        # Gérer les exceptions liées aux vérifications
+        messages.error(request, str(e))  # Afficher le message d'erreur correspondant
+        #return redirect('error_page')  # Rediriger vers une page d'erreur
+
+    return redirect(response)
+
+
+# creons une partie privee et misons automatiquement afin de participer
+@login_required
+def creer_partie_privee(request, nombre_participants, leurre, montant_mise):
+    
+    config = CurrentConfig()
+    profil = ContextConfig(request)['profil']  # Assurez-vous que 'profil' existe dans ContextConfig
+    solde = ContextConfig(request)['solde']  # Stocker le solde dans une variable pour éviter d'appeler plusieurs fois
+    response = reverse('index')
+    montant_mise = int(montant_mise)
+    nombre_participants = int(nombre_participants)
+    montant_cagnotte = DetermineCagnotte(montant_mise, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
+    montant_commission = DetermineCommission(montant_mise, nombre_participants, CurrentTauxCommission().taux if CurrentTauxCommission() and CurrentTauxCommission().taux else None)
+
+    try:
+        # Récupérer la mise correspondante
+        mise = Mise.objects.get(
+            montant=montant_mise, nombre_minimum__lte=nombre_participants, 
+            etat_validation=True, etat_suppression=False
+        )
+
+        # Vérifier si le profil a assez de solde pour la mise
+        if solde < montant_mise:
+            raise ValueError("Solde insuffisant")
+
+        # Vérifier que l'utilisateur ne participe pas déjà à une autre partie en cours
+        participation_en_cours = Participation.objects.filter(
+            profil=profil, 
+            partie__etat_fin=False, partie__etat_validation=True, partie__etat_suppression=False, 
+            etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+        ).first()
+
+        if participation_en_cours:
+            raise ValueError("Vous participez déjà à une autre partie en cours.")
+
+        # Si tout est bon, créer une nouvelle partie puis une participation
+        partie = Partie(
+            config = config,
+            delai_tour = config.delai_tour if config and config.delai_tour else None,
+            mise = mise,
+            montant_mise = montant_mise,
+            nombre_participants = nombre_participants,
+            montant_cagnotte = montant_cagnotte,
+            montant_commission = montant_commission,
+            taux_comission = CurrentTauxCommission(),
+            visibilite = Visibilite.Privee,
+            organise_par = profil
+        )
+        partie.save()
+            
+        participation = Participation(
+            partie=partie,
+            profil=profil
+        )
+        participation.save()
+
+        # Créer une transaction de mise
+        transaction_mise = Transaction(
+            config=config,
+            mise=montant_mise,
+            montant=(-1)*montant_mise,
+            etat_validation=True,
+            description="Mise pour la partie",
+            type=TypeTransaction.Mise,  # Assurez-vous que TypeTransaction.Mise est bien défini
+            type_api="Système",
+            partie=partie,
+            profil=profil
+        )
+        transaction_mise.save()
+        
+        # Rediriger vers la page de la partie
+        response = reverse('index_partie', args=[timezone.now().strftime('%d%m%Y%H%M%S%f'), partie.code])
+
+    except Mise.DoesNotExist:
+        # Gérer l'erreur si la partie n'existe pas
+        messages.error(request, "Cette mise n'est pas possible.")
+        #return redirect('error_page')  # Redirigez vers une page d'erreur ou l'index si nécessaire
+
+    except ValueError as e:
+        # Gérer les exceptions liées aux vérifications
+        messages.error(request, str(e))  # Afficher le message d'erreur correspondant
+        #return redirect('error_page')  # Rediriger vers une page d'erreur
+
+    return redirect(response)
+
+
+# accedons a la partie avec legitimite
+@login_required
+def index_partie(request, leurre, code):
+    config = CurrentConfig()
+    profil = ContextConfig(request)['profil']
+    try:
+        # Récupérer la partei
+        partie = Partie.objects.get(
+            code = code, etat_fin = False, 
+            etat_validation=True, etat_suppression=False
+            )
+        
+        # verifions qu'il participe a la partie en cours
+        participation_en_cours_match = Participation.objects.filter(
+            profil = profil, 
+            partie = partie, 
+            etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+            ).first()
+        
+        # ici tout est bon il accede à l'interface passé toutes les vérifications donc peut participer
+        if participation_en_cours_match:
+            return render(request, 'partie-details.html', locals())
+
+        raise ValueError("Problème de concordance.")
+
+    except Partie.DoesNotExist:
+       messages.error(request, "La partie n'exsite pas.")
+    
+    except ValueError as e:
+        # Gérer les exceptions liées aux vérifications
+        messages.error(request, str(e))  # Afficher le message d'erreur correspondant
+        #return redirect('error_page')  # Rediriger vers une page d'erreur
+    
+    return redirect(reverse('index'))
+
+
+def generation_parties(request):
+    
+    liste_mises = Mise.objects.filter(etat_validation=True, etat_suppression=False)
+    
+    choix_parties_privees = []
+
     # parcourons les mises pour creer des parties ou recuperons celles en attentes en fonction
     for mise in liste_mises:
         for nombre_participants in range(mise.nombre_minimum,5):
@@ -153,138 +374,52 @@ def index(request):
                     partie.montant_commission = montant_commission
                     partie.taux_comission = CurrentTauxCommission()
                     partie.save()
-    
-    #trions les choix pour les parties privees 
-    choix_parties_privees_triees = sorted(choix_parties_privees, key=lambda x: x['montant_cagnotte'], reverse=True)
-    # dd(choix_parties_privees)
 
-    # recuperons les parties valides pretes a recevoir des joueurs
-    liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False)
-
-    # partie privee pour utilisateur connecté
-    # Si l'utilisateur est authentifié via Facebook
-    if user.is_authenticated:
-        try:
-            # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
-            profil = Profil.objects.get(user=user)
-
-            partie_privee = Partie.objects.filter(organise_par=profil, visibilite = Visibilite.Privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first()
-
-            participation_en_cours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
-            
-            if participation_en_cours:
-                partie_en_cours = participation_en_cours.partie
-            # Afficher les informations du compte social
-            print(profil)
+    return choix_parties_privees
 
 
-        except Profil.DoesNotExist:
-            print("L'utilisateur n'a pas de compte social lié à Facebook")
+def checking_user(user, social_account, code_invitation):
+    # Tu peux accéder aux données du profil Facebook de l'utilisateur ici
+    facebook_data = social_account.extra_data
+    name = facebook_data.get('name')
+    email = facebook_data.get('email')
+    id_facebook = facebook_data.get('id')
+    nom = facebook_data.get('last_name')
+    prenom = facebook_data.get('first_name')
 
-    if next_url != '/' and next_url != '':
-        return redirect(next_url)
-    
-    return render(request, 'index.html', locals())
-
-
-'''Avoir une partie privee via code'''
-@login_required
-def api_get_partie_privee_via_by_code(request):
-    # dd(request)
-    data = {}
-    if request.method == 'GET':
-        # no need to do this
-        # request_csrf_token = request.POST.get('csrfmiddlewaretoken', '')
-        code_partie_privee = request.GET.get('code_partie_privee')  
-        # dd(code_partie_privee)   
-        partie = Partie.objects.filter(code=code_partie_privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first() #,visibilite-=Visibilite.Privee) 
-        # answers_list = Answer.objects.filter(is_active=True, question__pub__uuid__exact=uuid).values()
-        config = CurrentConfig()
-        if partie:
-            data = {
-                'mise': partie.montant_mise,
-                'nombre_participants': partie.nombre_participants,
-                'gain': partie.montant_cagnotte,
-                'minimum_depot': config.minimum_depot if config and config.minimum_depot else 100,
-                'solde': ContextConfig(request)['solde'],
-                'currency': config.currency if config and config.currency else "FCFA",
-                # 'answers': list(answers_list),
-            }
-    return JsonResponse(data) 
-
-
-# misons afin de participer a une partie
-@login_required
-def participer_partie(request, leurre, type, code):
-    config = CurrentConfig()
-    profil = ContextConfig(request)['profil']
-    response = reverse('index')
+    # Vérifier si un profil avec cet email existe
     try:
-        # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
-        partie = Partie.objects.get(code = code, visibilite = type, etat_demarrage = False, etat_validation=True, etat_suppression=False)
+        profil = Profil.objects.get(user=user)
+        # Mettre à jour le profil existant si besoin
+        if email and email is not "" and email != profil.email:
+            profil.email = email
+            profil.save()
+
+        if nom and nom is not "" and nom != profil.nom:   
+            profil.nom = nom
+            profil.save()
+
+        if prenom and prenom is not "" and prenom != profil.prenom:
+            profil.prenom = prenom
+            profil.save()
+    except Profil.DoesNotExist:
         
-        # verifions le nombre de place disponible
-        if partie.places_disponibles <= 0:
-            raise ("Nombre participants atteint")
+        # Créer un nouveau profil si l'utilisateur est nouveau
+        profil = Profil()
+        profil.user=user
+        profil.id_facebook=id_facebook
+        profil.nom=nom
+        profil.prenom=prenom
+        profil.email=email
+        profil.date_validation=timezone.now()
 
-        # verifions sa tresorerie
-        if ContextConfig(request)['solde'] < partie.montant_mise:
-            raise ("Solde insuffisant")
-
-        # verifions qu'il ne participe a une partie en cours
-        participation_en_cours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
-        if participation_en_cours:
-            raise ("Déjà dans une autre partie")
-
-        # ici tout est bon il a passé toutes les vérifications donc peut participer
-        participation = Participation()
-        participation.partie = partie
-        participation.profil = profil
-        participation.save()
-
-        transaction_mise = Transaction()
-        transaction_mise.config = config
-        transaction_mise.mise = partie.montant_mise
-        transaction_mise.montant = partie.montant_mise
-        transaction_mise.etat_validation = True
-        transaction_mise.description = "Mise pour partie"
-        transaction_mise.type = TypeTransaction.Mise
-        transaction_mise.type_api = "Système"
-        transaction_mise.partie = partie
-        transaction_mise.profil = profil
-        transaction_mise.save()
+        if code_invitation and code_invitation is not "":
+            profil.code_invite_par = code_invitation
+            invite_par = profil.objects.filter(code=code_invitation, etat_suppression=False).first()
+            if invite_par:
+                profil.invite_par = invite_par
         
-        response = reverse('index_partie', args=[str(timezone.now().strftime('%d%m%Y%H%M%S%f')), code])
+        profil.save()    
 
-        # Afficher les informations du compte social
-        # print(profil)
-    except Partie.DoesNotExist:
-       raise print("La partie n'exsite pas")
-
-    return redirect(response)
-
-
-# accedons a la partie avec legitimite
-@login_required
-def index_partie(request, leurre, code):
-    config = CurrentConfig()
-    profil = ContextConfig(request)['profil']
-    try:
-        # Récupérer la partei
-        partie = Partie.objects.get(code = code, etat_fin = False, etat_validation=True, etat_suppression=False)
-        
-        # verifions qu'il participe a la partie en cours
-        participation_en_cours_match = Participation.objects.filter(profil = profil, partie = partie, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
-        
-        # ici tout est bon il accede à l'interface passé toutes les vérifications donc peut participer
-        if participation_en_cours_match:
-            return render(request, 'parte-details.html', locals())
-
-        raise Exception("Pas de concordance")
-
-    except Partie.DoesNotExist:
-       raise print("La partie n'exsite pas")
-
-    return redirect(reverse('index'))
 
 

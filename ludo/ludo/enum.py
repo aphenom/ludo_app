@@ -51,3 +51,9 @@ class TypeTransaction(models.TextChoices):
 class Visibilite(models.TextChoices):
     Public = 'Public'
     Privee = 'Privée'  
+
+class TypeReferenceNotification(models.TextChoices):
+    Profil = 'Profil'
+    Transaction = 'Transaction'   
+    Participation = 'Participation'   
+    Partie = 'Partie'      

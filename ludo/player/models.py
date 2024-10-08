@@ -7,7 +7,7 @@ from tinymce.models import HTMLField
 from phonenumber_field.modelfields import PhoneNumberField
 from cities_light.models import Country
 from core.models import Config, Mise, TauxCommission, TauxTransaction
-from ludo.enum import Genre, TypeTransaction, Visibilite
+from ludo.enum import Genre, TypeReferenceNotification, TypeTransaction, Visibilite
 
 # Create your models here.
 
@@ -318,14 +318,20 @@ class HistoriqueNotification(models.Model):
    
     objet = models.CharField('objet', max_length=255, null=True, blank=True)
     message = HTMLField("message", blank=True, null=True)
+
+    type_reference = models.CharField(max_length=20, choices=TypeReferenceNotification.choices, null=True, blank=True, verbose_name = "type référence")
     
+    id_reference = models.CharField('ID référence', max_length=255, null=True, blank=True)
+
     date_creation = models.DateTimeField('date création', auto_now_add=True)
     date_modification = models.DateTimeField('date modification', null=True, blank=True, auto_now=True)
     date_validation  = models.DateTimeField('date validation', null=True, blank=True)
+    date_lecture  = models.DateTimeField('date lecture', null=True, blank=True)
     date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
 
     etat_validation = models.BooleanField('état validation', default=True)
     etat_suppression = models.BooleanField('état suppression', default=False)
+    etat_lecture = models.BooleanField('état lecture', default=False)
     
     profil = models.ForeignKey(Profil, models.SET_NULL, null=True, blank=True, related_name='profil_historique_notifications', related_query_name="profil_historique_notification", verbose_name = "profil")
     
@@ -339,6 +345,7 @@ class HistoriqueNotification(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_etat_validation = self.etat_validation
+        self._init_etat_lecture = self.etat_lecture
         self._init_etat_suppression = self.etat_suppression
     
     def save(self, *args, **kwargs):
@@ -353,6 +360,9 @@ class HistoriqueNotification(models.Model):
         if self.etat_validation != self._init_etat_validation:
             if self.etat_validation == True:
                 self.date_validation = timezone.now()
+        if self.etat_lecture != self._init_etat_lecture:
+            if self.etat_lecture == True:
+                self.date_lecture = timezone.now()
         if self.etat_suppression != self._init_etat_suppression:
             if self.etat_suppression == True:
                 self.date_suppression = timezone.now()                             

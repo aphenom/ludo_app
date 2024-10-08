@@ -13,5 +13,476 @@
 <!-- MainContent -->
 
 
+    <!-- Dashboard Section start -->
+{% block content %}
+    <section class="dashboard-section body-collapse">
+        <div class="overlay pt-120">
+            <div class="container-fruid">
+                <div class="row">
+                    <ul class="nav mb-40 dashboard-nav" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="balance-tab" data-bs-toggle="tab" data-bs-target="#balance" type="button"
+                                role="tab" aria-controls="balance" aria-selected="true">Mes parties</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="deposit-tab" data-bs-toggle="tab" data-bs-target="#deposit" type="button"
+                                role="tab" aria-controls="deposit" aria-selected="false">Dépôt</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="withdraw-tab" data-bs-toggle="tab" data-bs-target="#withdraw" type="button"
+                                role="tab" aria-controls="withdraw" aria-selected="false">Retrait</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="transaction-tab" data-bs-toggle="tab" data-bs-target="#transaction"
+                                type="button" role="tab" aria-controls="transaction" aria-selected="false">Mes transactions</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-0">
+                        <div class="tab-pane fade show active" id="balance" role="tabpanel" aria-labelledby="balance-tab">
+                            <div class="transaction-box">
+                                <div class="top-filter d-flex align-items-end d-none">
+                                    <div class="single-filter">
+                                        <p>Month</p>
+                                        <input type="text" placeholder="2023/01">
+                                    </div>
+                                    <div class="single-filter">
+                                        <p>Type</p>
+                                        <select>
+                                            <option value="0">All</option>
+                                            <option value="1">Type 1</option>
+                                            <option value="2">Type 2</option>
+                                            <option value="3">Type 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-filter">
+                                        <p>Currency</p>
+                                        <select>
+                                            <option value="0">All</option>
+                                            <option value="1">Currency 1</option>
+                                            <option value="2">Currency 2</option>
+                                            <option value="3">Currency 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-btn">
+                                        <button class="cmn-btn">Filter</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive mt-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date/Heure</th>
+                                                <th scope="col">Partie</th>
+                                                <th scope="col">Mise</th>
+                                                <th scope="col">Gains</th>
+                                                <th scope="col">Résultat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>22-01-2024  07:17:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>3 participants</p>
+                                                </td>
+                                                <td>
+                                                    <p>5 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>12 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Victoire</p>
+                                                </td>
+											</tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  17:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>1 contre 1</p>
+                                                </td>
+                                                <td>
+                                                    <p>10 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>16 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Victoire</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  15:12:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>4 participants</p>
+                                                </td>
+                                                <td>
+                                                    <p>2 500</p>
+                                                </td>
+                                                <td>
+                                                    <p>8 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Echec</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  13:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>1 contre 1</p>
+                                                </td>
+                                                <td>
+                                                    <p>10 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>16 000</p>
+                                                </td>
+                                                <td>
+                                                    <p>Victoire</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
+                            <div class="deposit-box">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="deposit-currency">
+                                            <div class="balance-area">
+                                                <div class="single-area d-none">
+                                                    <p>Deposit Currency</p>
+                                                    <select>
+                                                        <option>Select Currency</option>
+                                                        <option value="1">EUR</option>
+                                                        <option value="2">ETH</option>
+                                                        <option value="3">USD</option>
+                                                    </select>
+                                                </div>
+                                                <div class="single-area">
+                                                    <p>Solde</p>
+                                                    <h6 class="m-0">20 500 FCFA</h6>
+                                                </div>
+                                            </div>
+                                            <div class="first-deposit-bonus mt-30 mb-30 d-none">
+                                                <div class="head-area d-flex justify-content-between">
+                                                    <h6 class="m-0">First Deposit Bonus</h6>
+                                                    <a href="javascript:void(0)">More</a>
+                                                </div>
+                                                <div class="deposit-bonus-content mt-1 d-flex align-items-center d-none">
+                                                    <div class="item-single">
+                                                        <h5>$30(or above to get bonus)</h5>
+                                                        <p class="mdr">≈ 0.01664502 ETH</p>
+                                                    </div>
+                                                    <div class="item-single d-flex align-items-center justify-content-center">
+                                                        <img src="{% static 'dashboard/images/icon/coin.png' %}" alt="icon">
+                                                        <p>+80%Bonus</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="payment-system d-none">
+                                                <div class="head-area mb-2 d-flex justify-content-between">
+                                                    <h6 class="m-0">Select Payment System</h6>
+                                                </div>
+                                                <div class="payment-processor d-flex flex-wrap cus-mar">
+                                                    <div class="single-box active">
+                                                        <img src="{% static 'dashboard/images/payment-1.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-2.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-3.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-4.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-5.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-6.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-7.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-8.png' %}" alt="icon">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="deposit-amount mb-10">
+                                            <h5>Faire un dépôt</h5>
+                                            <!-- <p>Montant minimum : 500 FCFA <span class="mdr d-none">Instant | Min: 5 • Max: 6,000</span></p> -->
+                                            <ul class="quick-value d-none">
+                                                <li><h5>25</h5></li>
+                                                <li><h5 class="active">50</h5></li>
+                                                <li><h5>100</h5></li>
+                                                <li><h5>200</h5></li>
+                                                <li><h5>500</h5></li>
+                                            </ul>
+                                        </div>
+                                        <form action="#">
+                                            <div class="col-12">
+                                                <div class="single-input">
+                                                    <label for="dAmount">Montant</label>
+                                                    <input type="text" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
+                                                </div>
+                                                <div class="single-input d-none">
+                                                    <label for="dEmail">Email</label>
+                                                    <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
+                                                </div>
+                                                <div class="btn-area text-center mt-3">
+                                                    <button class="cmn-btn w-100">Déposer</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
+                            <div class="deposit-box">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="deposit-currency">
+                                            <div class="balance-area">
+                                                <div class="single-area d-none">
+                                                    <p>Deposit Currency</p>
+                                                    <select>
+                                                        <option>Select Currency</option>
+                                                        <option value="1">EUR</option>
+                                                        <option value="2">ETH</option>
+                                                        <option value="3">USD</option>
+                                                    </select>
+                                                </div>
+                                                <div class="single-area">
+                                                    <p>Solde</p>
+                                                    <h6 class="m-0">20 500 FCFA</h6>
+                                                </div>
+                                            </div>
+                                            <div class="first-deposit-bonus mt-30 mb-30 d-none">
+                                                <div class="head-area d-flex justify-content-between">
+                                                    <h6 class="m-0">First Deposit Bonus</h6>
+                                                    <a href="javascript:void(0)">More</a>
+                                                </div>
+                                                <div class="deposit-bonus-content mt-1 d-flex align-items-center d-none">
+                                                    <div class="item-single">
+                                                        <h5>$30(or above to get bonus)</h5>
+                                                        <p class="mdr">≈ 0.01664502 ETH</p>
+                                                    </div>
+                                                    <div class="item-single d-flex align-items-center justify-content-center">
+                                                        <img src="{% static 'dashboard/images/icon/coin.png' %}" alt="icon">
+                                                        <p>+80%Bonus</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="payment-system d-none">
+                                                <div class="head-area mb-2 d-flex justify-content-between">
+                                                    <h6 class="m-0">Select Payment System</h6>
+                                                </div>
+                                                <div class="payment-processor d-flex flex-wrap cus-mar">
+                                                    <div class="single-box active">
+                                                        <img src="{% static 'dashboard/images/payment-1.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-2.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-3.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-4.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-5.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-6.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-7.png' %}" alt="icon">
+                                                    </div>
+                                                    <div class="single-box">
+                                                        <img src="{% static 'dashboard/images/payment-8.png' %}" alt="icon">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="deposit-amount mb-10">
+                                            <h5>Faire un retrait</h5>
+                                            <!-- <p>Montant minimum : 500 FCFA <span class="mdr d-none">Instant | Min: 5 • Max: 6,000</span></p> -->
+                                            <ul class="quick-value d-none">
+                                                <li><h5>25</h5></li>
+                                                <li><h5 class="active">50</h5></li>
+                                                <li><h5>100</h5></li>
+                                                <li><h5>200</h5></li>
+                                                <li><h5>500</h5></li>
+                                            </ul>
+                                        </div>
+                                        <form action="#">
+                                            <div class="col-12">
+                                                <div class="single-input">
+                                                    <label for="dAmount">Montant</label>
+                                                    <input type="text" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
+                                                </div>
+                                                <div class="single-input d-none">
+                                                    <label for="dEmail">Email</label>
+                                                    <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
+                                                </div>
+                                                <div class="btn-area text-center mt-3">
+                                                    <button class="cmn-btn w-100">Retirer</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="transaction" role="tabpanel" aria-labelledby="transaction-tab">
+                            <div class="transaction-box">
+                                <div class="top-filter d-flex align-items-end">
+                                    <div class="single-filter">
+                                        <p>Mois</p>
+                                        <input type="text" placeholder="01/2024">
+                                    </div>
+                                    <div class="single-filter">
+                                        <p>Type</p>
+                                        <select>
+                                            <option value="0">Tout</option>
+                                            <option value="1">Dépôt</option>
+                                            <option value="2">Retrait</option>
+                                            <option value="3">Gains</option>
+                                            <!-- <option value="4">Retrait</option> -->
+                                        </select>
+                                    </div>
+                                    <div class="single-filter d-none">
+                                        <p>Currency</p>
+                                        <select>
+                                            <option value="0">All</option>
+                                            <option value="1">Currency 1</option>
+                                            <option value="2">Currency 2</option>
+                                            <option value="3">Currency 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-btn">
+                                        <button class="cmn-btn">Filtrer</button>
+                                    </div>
+                                </div>
+                                 <div class="table-responsive mt-4">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Date/Heure</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Montant</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  15:12:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>Retrait</p>
+                                                </td>
+                                                <td>
+                                                    <p>- 21 500</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>22-01-2024  07:17:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>Gains</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 12 000</p>
+                                                </td>
+											</tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  17:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>Gains</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 16 000</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  15:12:51</p>
+                                                </th>
+                                                <td>
+                                                    <p>Retrait</p>
+                                                </td>
+                                                <td>
+                                                    <p>- 2 500</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>21-01-2024  13:22:11</p>
+                                                </th>
+                                                <td>
+                                                    <p>Gains</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 16 000</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    <p>20-01-2024  18:11:17</p>
+                                                </th>
+                                                <td>
+                                                    <p>Dépôt</p>
+                                                </td>
+                                                <td>
+                                                    <p>+ 500</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <input type="hidden" value="{{tab}}" id="tabulation-id">
+{% endblock %}
+    <!-- Dashboard Section end -->
 
-<!--  -->
+<!-- javascript -->
+{% block script %}
+    <!-- parent -->
+    {{ block.super }}
+    <!-- perso lié a l'interaction  -->
+    {% if tab %}
+    <script>
+        $(document).ready(function() {
+            $("#"+$("#tabulation-id").val()).trigger("click");
+        });
+    </script>
+    {% endif %}
+{% endblock %}    
+<!-- javascript end -->

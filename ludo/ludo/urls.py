@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import api_get_partie_privee_via_by_code, facebook_login_with_state, index, index_partie, participer_partie
+from .views import api_get_partie_privee_via_by_code, creer_partie_privee, facebook_login_with_state, index, index_partie, participer_partie
 
 
 urlpatterns = [
@@ -28,6 +28,8 @@ urlpatterns = [
 
     
     path('participer_partie/<str:leurre>/<str:type>/<str:code>/', participer_partie, name='participer_partie'),
+    
+    path('creer_partie_privee/<str:nombre_participants>/<str:leurre>/<str:montant_mise>/', creer_partie_privee, name='creer_partie_privee'),
     
     path('index_partie/<str:leurre>/<str:code>/', index_partie, name='index_partie'),
 

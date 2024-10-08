@@ -109,6 +109,40 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
+
+                    <div class="modal fade" id="messageMod">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header justify-content-center">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="messageArea" role="tabpanel"
+                                        aria-labelledby="messageArea-tab">
+                                        <div class="login-reg-content messageMode">
+                                            <div class="modal-body">
+                                                <div class="form-area">
+                                                    <div class="section-text text-center">
+                                                        <h3 class="title">Info</h3>
+                                                        <!-- <p>Tu n'as pas de compte ? <a href="javascript:void(0)" class="reg-btn">Inscris-toi</a></p> -->
+                                                    </div>
+                                                    {% if messages %}
+                                                        <ul class="messages">
+                                                            {% for message in messages %}
+                                                                <li class="{{ message.tags }}">{{ message }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="modal fade" id="loginMod">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -258,7 +292,7 @@
                                                         <p>Mise : <span id="mise-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
                                                         <p>Nombre de joueurs : <span id="mise-nombre_participants">2</span></p>
                                                         <p>Gain : <a href="#"><span id="mise-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
-                                                        <p class="mise-solde-bon">Tu seras debité de : <span id="mise-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
+                                                        <p class="mise-solde-bon">Tu seras debité{{ complement_genre }} de : <span id="mise-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
                                                         <p class="mise-solde-mauvais">Ton solde (<span id="mise-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
                                                         <!--<input type="hidden" id="mise-recharge" data-difference_solde_mise="0" data-minimum_depot="0">-->
                                                         <a href="javascript:void(0)" class="recharge-btn recharge" id="mise-link-recharge"  data-bs-dismiss="modal"
@@ -289,7 +323,7 @@
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                             <a href="javascript:void(0)" class="cmn-btn mt-4 mise-solde-mauvais recharge" id="mise-btn-recharge"  data-bs-dismiss="modal"
-                                                        aria-label="Close" data-bs-toggle="modal"data-bs-target="#rechargeMod">Recharger mon compte
+                                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">Recharger mon compte
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                         </div>
@@ -302,6 +336,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="modal fade" id="rechargeMod">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -339,6 +374,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="modal fade" id="privateChoiceMod">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -366,18 +402,19 @@
                                                             <p>Mise : <span id="rejoindre_partie_privee-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
                                                             <p>Nombre de joueurs : <span id="rejoindre_partie_privee-nombre_participants">2</span></p>
                                                             <p>Gain : <a href="#"><span id="rejoindre_partie_privee-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
-                                                            <p class="rejoindre_partie_privee-solde-bon">Tu seras debité de : <span id="rejoindre_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie privée !</p>
+                                                            <p class="rejoindre_partie_privee-solde-bon">Tu seras debité{{ complement_genre }} de : <span id="rejoindre_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie privée !</p>
                                                             <p class="rejoindre_partie_privee-solde-mauvais">Ton solde (<span id="rejoindre_partie_privee-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
                                                             <a href="javascript:void(0)" class="recharge-btn recharge" id="rejoindre_partie_privee-link-recharge"  data-bs-dismiss="modal"
                                                             aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> avant de continuer !</p>
                                                         </div>
                                                         <p class="text-danger rejoindre_partie_privee-code-erreur d-none">Désolé, ce code ne correspond à aucune partie privée active !</p>
                                                         <div class="btn-area text-center mt-0">
+                                                            <input type="hidden" id="rejoindre-partie_privee-input-url" class="d-none" value="{% url 'participer_partie' 'complement_url_leurre' 'Privée' 'complement_url_code' %}">
                                                             <a href="javascript:void(0)" class="cmn-btn mt-4 rejoindre_partie_privee-solde-bon d-none" id="rejoindre_partie_privee-btn-rejoindre">Rejoindre la partie privée
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                             <a href="javascript:void(0)" class="cmn-btn mt-4 rejoindre_partie_privee-solde-mauvais recharge d-none" id="rejoindre_partie_privee-btn-recharge"  data-bs-dismiss="modal"
-                                                        aria-label="Close" data-bs-toggle="modal"data-bs-target="#rechargeMod">Recharger
+                                                        aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">Recharger
                                                                 <i class="icon-d-right-arrow-2"></i>
                                                             </a>
                                                         </div>
@@ -408,16 +445,17 @@
                                                             <p>Mise : <span id="choix_partie_privee-mise">1 000</span> {{ config.currency|default:'FCFA' }}</p>
                                                             <p>Nombre de joueurs : <span id="choix_partie_privee-nombre_participants">2</span></p>
                                                             <p>Gain : <a href="#"><span id="choix_partie_privee-gain" style="color:rgb(161, 255, 0)">1 000</span> {{ config.currency|default:'FCFA' }}</a></p>
-                                                            <p class="choix_partie_privee-solde-bon">Tu seras debité de : <span id="choix_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
+                                                            <p class="choix_partie_privee-solde-bon">Tu seras debité{{ complement_genre }} de : <span id="choix_partie_privee-debit">1 000</span> {{ config.currency|default:'FCFA' }} pour rejoindre cette partie !</p>
                                                             <p class="choix_partie_privee-solde-mauvais">Ton solde (<span id="choix_partie_privee-solde">1 000</span> {{ config.currency|default:'FCFA' }}) est inférieur à la mise attendue. Merci de 
                                                             <a href="javascript:void(0)" class="recharge-btn recharge" id="choix_partie_privee-link-recharge"  data-bs-dismiss="modal"
                                                             aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">recharger ton compte</a> ou de choisir un autre type de partie privée avant de continuer !</p>
                                                             <div class="btn-area text-center">
-                                                                <a href="partie-details.html" class="cmn-btn mt-4 choix_partie_privee-solde-bon">Créer la partie privée
+                                                                <input type="hidden" id="creer-partie_privee-input-url" class="d-none" value="{% url 'creer_partie_privee' 'complement_url_nombre' 'complement_url_leurre' 'complement_url_mise' %}">
+                                                                <a href="javascript:void(0)" class="cmn-btn mt-4 choix_partie_privee-solde-bon" id="creer_partie_privee-btn-creer">Créer la partie privée
                                                                     <i class="icon-d-right-arrow-2"></i>
                                                                 </a>
                                                                 <a href="javascript:void(0)" class="cmn-btn mt-4 choix_partie_privee-solde-mauvais recharge" id="choix_partie_privee-btn-recharge"  data-bs-dismiss="modal"
-                                                            aria-label="Close" data-bs-toggle="modal"data-bs-target="#rechargeMod">Recharger
+                                                            aria-label="Close" data-bs-toggle="modal" data-bs-target="#rechargeMod">Recharger
                                                                     <i class="icon-d-right-arrow-2"></i>
                                                                 </a>
                                                             </div>
@@ -1020,7 +1058,16 @@
     }
   </script>
   
-    {% endblock %}
+
+    {% if messages %}
+    <script>
+    $(document).ready(function () {
+        $("#messageMod").modal('show');
+    });
+    </script>
+    {% endif %}
+
+   {% endblock %}
 </body>
 
 </html>

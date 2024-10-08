@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.db.models import Q, Sum
 
 from core.models import Config, TauxCommission, TauxTransaction
-from player.models import Profil, Transaction
-from ludo.enum import TypeTransaction
+from player.models import HistoriqueNotification, Profil, Transaction
+from .enum import Genre, TypeTransaction
 
 
 def ContextConfig(request):
@@ -30,14 +30,21 @@ def ContextConfig(request):
 
     solde = solde if solde else 0
 
+    profil = None
+    complement_genre = ""
     if user.is_authenticated:
         try:
             # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
             profil = Profil.objects.get(user=user)
+            if profil.genre == Genre.Feminin:
+                complement_genre = "e"
         except Profil.DoesNotExist:
             print("L'utilisateur n'a pas de compte social lié à Facebook")
-            profil = None
 
+    notifications_attentes = None
+    if profil:
+        notifications_attentes = HistoriqueNotification.objects.filter(profil=profil, etat_lecture=False, etat_validation=True, etat_suppression=False)
+        
     #print(solde)
     """ 
     if config.parallax and hasattr(config.parallax, 'url'):
@@ -66,6 +73,8 @@ def ContextConfig(request):
     return {
         'config' : config, 
         'profil' : profil, 
+        'notifications_attentes' : notifications_attentes, 
+        'complement_genre' : complement_genre, 
         'my_current_url' : my_current_url, 
         'code_invitation' : code_invitation, 
         'next' : next,

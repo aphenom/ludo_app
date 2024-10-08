@@ -5,23 +5,34 @@ from allauth.socialaccount.models import SocialAccount
 from django.urls import reverse
 
 from core.models import Mise
-from ludo.enum import TypeTransaction, Visibilite
+from ludo.enum import TypeReferenceNotification, TypeTransaction, Visibilite
 from ludo.utils import CurrentConfig, CurrentTauxCommission, CurrentTauxTransaction, DetermineCagnotte, DetermineCommission, DetermineFraisGenere
-from player.models import Participation, Partie, Profil, Transaction
+from player.models import HistoriqueNotification, Participation, Partie, Profil, Transaction
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from cinetpay_sdk.s_d_k import Cinetpay
 from django_dump_die.middleware import dd
 import math
+from django.db.models import Q, Sum
+from django.template.defaultfilters import floatformat
+from django.contrib.humanize.templatetags.humanize import intcomma
 
 
 @login_required
 def dashboard(request):
 
+    tab = request.GET.get('tab', None)
+
+    participations = Participation.objects.filter(partie__etat_validation=True, partie__etat_suppression=False, etat_validation=True, etat_suppression=False)
+
+    transactions = Transaction.objects.filter(
+        Q((Q(type=TypeTransaction.Retrait) | Q(type=TypeTransaction.Mise)), etat_suppression=False) 
+        | Q((Q(type=TypeTransaction.Depot) | Q(type=TypeTransaction.Gain)), etat_validation=True))
+
     return render(request, 'player/dashboard.html', locals())
 
 
-#@login_required
+@login_required
 def profil(request):
 
    # Récupérer l'utilisateur connecté
@@ -51,7 +62,7 @@ def profil(request):
 @login_required
 def rechargement(request, montant):
     
-    response = reverse('player:player_profil')+"?tab=transaction"
+    response = reverse('player:player_profil')+"?tab=transaction-tab"
 
     config = CurrentConfig()
 
@@ -108,7 +119,7 @@ def rechargement(request, montant):
 
 def rechargement_callback(request, code):
     
-    response = reverse('player:player_profil')+"?tab=transaction"
+    response = reverse('player:player_profil')+"?tab=transaction-tab"
 
     config = CurrentConfig()
 
@@ -138,6 +149,15 @@ def rechargement_callback(request, code):
     if retour and retour["code"] == '00' and transaction.etat_validation is False:
         transaction.etat_validation = True
         transaction.etat_suppression = False
+
+        notification = HistoriqueNotification(
+            profil=transaction.profil,
+            objet = transaction.description,
+            message = "Réchargement de {} {} effectué avec succès !".format(intcomma(floatformat(transaction.montant,-2)), config.currency if config and config.currency else "FCFA"),
+            type_reference = TypeReferenceNotification.Transaction,
+            id_reference = transaction.pk
+        )
+        notification.save()
     
     #echec
     if retour and retour == "600":
