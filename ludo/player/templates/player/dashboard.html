@@ -193,14 +193,14 @@
                                                 <div class="single-input">
                                                     <label for="dAmount">Montant</label>
                                                     <input type="hidden" id="recharge-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
-                                                    <input type="text" id="recharge-input" class="money_field" placeholder="Entre le montant ici" data-minimum_depot="{{ config.minimum_depot|default:100 }}" autocomplete="off">
+                                                    <input type="text" class="money_field" id="recharge-input" placeholder="Entre le montant ici" data-minimum_depot="{{ config.minimum_depot|default:100 }}" autocomplete="off" value="">
                                                 </div>
                                                 <div class="single-input d-none">
                                                     <label for="dEmail">Email</label>
                                                     <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
                                                 </div>
                                                 <div class="btn-area text-center mt-3">
-                                                    <button class="cmn-btn w-100">Déposer</button>
+                                                    <button class="cmn-btn w-100 d-none" id="recharge-button">Déposer</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -392,12 +392,13 @@
 
         // box rechargement 
         $(document).on("change keyup", "#recharge-input", function(e) {
-            // alert("here");
+            console.log(e.handleObj.type);
             // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
             valeur_input_recharge = Number(String($("#recharge-input").val()).replace(/\s/g, ''));
             let minimum_depot = Number(String($("#recharge-input").data('minimum_depot')).replace(/\s/g, ''));
             let base_url_recharge = $("#recharge-input-url").val();
 
+            $("#recharge-button").removeClass("d-none");
             $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
             $("#recharge-button").show();
 
