@@ -1,6 +1,8 @@
 <!doctype html>
 {% load static %}
-<html lang="en">
+{% load socialaccount %}
+{% load humanize %}
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -17,6 +19,8 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/ara-font.css' %}">
     <link rel="stylesheet" href="{% static 'dashboard/css/plugin/animate.css' %}">
     <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+
+    {% comment %} <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"> {% endcomment %}
 </head>
 
 <body>
@@ -58,13 +62,13 @@
                             </div>
 
                             <div class="single-item notifications-area">
-                                <div class="notifications-btn btn-head dot">
+                                <div class="notifications-btn btn-head  {% if notifications_attentes.count > 0 %} dot {% endif %} ">
                                     <img src="{% static 'dashboard/images/icon/notification.png' %}" class="bell-icon" alt="icon">
                                 </div>
                                 <div class="main-area notifications-content">
                                     <div class="head-area d-flex justify-content-between">
                                         <h5>Notifications</h5>
-                                        <span class="mdr">4</span>
+                                        <span class="mdr">{{  notifications_attentes.count|intcomma }}</span>
                                     </div>
                                     <ul>
                                         <li>
@@ -127,20 +131,28 @@
                             <div class="single-item user-area">
                                 <div class="profile-area d-flex align-items-center">
                                     <span class="user-profile">
-                                        <img src="{% static 'dashboard/images/user-1.png' %}" alt="User">
+                                        {% if profil.genre == "Féminin" %}
+                                            <img src="{% static 'dashboard/images/user-f.png' %}" width="32px" alt="{{ profil.nom }} {{ profil.prenom }}">
+                                        {% else %}
+                                            <img src="{% static 'dashboard/images/user-m.png' %}" width="32px" alt="{{ profil.nom }} {{ profil.prenom }}">
+                                        {% endif %}
                                     </span>
                                     <i class="fa-solid fa-sort-down"></i>
                                 </div>
                                 <div class="main-area user-content">
                                     <div class="head-area d-flex align-items-center">
                                         <div class="profile-img">
-                                            <img src="{% static 'dashboard/images/user-1.png' %}" alt="User">
+                                            {% if profil.genre == "Féminin" %}
+                                                <img src="{% static 'dashboard/images/user-f.png' %}" width="32px" alt="{{ profil.nom }} {{ profil.prenom }}">
+                                            {% else %}
+                                                <img src="{% static 'dashboard/images/user-m.png' %}" width="32px" alt="{{ profil.nom }} {{ profil.prenom }}">
+                                            {% endif %}
                                         </div>
                                         <div class="profile-head">
                                             <a href="javascript:void(0)">
-                                                <h5>Katie Mamini</h5>
+                                                 <h5>{{ profil.nom }} {{ profil.prenom }}</h5>
                                             </a>
-                                            <p class="wallet-id">ID: 6264849965</p>
+                                            <p class="wallet-id">ID: {{ profil.code }}</p>
                                         </div>
                                     </div>
                                     <ul>
@@ -148,7 +160,7 @@
                                             <a href="account.html"><i class="fas fa-cog"></i>Settings</a>
                                         </li>
                                         <li>
-                                            <a href="../index.html"><i class="fas fa-sign-out"></i>Déconnexion</a>
+                                            <a href="{% url 'account_logout' %}"><i class="fas fa-sign-out"></i>Déconnexion</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -160,30 +172,46 @@
                             <i class="fas fa-bars"></i>
                         </div>
                         <div class="sidebar-logo">
-                            <a href="dashboard.html"><img src="{% static 'dashboard/images/logo.png' %}" alt="logo"></a>
+                            <a href="{% url 'player:player_dashboard' %}"><img src="{% static 'dashboard/images/logo.png' %}" alt="logo"></a>
                         </div>
                         <div class="sidebar-link mt-60">
                             <div class="profile-info text-center">
                                 <div class="profile-info-content">
-                                    <img src="{% static 'dashboard/images/profile-1.png' %}" alt="image">
-                                    <h5>Katie Mamini</h5>
-                                    <p class="mdr">Inscrite le 20/01/2024</p>
+                                {% if profil.genre == "Féminin" %}
+                                    <img src="{% static 'dashboard/images/user-f.png' %}" width="96px" alt="{{ profil.nom }} {{ profil.prenom }}">
+                                {% else %}
+                                    <img src="{% static 'dashboard/images/user-m.png' %}" width="96px" alt="{{ profil.nom }} {{ profil.prenom }}">
+                                {% endif %}
+                                    <h5>{{ profil.nom }} {{ profil.prenom }}</h5>
+                                    <p class="mdr">ID: {{ profil.code }}</p>
+                                    <!--<p class="mdr">Inscrite le 20/01/2024</p>-->
                                 </div>
                                 <ul>
-                                    <li class="active">
-                                        <a href="dashboard.html">
+                                    <li {% if my_current_url == "player_dashboard" %} class="active" {% endif %}>
+                                        <a href="{% url 'player:player_dashboard'%}">
                                             <img src="{% static 'dashboard/images/icon/bonuses.png' %}" alt="wallet"> <span>Portefeuille</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="profile.html">
+                                        <a href="{% url 'index' %}">
+                                            <img src="{% static 'front/images/icon/play-icon.png' %}" alt="jouer"> <span>Jouer</span>
+                                        </a>
+									
+                                    </li>
+                                    <li {% if my_current_url == "player_profil" %} class="active" {% endif %}>
+                                        <a href="{% url 'player:player_profil'%}">
                                             <img src="{% static 'dashboard/images/icon/profile.png' %}" alt="profile"> <span>Profil</span>
                                         </a>
 									
                                     </li>
-                                    <li>
+                                    <li {% if my_current_url == "player_notification" %} class="active" {% endif %}>
                                         <a href="notifications.html">
                                             <img src="{% static 'dashboard/images/icon/notification.png' %}" alt="notifications"> <span>Notifications</span>
+                                        </a>
+                                    </li>
+                                    <li {% if my_current_url == "player_invitation" %} class="active" {% endif %}>
+                                        <a href="notifications.html">
+                                            <img src="{% static 'front/images/icon/send-icon.png' %}" alt="invitations"> <span>Invitations</span>
                                         </a>
                                     </li>
                                     <!-- 
@@ -197,7 +225,7 @@
                             </div>
                             <ul class="bottom-item">
                                 <li>
-                                    <a href="../index.html">
+                                    <a href="{% url 'account_logout' %}">
                                         <img src="{% static 'dashboard/images/icon/logout.png' %}" alt="logout"> <span>Déconnexion</span>
                                     </a>
                                 </li>
@@ -209,7 +237,7 @@
                     <div class="top-info-bar">
                         <h5 class="m-0">Portefeuille </h5>
                         <div class="right-area">
-                            <p>Solde : 20 500 FCFA</p>
+                            <p>Solde : {{ solde|floatformat:-2|intcomma }} {{ config.currency|default:'FCFA' }}</p>
                         </div>
                     </div>
                 </div>
@@ -673,7 +701,6 @@
                 </div>
             </div>
         </div>
-    </section>
     {% endblock %}
     <!-- Dashboard Section end -->
 
@@ -687,7 +714,97 @@
     <script src="{% static 'dashboard/js/plugin/wow.min.js' %}"></script>
     <script src="{% static 'dashboard/js/plugin/plugin.js' %}"></script>
     <script src="{% static 'dashboard/js/main.js' %}"></script>
-    {% endblock %}
+    <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    
+    <script>
+
+        $(document).ready(function () {
+
+            //appliquer le mask de saisie sur les champs montant
+            Inputmask("currency", {
+                prefix: "",
+                groupSeparator: " ",
+                alias: "numeric",
+                digits: 0, //2 nombre de caractère après la virgule
+                onKeyDown: function(event) {
+                    var key = event.keyCode || event.charCode;
+
+                    // Empêcher la saisie du signe négatif
+                    if (key === 189 || key === 109) { // Les codes 189 et 109 correspondent au signe moins (-)
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+            }).mask('.money_field');
+
+        });   
+
+
+        // Fonction pour appliquer Inputmask sur les champs ayant la classe .money_field
+        function applyMoneyFieldMask() {
+            Inputmask("currency", {
+                prefix: "",
+                groupSeparator: " ",
+                alias: "numeric",
+                digits: 0, // Nombre de caractères après la virgule
+                onKeyDown: function(event) {
+                    var key = event.keyCode || event.charCode;
+
+                    // Empêcher la saisie du signe négatif
+                    if (key === 189 || key === 109) { // Les codes 189 et 109 correspondent au signe moins (-)
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+            }).mask('.money_field');
+        }
+    
+        function multipleSuperieur(a, b) {
+            // Trouver le multiple de b le plus proche de a mais supérieur ou égal à a
+            return Math.ceil(a / b) * b;
+        }
+    </script>
+{% comment %} 
+    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.0.0/js/dataTables.buttons.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.0.0/js/buttons.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.0.0/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.0.0/js/buttons.print.min.js"></script>
+
+    <script>
+    let table = new DataTable('.table', {
+            layout: {
+              topStart: {
+              }
+            },
+            "pageLength": -1,
+            scrollX: true,
+            scrollY: "75vh",
+            //paging: false,
+            "order": [],
+            //dom: 'Bfrtip',
+            lengthMenu: [
+                [100, 200, 300, -1],
+                ['100 lignes', '200 lignes', '300 lignes', 'Tout afficher']
+            ],
+            
+            //"bPaginate": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+                buttons: {
+                    pageLength: {
+                        _: "Afficher %d éléments",
+                        '-1': "Tout afficher"
+                    }
+                },
+            },
+        });
+    </script>
+  {% endcomment %}   
+  {% endblock %}
 </body>
 
 </html>

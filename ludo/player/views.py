@@ -153,7 +153,7 @@ def rechargement_callback(request, code):
         notification = HistoriqueNotification(
             profil=transaction.profil,
             objet = transaction.description,
-            message = "Réchargement de {} {} effectué avec succès !".format(intcomma(floatformat(transaction.montant,-2)), config.currency if config and config.currency else "FCFA"),
+            message = "Ton réchargement de {} {} a été effectué avec succès !".format(intcomma(floatformat(transaction.montant,-2)), config.currency if config and config.currency else "FCFA"),
             type_reference = TypeReferenceNotification.Transaction,
             id_reference = transaction.pk
         )

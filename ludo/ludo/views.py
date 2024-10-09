@@ -42,6 +42,7 @@ def index(request):
     # Récupérer les paramètres de `state` dans la requête
     next_url = request.GET.get('next', ContextConfig(request)['next'])
     code_invitation = request.GET.get('code_invitation', ContextConfig(request)['code_invitation'])
+    # pour rejoindre une partie privee /?rejoindre_partie_code=code
     rejoindre_partie_code = request.GET.get('rejoindre_partie_code', "")
 
     # Récupérer l'utilisateur connecté

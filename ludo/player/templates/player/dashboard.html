@@ -9,6 +9,9 @@
 <!-- load static -->
 {% load static %}
 <!---->
+{% load socialaccount %}
+{% load humanize %}
+{% load player_extras %}
 
 <!-- MainContent -->
 
@@ -67,86 +70,38 @@
                                         <button class="cmn-btn">Filter</button>
                                     </div>
                                 </div>
-                                <div class="table-responsive mt-4">
-                                    <table class="table">
+                                <div class="table-responsive mt-0">
+                                    <table class="table"  style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Date/Heure</th>
                                                 <th scope="col">Partie</th>
-                                                <th scope="col">Mise</th>
-                                                <th scope="col">Gains</th>
+                                                <th scope="col">Mise ({{ config.currency|default:'FCFA' }})</th>
+                                                <th scope="col">Gains ({{ config.currency|default:'FCFA' }})</th>
                                                 <th scope="col">Résultat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for participation in participations %}
                                             <tr>
-                                                <th scope="row">
-                                                    <p>22-01-2024  07:17:51</p>
+                                                <th scope="row" data-order="{{ participation.date_creation|date:'U' }}">
+                                                    <p>{{ participation.date_creation|date:"d-m-Y H:i:s" }}</p>
                                                 </th>
-                                                <td>
-                                                    <p>3 participants</p>
+                                                <td data-order="{{ participation.partie.nombre_participants }}">
+                                                    <p>{% if participation.partie.nombre_participants > 2 %} {{ participation.partie.nombre_participants }} joueurs {% else %} 1 contre 1 {% endif %}</p>
+                                                </td>
+                                                <td data-order="{{ participation.partie.montant_mise }}">
+                                                    <p>{{ participation.partie.montant_mise|floatformat:-2|intcomma }}</p>
+                                                </td>
+                                                <td data-order="{{ participation.partie.montant_cagnotte }}">
+                                                    <p>{{ participation.partie.montant_cagnotte|floatformat:-2|intcomma }}</p>
                                                 </td>
                                                 <td>
-                                                    <p>5 000</p>
+                                                    <p class="fw-bold text-{% participation_state participation.id 'couleur' %}">{% participation_state participation.id 'libelle' %}</p>
                                                 </td>
-                                                <td>
-                                                    <p>12 000</p>
-                                                </td>
-                                                <td>
-                                                    <p>Victoire</p>
-                                                </td>
-											</tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  17:22:11</p>
-                                                </th>
-                                                <td>
-                                                    <p>1 contre 1</p>
-                                                </td>
-                                                <td>
-                                                    <p>10 000</p>
-                                                </td>
-                                                <td>
-                                                    <p>16 000</p>
-                                                </td>
-                                                <td>
-                                                    <p>Victoire</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  15:12:51</p>
-                                                </th>
-                                                <td>
-                                                    <p>4 participants</p>
-                                                </td>
-                                                <td>
-                                                    <p>2 500</p>
-                                                </td>
-                                                <td>
-                                                    <p>8 000</p>
-                                                </td>
-                                                <td>
-                                                    <p>Echec</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  13:22:11</p>
-                                                </th>
-                                                <td>
-                                                    <p>1 contre 1</p>
-                                                </td>
-                                                <td>
-                                                    <p>10 000</p>
-                                                </td>
-                                                <td>
-                                                    <p>16 000</p>
-                                                </td>
-                                                <td>
-                                                    <p>Victoire</p>
-                                                </td>
-                                            </tr>
+											</tr> 
+                                            {% endfor %}
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -169,7 +124,7 @@
                                                 </div>
                                                 <div class="single-area">
                                                     <p>Solde</p>
-                                                    <h6 class="m-0">20 500 FCFA</h6>
+                                                    <h6 class="m-0">{{ solde|floatformat:-2|intcomma }} {{ config.currency|default:'FCFA' }}</h6>
                                                 </div>
                                             </div>
                                             <div class="first-deposit-bonus mt-30 mb-30 d-none">
@@ -237,7 +192,8 @@
                                             <div class="col-12">
                                                 <div class="single-input">
                                                     <label for="dAmount">Montant</label>
-                                                    <input type="text" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
+                                                    <input type="hidden" id="recharge-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
+                                                    <input type="text" id="recharge-input" class="money_field" placeholder="Entre le montant ici" data-minimum_depot="{{ config.minimum_depot|default:100 }}" autocomplete="off">
                                                 </div>
                                                 <div class="single-input d-none">
                                                     <label for="dEmail">Email</label>
@@ -269,7 +225,7 @@
                                                 </div>
                                                 <div class="single-area">
                                                     <p>Solde</p>
-                                                    <h6 class="m-0">20 500 FCFA</h6>
+                                                    <h6 class="m-0">{{ solde|floatformat:-2|intcomma }} {{ config.currency|default:'FCFA' }}</h6>
                                                 </div>
                                             </div>
                                             <div class="first-deposit-bonus mt-30 mb-30 d-none">
@@ -354,7 +310,7 @@
                         </div>
                         <div class="tab-pane fade" id="transaction" role="tabpanel" aria-labelledby="transaction-tab">
                             <div class="transaction-box">
-                                <div class="top-filter d-flex align-items-end">
+                                <div class="top-filter d-flex align-items-end d-none">
                                     <div class="single-filter">
                                         <p>Mois</p>
                                         <input type="text" placeholder="01/2024">
@@ -388,76 +344,27 @@
                                             <tr>
                                                 <th scope="col">Date/Heure</th>
                                                 <th scope="col">Type</th>
-                                                <th scope="col">Montant</th>
+                                                <th scope="col">Montant ({{ config.currency|default:'FCFA' }})</th>
+                                                <th scope="col">Etat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for transaction in transactions %}
                                             <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  15:12:51</p>
+                                                <th scope="row" data-order="{{ transaction.date_creation|date:'U' }}">
+                                                    <p>{{ transaction.date_creation|date:"d-m-Y H:i:s" }}</p>
                                                 </th>
                                                 <td>
-                                                    <p>Retrait</p>
+                                                    <p>{{ transaction.type }}</p>
+                                                </td>
+                                                <td data-order="{{ transaction.montant }}">
+                                                    <p {% if transaction.montant > 0 %} class="text-success fw-bold" {% else %} class="text-danger fw-bold" {% endif %}>{{ transaction.montant|floatformat:-2|intcomma }}</p>
                                                 </td>
                                                 <td>
-                                                    <p>- 21 500</p>
+                                                    <p>{% if transaction.etat_validation %} Terminée {% else %} En cours {% endif %}</p>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>22-01-2024  07:17:51</p>
-                                                </th>
-                                                <td>
-                                                    <p>Gains</p>
-                                                </td>
-                                                <td>
-                                                    <p>+ 12 000</p>
-                                                </td>
-											</tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  17:22:11</p>
-                                                </th>
-                                                <td>
-                                                    <p>Gains</p>
-                                                </td>
-                                                <td>
-                                                    <p>+ 16 000</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  15:12:51</p>
-                                                </th>
-                                                <td>
-                                                    <p>Retrait</p>
-                                                </td>
-                                                <td>
-                                                    <p>- 2 500</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>21-01-2024  13:22:11</p>
-                                                </th>
-                                                <td>
-                                                    <p>Gains</p>
-                                                </td>
-                                                <td>
-                                                    <p>+ 16 000</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <p>20-01-2024  18:11:17</p>
-                                                </th>
-                                                <td>
-                                                    <p>Dépôt</p>
-                                                </td>
-                                                <td>
-                                                    <p>+ 500</p>
-                                                </td>
-                                            </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -481,6 +388,34 @@
     <script>
         $(document).ready(function() {
             $("#"+$("#tabulation-id").val()).trigger("click");
+        });
+
+        // box rechargement 
+        $(document).on("change keyup", "#recharge-input", function(e) {
+            // alert("here");
+            // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+            valeur_input_recharge = Number(String($("#recharge-input").val()).replace(/\s/g, ''));
+            let minimum_depot = Number(String($("#recharge-input").data('minimum_depot')).replace(/\s/g, ''));
+            let base_url_recharge = $("#recharge-input-url").val();
+
+            $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
+            $("#recharge-button").show();
+
+            let check = multipleSuperieur(valeur_input_recharge, minimum_depot);
+            if(valeur_input_recharge != check){
+                if(e.handleObj.type == "change"){
+                    $("#recharge-input").val(check);
+                    $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
+                }
+                else{
+                    $("#recharge-button").attr("href", "javascript:void(0)");
+                    $("#recharge-button").hide();
+                }
+            }
+            else{
+                $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
+                $("#recharge-button").show();
+            }
         });
     </script>
     {% endif %}
