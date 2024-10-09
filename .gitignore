@@ -1,5 +1,15 @@
 env/
 .env
-*/__pycache__/*
+*/__pycache__/
 *.cpython*
 *.pyc
+ludo/core/__pycache__/models.cpython-311.pyc
+ludo/ludo/__pycache__/enum.cpython-311.pyc
+ludo/ludo/__pycache__/settings.cpython-311.pyc
+ludo/ludo/__pycache__/urls.cpython-311.pyc
+ludo/ludo/__pycache__/utils.cpython-311.pyc
+ludo/ludo/__pycache__/views.cpython-311.pyc
+ludo/player/__pycache__/models.cpython-311.pyc
+ludo/player/__pycache__/
+ludo/ludo/__pycache__/
+ludo/core/__pycache__/
