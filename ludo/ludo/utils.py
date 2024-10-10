@@ -10,6 +10,8 @@ from core.models import Config, TauxCommission, TauxTransaction
 from player.models import HistoriqueNotification, Profil, Transaction
 from .enum import Genre, TypeTransaction
 
+import requests
+import json
 
 def ContextConfig(request):
     
@@ -111,3 +113,31 @@ def DetermineFraisGenere(montant, taux_frais):
         taux_frais = 0
     valeur = Decimal(montant)*Decimal(taux_frais/100)
     return round(valeur)
+
+
+# notification wonderpush
+WONDERPUSH_SECRET = CurrentConfig().notification_api_key if CurrentConfig() and CurrentConfig().notification_api_key else "YmM0MjAwMzE4ZjkxYWFmMjBiNGJkZTFjYWFkZDBjYmEzOTRlMGU0YmZiODEwNGU2MWEzMDY2M2ZlMGE2MjJiNQ"
+
+def send_notification_to_device(installation_id, title, message):
+    url = f"https://management-api.wonderpush.com/v1/deliveries?accessToken={WONDERPUSH_SECRET}"
+    headers = {
+        "accept": "text/plain",
+        'Content-Type': 'application/json',
+    }
+
+    payload = {
+        "targetInstallationIds": [installation_id],
+        "notification": {
+            "alert": {
+                "title": title,
+                "text": message
+            }
+        }
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    
+    print(response.text)
+    
+    return response.json()
+

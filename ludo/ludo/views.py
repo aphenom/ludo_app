@@ -1,3 +1,4 @@
+import json
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -7,8 +8,8 @@ from django.urls import reverse
 
 from core.models import Mise
 from .enum import TypeTransaction, Visibilite
-from .utils import ContextConfig, CurrentConfig, CurrentTauxCommission, DetermineCagnotte, DetermineCommission
-from player.models import Participation, Partie, Profil, Transaction
+from .utils import ContextConfig, CurrentConfig, CurrentTauxCommission, DetermineCagnotte, DetermineCommission, send_notification_to_device
+from player.models import Participation, Partie, Profil, Transaction, Visiteur
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -17,6 +18,7 @@ from urllib.parse import urlencode
 from django.template.defaultfilters import floatformat
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 
 def facebook_login_with_state(request):
@@ -38,6 +40,10 @@ def facebook_login_with_state(request):
 
 #@login_required
 def index(request):
+
+    send_notification_to_device("6735cbb21c7c97cdebc3110ead81e0c81daa3604", "welcome", "to you ohhh")
+
+    print("notif")
 
     # Récupérer les paramètres de `state` dans la requête
     next_url = request.GET.get('next', ContextConfig(request)['next'])
@@ -392,15 +398,15 @@ def checking_user(user, social_account, code_invitation):
     try:
         profil = Profil.objects.get(user=user)
         # Mettre à jour le profil existant si besoin
-        if email and email is not "" and email != profil.email:
+        if email and email != "" and email != profil.email:
             profil.email = email
             profil.save()
 
-        if nom and nom is not "" and nom != profil.nom:   
+        if nom and nom != "" and nom != profil.nom:   
             profil.nom = nom
             profil.save()
 
-        if prenom and prenom is not "" and prenom != profil.prenom:
+        if prenom and prenom != "" and prenom != profil.prenom:
             profil.prenom = prenom
             profil.save()
     except Profil.DoesNotExist:
@@ -414,7 +420,7 @@ def checking_user(user, social_account, code_invitation):
         profil.email=email
         profil.date_validation=timezone.now()
 
-        if code_invitation and code_invitation is not "":
+        if code_invitation and code_invitation != "":
             profil.code_invite_par = code_invitation
             invite_par = profil.objects.filter(code=code_invitation, etat_suppression=False).first()
             if invite_par:
@@ -424,3 +430,27 @@ def checking_user(user, social_account, code_invitation):
 
 
 
+@csrf_exempt
+def register_device(request):
+    if request.method == "POST":
+        try:
+            # Charger le corps de la requête en tant que JSON
+            data = json.loads(request.body)
+            installation_id = data.get("installation_id")
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+        if installation_id:
+            # Vérifiez si cet identifiant d'appareil existe déjà
+            visitor, created = Visiteur.objects.get_or_create(
+                visiteur_id=installation_id,
+                profil=ContextConfig(request)['profil']
+            )
+
+            if created:
+                visitor.save()
+                return JsonResponse({'message': 'Device Installation ID enregistré.'}, status=200)
+            else:
+                return JsonResponse({'message': 'Device Installation ID déjà existant.'}, status=200)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

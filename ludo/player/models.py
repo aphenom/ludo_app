@@ -75,6 +75,43 @@ class Profil(models.Model):
         return super(Profil, self).save(*args, **kwargs)        
 
 
+class Visiteur(models.Model):
+    visiteur_id = models.CharField(max_length=255)
+    profil = models.ForeignKey(Profil, models.SET_NULL, null=True, blank=True, related_name='profil_visiteurs', related_query_name="profil_visiteur", verbose_name = "profil")
+
+    date_creation = models.DateTimeField('date création', auto_now_add=True)
+    date_modification = models.DateTimeField('date modification', null=True, blank=True, auto_now=True)
+    date_validation  = models.DateTimeField('date validation', null=True, blank=True)
+    date_suppression = models.DateTimeField('date suppression', null=True, blank=True)
+    
+    etat_validation = models.BooleanField('état validation', default=True)
+    etat_suppression = models.BooleanField('état suppression', default=False)
+
+    class Meta:
+        ordering = ['-date_creation']
+        verbose_name = "Visiteur"  
+
+    def __str__(self):
+        return f"Visiteur {self.visiteur_id}"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_etat_validation = self.etat_validation
+        self._init_etat_suppression = self.etat_suppression
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            pass
+        if self.etat_validation != self._init_etat_validation:
+            if self.etat_validation == True:
+                self.date_validation = timezone.now()
+        if self.etat_suppression != self._init_etat_suppression:
+            if self.etat_suppression == True:
+                self.date_suppression = timezone.now()                             
+        return super(Visiteur, self).save(*args, **kwargs)    
+     
+
 class Partie(models.Model):
 
     code = models.CharField(max_length=25, unique=True, editable=False)

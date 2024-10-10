@@ -5,6 +5,17 @@
 <html lang="fr">
 
 <head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E76R2J9F3F"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-E76R2J9F3F');
+    </script>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,9 +32,24 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
 
     {% comment %} <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"> {% endcomment %}
+   
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K22BVN9R');</script>
+    <!-- End Google Tag Manager -->
+
 </head>
 
 <body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K22BVN9R"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <!-- start preloader -->
     <div class="preloader" id="preloader"></div>
     <!-- end preloader -->
@@ -804,7 +830,59 @@
         });
     </script>
   {% endcomment %}   
+
+    <script src="https://cdn.by.wonderpush.com/sdk/1.1/wonderpush-loader.min.js" async></script>
+    <script>
+
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log("Les notifications sont autorisées.");
+            } else {
+                console.log("Les notifications ont été refusées.");
+            }
+        });
+    } else {
+        console.log("Les notifications sont déjà autorisées.");
+    }
+
+    window.WonderPush = window.WonderPush || [];
+    WonderPush.push(["init", {
+        webKey: "3a289836ffe88320994c548d19d5e8bbd1b0e564fe2d7d2c45bdda924a4baca2",
+        optIn: true // Demander la permission des notifications
+    }]);
+
+    console.log("Le script WP est en cours d'exécution...");
+
+    WonderPush.push(function() {
+        console.log("WP est chargé et initialisé.");
+
+        WonderPush.getDeviceId(function(deviceId) {
+            console.log("Device ID: " + deviceId);
+            // Envoyer l'ID de l'appareil au serveur
+            fetch('{% url 'register_device' %}', {
+                method: 'POST',
+                body: JSON.stringify({device_id: deviceId}),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            }).then(response => {
+                if (response.ok) {
+                    console.log("Device ID enregistré avec succès.");
+                } else {
+                    console.error("Erreur lors de l'enregistrement du Device ID.");
+                }
+            }).catch(error => {
+                console.error("Erreur réseau :", error);
+            });
+        });
+    });
+
+    </script>
+
   {% endblock %}
+
 </body>
 
 </html>
