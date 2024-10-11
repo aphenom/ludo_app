@@ -17,3 +17,8 @@ ludo/ludo/__pycache__/urls.cpython-311.pyc
 ludo/ludo/__pycache__/utils.cpython-311.pyc
 ludo/ludo/__pycache__/views.cpython-311.pyc
 ludo/player/__pycache__/models.cpython-311.pyc
+ludo/core/__pycache__/models.cpython-312.pyc
+ludo/ludo/__pycache__/enum.cpython-312.pyc
+ludo/ludo/__pycache__/urls.cpython-312.pyc
+ludo/ludo/__pycache__/views.cpython-312.pyc
+ludo/ludo/__pycache__/settings.cpython-312.pyc
