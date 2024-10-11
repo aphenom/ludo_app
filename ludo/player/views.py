@@ -1,8 +1,10 @@
+import json
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.conf import settings
 from allauth.socialaccount.models import SocialAccount
 from django.urls import reverse
+import requests
 
 from core.models import Mise
 from ludo.enum import TypeReferenceNotification, TypeTransaction, Visibilite
@@ -68,7 +70,7 @@ def rechargement(request, montant):
 
     minimum_depot = int(config.minimum_depot) if config and config.minimum_depot else 100
 
-    conformite = math.ceil(int(montant) / minimum_depot) * minimum_depot
+    conformite = math.ceil(int(montant) / minimum_depot) * minimum_depot if int(montant) > 0 else minimum_depot
 
     if int(montant) == int(conformite):
         try:
@@ -169,3 +171,81 @@ def rechargement_callback(request, code):
     # print(retour)
     # JsonResponse(retour) 
     return HttpResponseRedirect(response)
+
+
+def retrait(request, contact, montant):
+
+    config = CurrentConfig()
+
+    apikey = config.transaction_api_key if config and config.transaction_api_key else "1121307539667c1e026ec794.68685186"
+    site_id = config.transaction_api_id if config and config.transaction_api_id else "5874786"
+
+    url = "https://client.cinetpay.com/v1/auth/login"
+
+    headers = {
+        "accept": "text/plain",
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+
+    payload = {
+        "apikey": apikey,
+        "password": "password",
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+    
+    data = response.json()
+
+    token = data["data"]["token"]
+
+    url = f"https://client.cinetpay.com/v1/transfer/contact?token={token}"
+    
+    headers = {
+        "accept": "text/plain",
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+
+    payload = {"data": json.dumps([{
+    "prefix": "225",
+    "phone": "0707020400",
+    "name": "Test A",
+    "surname": "Test B AP",
+    "email": "test@madoha.com"
+    }])
+    } 
+
+    # dd(payload)
+
+    response = requests.post(url, data=payload, headers=headers)
+    
+    data = response.json()
+    
+    if data["code"] == 0:
+        url = f"https://client.cinetpay.com/v1/transfer/money/send/contact?token={token}"
+        
+        headers = {
+            "accept": "text/plain",
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        payload = {"data": json.dumps([{
+        "prefix": "225",
+        "phone": "0707020400",
+        "amount": 500,
+        "client_transaction_id": "TEST-ID1",
+        "notify_url": "http://yourdomain.com/transfer/notify",
+        }])
+        } 
+
+        # dd(payload)
+
+        response = requests.post(url, data=payload, headers=headers)
+        
+
+    #dd(response)
+
+    dd(response.json())
+    
+    return response.json()
+
+

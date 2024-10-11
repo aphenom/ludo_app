@@ -200,7 +200,7 @@
                                                     <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
                                                 </div>
                                                 <div class="btn-area text-center mt-3">
-                                                    <button class="cmn-btn w-100 d-none" id="recharge-button">Déposer</button>
+                                                    <a class="cmn-btn w-100 d-none" id="recharge-button">Déposer</a>
                                                 </div>
                                             </div>
                                         </form>
@@ -293,14 +293,23 @@
                                             <div class="col-12">
                                                 <div class="single-input">
                                                     <label for="dAmount">Montant</label>
-                                                    <input type="text" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
+                                                    <select name="choix_partie_privee" id="choix_partie_privee">
+                                                            <option value="">Choisis ton moyen de retrait </option>
+                                                            <option value="telecom">Orange / MTN / Moov</option>
+                                                            <option value="wave">Wave</option>
+                                                    </select>
+                                                 </div>        
+                                                <div class="single-input">
+                                                    <label for="dAmount">Montant</label>
+                                                    <input type="hidden" id="retrait-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
+                                                    <input type="text" class="money_field" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
                                                 </div>
                                                 <div class="single-input d-none">
                                                     <label for="dEmail">Email</label>
                                                     <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
                                                 </div>
                                                 <div class="btn-area text-center mt-3">
-                                                    <button class="cmn-btn w-100">Retirer</button>
+                                                    <a class="cmn-btn w-100 d-none">Retirer</a>
                                                 </div>
                                             </div>
                                         </form>
@@ -384,12 +393,16 @@
     <!-- parent -->
     {{ block.super }}
     <!-- perso lié a l'interaction  -->
+   
     {% if tab %}
     <script>
         $(document).ready(function() {
             $("#"+$("#tabulation-id").val()).trigger("click");
         });
+    </script>
+    {% endif %}
 
+    <script>
         // box rechargement 
         $(document).on("change keyup", "#recharge-input", function(e) {
             console.log(e.handleObj.type);
@@ -419,6 +432,5 @@
             }
         });
     </script>
-    {% endif %}
 {% endblock %}    
 <!-- javascript end -->

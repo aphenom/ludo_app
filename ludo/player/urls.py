@@ -8,4 +8,5 @@ urlpatterns = [
     path('profil/', views.profil, name='player_profil'),
     path('rechargement/<str:montant>/', views.rechargement, name='player_rechargement'),
     path('rechargement_callback/<str:code>/', views.rechargement_callback, name='player_rechargement_callback'),
+    path('retrait/<str:contact>/<str:montant>/', views.retrait, name='player_retrait'),
 ]

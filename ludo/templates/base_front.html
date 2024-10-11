@@ -1054,7 +1054,7 @@
 
     function multipleSuperieur(a, b) {
         // Trouver le multiple de b le plus proche de a mais supérieur ou égal à a
-        return Math.ceil(a / b) * b;
+        return a > 0 ? Math.ceil(a / b) * b : b;
     }
     </script>
 
