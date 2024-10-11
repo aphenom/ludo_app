@@ -292,24 +292,38 @@
                                         <form action="#">
                                             <div class="col-12">
                                                 <div class="single-input">
-                                                    <label for="dAmount">Montant</label>
-                                                    <select name="choix_partie_privee" id="choix_partie_privee">
-                                                            <option value="">Choisis ton moyen de retrait </option>
-                                                            <option value="telecom">Orange / MTN / Moov</option>
+                                                    <label for="dAmount">Pays</label>
+                                                    <select name="choix_pays_retrait" id="choix_pays_retrait">
+                                                            <option value="">Choisis le pays de ton canal de retrait </option>
+                                                            <option value="telecom" data-indicatif="225" data-lg-contact="10" selected>Côte d'Ivoire</option>
                                                             <option value="wave">Wave</option>
                                                     </select>
-                                                 </div>        
+                                                </div> 
+                                                <div class="single-input">
+                                                    <label for="dAmount">Canal de retrait</label>
+                                                    <select name="choix_canal_retrait" id="choix_canal_retrait">
+                                                            <option value="">Choisis ton canal de retrait </option>
+                                                            <option value="telecom" selected>Mobile money (Orange, MTN, Moov et autres)</option>
+                                                            <option value="wave">Wave (Uniquement Côte d'Ivoire et Sénégal)</option>
+                                                    </select>
+                                                 </div>
+                                                <div class="single-input">
+                                                    <label for="dEmail">Contact</label>
+                                                    <input type="email" id="dEmail" placeholder="Entre ton adresse mail" autocomplete="off">
+                                                </div>   
+                                                <div class="single-input">
+                                                    <label for="dEmail">Email</label>
+                                                    <input type="email" id="dEmail" placeholder="Entre ton adresse mail" autocomplete="off" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                                                </div>       
                                                 <div class="single-input">
                                                     <label for="dAmount">Montant</label>
                                                     <input type="hidden" id="retrait-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
-                                                    <input type="text" class="money_field" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off">
-                                                </div>
-                                                <div class="single-input d-none">
-                                                    <label for="dEmail">Email</label>
-                                                    <input type="text" id="dEmail" placeholder="Enter neteller  email address" autocomplete="off">
+                                                    <input type="text" class="money_field" id="retrait-input" placeholder="Entre le montant ici" 
+                                                    data-minimum_depot="{{ config.minimum_retrait|default:100 }}" data-solde="{{ solde }}" autocomplete="off" value="">
+                                                    {% comment %} <input type="text" class="money_field" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off"> {% endcomment %}
                                                 </div>
                                                 <div class="btn-area text-center mt-3">
-                                                    <a class="cmn-btn w-100 d-none">Retirer</a>
+                                                    <a class="cmn-btn w-100 d-none" id="retrait-button">Retirer</a>
                                                 </div>
                                             </div>
                                         </form>
@@ -429,6 +443,35 @@
             else{
                 $("#recharge-button").attr("href", base_url_recharge.replace("complement_url_recharge", String($("#recharge-input").val()).replace(/\s/g, '')));
                 $("#recharge-button").show();
+            }
+        });
+
+        // box retrait 
+        $(document).on("change keyup", "#retrait-input", function(e) {
+            console.log(e.handleObj.type);
+            // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
+            valeur_input_retrait = Number(String($("#retrait-input").val()).replace(/\s/g, ''));
+            let minimum_retrait = Number(String($("#retrait-input").data('minimum_retrait')).replace(/\s/g, ''));
+            let base_url_retrait = $("#retrait-input-url").val();
+
+            $("#retrait-button").removeClass("d-none");
+            $("#retrait-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));
+            $("#retrait-button").show();
+
+            let check = multipleSuperieur(valeur_input_retrait, minimum_retrait);
+            if(valeur_input_retrait != check){
+                if(e.handleObj.type == "change"){
+                    $("#retrait-input").val(check);
+                    $("#retrait-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));
+                }
+                else{
+                    $("#retrait-button").attr("href", "javascript:void(0)");
+                    $("#retrait-button").hide();
+                }
+            }
+            else{
+                $("#retrait-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));
+                $("#retrait-button").show();
             }
         });
     </script>

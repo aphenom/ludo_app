@@ -41,9 +41,9 @@ def facebook_login_with_state(request):
 #@login_required
 def index(request):
 
-    send_notification_to_device("6735cbb21c7c97cdebc3110ead81e0c81daa3604", "welcome", "to you ohhh")
-
-    print("notif")
+    # send_notification_to_device("6d37c0e08f34c443388e8f32005290525e9632a7", "welcome", "to you ohhh")
+    # 6735cbb21c7c97cdebc3110ead81e0c81daa3604 mac
+    # print("notif")
 
     # Récupérer les paramètres de `state` dans la requête
     next_url = request.GET.get('next', ContextConfig(request)['next'])
