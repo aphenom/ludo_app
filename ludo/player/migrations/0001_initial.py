@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("cities_light", "0011_alter_city_country_alter_city_region_and_more"),
+        #("cities_light", "0011_alter_city_country_alter_city_region_and_more"),
         ("core", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]

@@ -48,8 +48,12 @@ def index(request):
     # Récupérer les paramètres de `state` dans la requête
     next_url = request.GET.get('next', ContextConfig(request)['next'])
     code_invitation = request.GET.get('code_invitation', ContextConfig(request)['code_invitation'])
+    
     # pour rejoindre une partie privee /?rejoindre_partie_code=code
     rejoindre_partie_code = request.GET.get('rejoindre_partie_code', "")
+    
+    # pour rejoindre une partie privee /?public_partie_code=code
+    public_partie_code = request.GET.get('public_partie_code', "")
 
     # Récupérer l'utilisateur connecté
     user = request.user
@@ -425,6 +429,8 @@ def checking_user(user, social_account, code_invitation):
             invite_par = profil.objects.filter(code=code_invitation, etat_suppression=False).first()
             if invite_par:
                 profil.invite_par = invite_par
+            else:
+                profil.code_invite_par = ""
         
         profil.save()    
 
@@ -454,3 +460,32 @@ def register_device(request):
                 return JsonResponse({'message': 'Device Installation ID déjà existant.'}, status=200)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def faq(request):
+    return render(request, 'player/invitation.html', locals())
+
+
+def privacy(request):
+    return render(request, 'player/invitation.html', locals())
+
+
+def cgu(request):
+    return render(request, 'player/invitation.html', locals())
+
+#supprimer en prod
+def annuler(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
+            profil = Profil.objects.get(user=user)
+
+            participation_en_cours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False)
+            
+            for participation in participation_en_cours:
+                participation.etat_exclusion = True
+                participation.save()
+            return redirect(reverse('index'))
+        except Profil.DoesNotExist:
+            print("L'utilisateur n'a pas de compte social lié à Facebook")

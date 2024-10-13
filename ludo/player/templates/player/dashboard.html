@@ -193,7 +193,7 @@
                                                 <div class="single-input">
                                                     <label for="dAmount">Montant</label>
                                                     <input type="hidden" id="recharge-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
-                                                    <input type="text" class="money_field" id="recharge-input" placeholder="Entre le montant ici" data-minimum_depot="{{ config.minimum_depot|default:100 }}" autocomplete="off" value="">
+                                                    <input type="text" class="money_field" id="recharge-input" placeholder="Entre le montant ici" data-minimum_depot="{{ minimum_depot }}" autocomplete="off" value="">
                                                 </div>
                                                 <div class="single-input d-none">
                                                     <label for="dEmail">Email</label>
@@ -226,6 +226,7 @@
                                                 <div class="single-area">
                                                     <p>Solde</p>
                                                     <h6 class="m-0">{{ solde|floatformat:-2|intcomma }} {{ config.currency|default:'FCFA' }}</h6>
+                                                    <p class="text-warning">Le montant minimum de retrait est de {{ minimum_retrait|floatformat:-2|intcomma }}  {{ config.currency|default:'FCFA' }}.</p>
                                                 </div>
                                             </div>
                                             <div class="first-deposit-bonus mt-30 mb-30 d-none">
@@ -277,10 +278,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% if solde >= minimum_retrait %}
                                     <div class="col-xl-6">
                                         <div class="deposit-amount mb-10">
+                                           {% if messages %}
+                                                <ul class="messages text-warning">
+                                                    {% for message in messages %}
+                                                        <li class="{{ message.tags }} text-warning">{{ message }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
                                             <h5>Faire un retrait</h5>
-                                            <!-- <p>Montant minimum : 500 FCFA <span class="mdr d-none">Instant | Min: 5 • Max: 6,000</span></p> -->
+                                            <span><i>Remplis ce formulaire correctement pour faire un retrait !</i></span> 
                                             <ul class="quick-value d-none">
                                                 <li><h5>25</h5></li>
                                                 <li><h5 class="active">50</h5></li>
@@ -289,45 +298,52 @@
                                                 <li><h5>500</h5></li>
                                             </ul>
                                         </div>
-                                        <form action="#">
+                                        <form action="#" id="retrait-form">
                                             <div class="col-12">
                                                 <div class="single-input">
                                                     <label for="dAmount">Pays</label>
-                                                    <select name="choix_pays_retrait" id="choix_pays_retrait">
+                                                    <select class="choix_pays_retrait" name="choix_pays_retrait" id="choix_pays_retrait" required>
                                                             <option value="">Choisis le pays de ton canal de retrait </option>
-                                                            <option value="telecom" data-indicatif="225" data-lg-contact="10" selected>Côte d'Ivoire</option>
-                                                            <option value="wave">Wave</option>
+                                                            <option value="229;8">Bénin</option>
+                                                            <option value="226;8">Burkina Faso</option>
+                                                            <option value="225;10" selected>Côte d'Ivoire</option>
+                                                            <option value="223;8">Mali</option>
+                                                            <option value="221;9">Sénégal</option>
+                                                            <option value="228;8">Togo</option>
                                                     </select>
                                                 </div> 
                                                 <div class="single-input">
                                                     <label for="dAmount">Canal de retrait</label>
-                                                    <select name="choix_canal_retrait" id="choix_canal_retrait">
+                                                    <select class="choix_canal_retrait" name="choix_canal_retrait" id="choix_canal_retrait" required>
                                                             <option value="">Choisis ton canal de retrait </option>
                                                             <option value="telecom" selected>Mobile money (Orange, MTN, Moov et autres)</option>
-                                                            <option value="wave">Wave (Uniquement Côte d'Ivoire et Sénégal)</option>
+                                                            <option value="WAVECI">Wave Côte d'Ivoire</option>
+                                                            <option value="WAVESN">Wave Sénégal</option>
                                                     </select>
                                                  </div>
                                                 <div class="single-input">
                                                     <label for="dEmail">Contact</label>
-                                                    <input type="email" id="dEmail" placeholder="Entre ton adresse mail" autocomplete="off">
+                                                    <input class="retrait_input_class contact" type="tel" id="contact-retrait" placeholder="Entre ton numero" autocomplete="off" required>
                                                 </div>   
                                                 <div class="single-input">
                                                     <label for="dEmail">Email</label>
-                                                    <input type="email" id="dEmail" placeholder="Entre ton adresse mail" autocomplete="off" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                                                    <input class="retrait_input_class" type="email" id="email-retrait" placeholder="Entre ton adresse mail" autocomplete="off" email="{{ profil.email }}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required>
                                                 </div>       
                                                 <div class="single-input">
                                                     <label for="dAmount">Montant</label>
-                                                    <input type="hidden" id="retrait-input-url" class="d-none" value="{% url 'player:player_rechargement' 'complement_url_recharge' %}">
-                                                    <input type="text" class="money_field" id="retrait-input" placeholder="Entre le montant ici" 
-                                                    data-minimum_depot="{{ config.minimum_retrait|default:100 }}" data-solde="{{ solde }}" autocomplete="off" value="">
+                                                    <input type="hidden" id="retrait-input-url" class="d-none" value="{% url 'player:player_retrait' 'complement_pays' 'complement_canal' 'complement_contact' 'complement_montant' 'complement_email' %}">
+                                                    <input type="text" class="money_field retrait_input_class" id="retrait-input" placeholder="Entre le montant ici" autocomplete="off" value="" 
+                                                    data-minimum_depot="{{ minimum_depot }}" data-minimum_retrait="{{ minimum_retrait|floatformat:-2|intcomma }}" data-solde="{{ solde|floatformat:-2|intcomma }}" required>
                                                     {% comment %} <input type="text" class="money_field" id="dAmount" placeholder="Entrer Montant" value="500" autocomplete="off"> {% endcomment %}
                                                 </div>
+                                                <p class="text-warning">Le montant minimum de retrait est de {{ minimum_retrait|floatformat:-2|intcomma }}  {{ config.currency|default:'FCFA' }}.</p>
                                                 <div class="btn-area text-center mt-3">
                                                     <a class="cmn-btn w-100 d-none" id="retrait-button">Retirer</a>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -421,7 +437,7 @@
         $(document).on("change keyup", "#recharge-input", function(e) {
             console.log(e.handleObj.type);
             // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
-            valeur_input_recharge = Number(String($("#recharge-input").val()).replace(/\s/g, ''));
+            let valeur_input_recharge = Number(String($("#recharge-input").val()).replace(/\s/g, ''));
             let minimum_depot = Number(String($("#recharge-input").data('minimum_depot')).replace(/\s/g, ''));
             let base_url_recharge = $("#recharge-input-url").val();
 
@@ -446,33 +462,79 @@
             }
         });
 
-        // box retrait 
-        $(document).on("change keyup", "#retrait-input", function(e) {
-            console.log(e.handleObj.type);
-            // console.log($(this)); // Utilisation correcte de $(this) pour faire référence à l'élément cliqué
-            valeur_input_retrait = Number(String($("#retrait-input").val()).replace(/\s/g, ''));
-            let minimum_retrait = Number(String($("#retrait-input").data('minimum_retrait')).replace(/\s/g, ''));
-            let base_url_retrait = $("#retrait-input-url").val();
 
+        $('#retrait-form :input').on('change input', function(e) {
+            let form = $('#retrait-form');
+            let form_validity = $(form)[0].checkValidity();
+            console.log(form_validity);
             $("#retrait-button").removeClass("d-none");
-            $("#retrait-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));
+            // $("#recharge-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));            
             $("#retrait-button").show();
+            if(form_validity){
+                let choix_pays_retrait = $(".choix_pays_retrait>ul>li.selected").data('value').split(';');
+                let indicatif = String(choix_pays_retrait[0]).replace(/\s/g, '');
+                let lg_contact = Number(String(choix_pays_retrait[1]).replace(/\s/g, ''));
+                let canal = $(".choix_canal_retrait>ul>li.selected").data('value');
+                // a checker
+                let contact = String($("#contact-retrait").val());
+                let email = $("#email-retrait").val();
+                // a checker
+                let valeur_input_retrait = Number(String($("#retrait-input").val()).replace(/\s/g, ''));
+                let minimum_retrait = Number(String($("#retrait-input").data('minimum_retrait')).replace(/\s/g, ''));
+                let minimum_depot = Number(String($("#retrait-input").data('minimum_depot')).replace(/\s/g, ''));
+                let solde = Number(String($("#retrait-input").data('solde')).replace(/\s/g, ''));
+                let base_url_retrait = $("#retrait-input-url").val();
 
-            let check = multipleSuperieur(valeur_input_retrait, minimum_retrait);
-            if(valeur_input_retrait != check){
-                if(e.handleObj.type == "change"){
-                    $("#retrait-input").val(check);
-                    $("#retrait-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));
-                }
-                else{
+
+                if (contact.length != lg_contact || minimum_retrait >= solde || valeur_input_retrait >= solde || valeur_input_retrait < minimum_retrait || valeur_input_retrait == 0) {
                     $("#retrait-button").attr("href", "javascript:void(0)");
                     $("#retrait-button").hide();
+                } else {
+
+                    let check = multipleInferieur(valeur_input_retrait, minimum_depot);
+                    if(valeur_input_retrait != check){
+                        if(e.currentTarget.id == "retrait-input" && e.handleObj.type == "change"){
+                            $("#retrait-input").val(check);
+                            $("#retrait-button").attr("href", 
+                            base_url_retrait
+                            .replace("complement_pays", String(indicatif).replace(/\s/g, ''))
+                            .replace("complement_canal", String(canal).replace(/\s/g, ''))
+                            .replace("complement_contact", String(contact).replace(/\s/g, ''))
+                            .replace("complement_montant", String($("#retrait-input").val()).replace(/\s/g, ''))
+                            .replace("complement_email", String(email).replace(/\s/g, ''))
+                            );
+                        }
+                        else{
+                            $("#retrait-button").attr("href", "javascript:void(0)");
+                            $("#retrait-button").hide();
+                        }
+                    }
+                    else{
+                        $("#retrait-button").attr("href", 
+                        base_url_retrait
+                        .replace("complement_pays", String(indicatif).replace(/\s/g, ''))
+                        .replace("complement_canal", String(canal).replace(/\s/g, ''))
+                        .replace("complement_contact", String(contact).replace(/\s/g, ''))
+                        .replace("complement_montant", String($("#retrait-input").val()).replace(/\s/g, ''))
+                        .replace("complement_email", String(email).replace(/\s/g, ''))
+                        );
+                        $("#retrait-button").show();    
+                    }   // errorContactMessage.hide(); // Cache le message d'erreur si l'entrée est correcte
                 }
             }
             else{
-                $("#retrait-button").attr("href", base_url_retrait.replace("complement_url_retrait", String($("#retrait-input").val()).replace(/\s/g, '')));
-                $("#retrait-button").show();
+                $("#retrait-button").attr("href", "javascript:void(0)");
+                $("#retrait-button").hide();
             }
+        });
+     
+
+        // masque sur telephone
+        $(".contact").inputmask({
+            mask: "9{1,15}", // Masque qui accepte 15 chiffres (ajustez selon vos besoins)
+            placeholder: "", // Placeholder vide pour ne pas afficher les symboles du masque
+            showMaskOnHover: false, // Ne pas montrer le masque au survol
+            showMaskOnFocus: false // Ne pas montrer le masque lorsqu'on clique sur le champ
         });
     </script>
 {% endblock %}    

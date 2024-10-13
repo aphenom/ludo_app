@@ -1,0 +1,238 @@
+{% extends "base_player.html" %}
+
+<!-- titre -->
+{% block title %}BetLudo{% endblock %}
+
+<!-- meta -->
+{% block meta-description %}"Gagnez de l'argent en interagissant efficacement avec du contenu publicitaire de qualité sur Benepub. Inscrivez-vous dès maintenant pour profiter de nos campagnes publicitaires efficaces !"{% endblock %}
+
+<!-- load static -->
+{% load static %}
+<!---->
+
+    <!-- Dashboard Section start -->
+{% block content %}
+    <section class="dashboard-section profile body-collapse">
+        <div class="overlay pt-120">
+            <div class="container-fruid">
+                <div class="row">
+                    <ul class="nav mb-40 profile-nav" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="information-tab" data-bs-toggle="tab" data-bs-target="#information" type="button"
+                                role="tab" aria-controls="information" aria-selected="true">Information Générale</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="invites-tab" data-bs-toggle="tab" data-bs-target="#invites" type="button"
+                                role="tab" aria-controls="invites" aria-selected="false">Mes invités</button>
+                        </li>
+                    </ul>
+                    <div class="col-xl-12">
+                        <div class="tab-content p-0">
+                            <div class="tab-pane fade show active" id="information" role="tabpanel" aria-labelledby="information-tab">
+                                <div class="verification">
+                                    <h5 class="mb-3">Comment inviter ?</h5>
+                                    <h6 class="mt-1">Partage ton lien d'invitation</h6>
+                                    <p>
+                                        Partage ton lien personnel avec ton invité (nouvel utilisateur) pour qu'il accède à la plateforme et puisse procéder à son inscription.
+                                        <h6 class="mt-1">Lien d'invitation : <span class="text-warning"><b>{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}</b></span></h6>
+                                        <button id="share-button" class="share-button" onclick="toggleShareDropdown()">
+                                            Partager maintenant
+                                        </button>
+
+                                        <div class="share-icons" id="share-icons">
+                                        <button onclick="shareOnFacebook()"><i class="fab fa-facebook-f"></i></button>
+                                        <button onclick="shareOnTwitter()"><i class="fab fa-twitter"></i></button>
+                                        <button onclick="shareOnPinterest()"><i class="fab fa-pinterest"></i></button>
+                                        <button onclick="shareOnLinkedIn()"><i class="fab fa-linkedin-in"></i></button>
+                                        <button onclick="shareOnFlipboard()"><i class="fab fa-flipboard"></i></button>
+                                        <button onclick="shareOnTelegram()"><i class="fab fa-telegram-plane"></i></button>
+                                        <button onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i></button>
+                                        <button onclick="shareOnReddit()"><i class="fab fa-reddit"></i></button>
+                                        <button onclick="shareViaEmail()"><i class="fas fa-envelope"></i></button>
+                                        <button onclick="shareNative()"><i class="fas fa-share-alt"></i></button>
+                                        </div>
+                                    </p>
+                                    
+                                    <p class="text-center">ou</p>
+
+                                    <h6 class="mt-1">Communique ton code personnel</h6>
+                                    <p>
+                                        Donne ton code personnel à ton invité (nouvel utilisateur) afin qu'il le renseigne dans la section <b>"Invité par"</b> depuis le formulaire de modification de son profil, une fois qu'il aura finalisé son inscription sur la plateforme.
+                                        <h6 class="mt-1">Code d'ivitation : <span class="text-warning"><b>{{ profil.code }}</b></span></h6>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="invites" role="tabpanel" aria-labelledby="invites-tab">
+                                <div class="transaction-box">
+                                    <div class="table-responsive mt-4">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Enregistré le</th>
+                                                    <th scope="col">Code</th>
+                                                    <th scope="col">Nom</th>
+                                                    <th scope="col">Prénom (s)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for invite in invites %}
+                                                <tr>
+                                                    <th scope="row" data-order="{{ profil.date_creation|date:'U' }}">
+                                                        <p>{{ profil.date_creation|date:"d-m-Y H:i:s" }}</p>
+                                                    </th>
+                                                    <td>
+                                                        <p>{{ profil.code }}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ profil.nom }}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{ profil.prenom }}</p>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+    <!-- Dashboard Section end -->
+<!-- javascript -->
+{% block script %}
+    <!-- parent -->
+    {{ block.super }}
+
+    <style>
+        .share-button {
+        background-color: #078d07;
+        color: #FFFFFF;
+        border: 1px solid #078d07;
+        padding: 5px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        }
+
+        .share-button:hover {
+        background-color: #FFFFFF;
+        color: #000000;
+        border-color: #00BFFF;
+        }
+
+        .share-icons {
+        display: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 5px;
+        }
+
+        .share-icons.show {
+        display: flex;
+        }
+
+        .share-icons button {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        padding: 0;
+        margin: 5px;
+        border-radius: 50%;
+        background-color: #000000;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 40px;
+        color: #FFFFFF;
+        }
+
+        .share-icons button i {
+        color: #FFFFFF;
+        }
+    </style>
+
+
+    <script>
+        function toggleShareDropdown() {
+            var shareIcons = document.getElementById('share-icons');
+            shareIcons.classList.toggle('show');
+        }
+
+        function shareOnFacebook() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var facebookShareURL = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(sharedURL);
+            window.open(facebookShareURL, '_blank');
+        }
+
+        function shareOnTwitter() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var twitterShareURL = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(sharedURL);
+            window.open(twitterShareURL, '_blank');
+        }
+
+        function shareOnPinterest() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var pinterestShareURL = 'https://www.pinterest.com/pin/create/button/?url=' + encodeURIComponent(sharedURL);
+            window.open(pinterestShareURL, '_blank');
+        }
+
+        function shareOnLinkedIn() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var linkedInShareURL = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(sharedURL);
+            window.open(linkedInShareURL, '_blank');
+        }
+
+        function shareOnFlipboard() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var flipboardShareURL = 'https://share.flipboard.com/bookmarklet/popout?v=2&title=&url=' + encodeURIComponent(sharedURL);
+            window.open(flipboardShareURL, '_blank');
+        }
+
+        function shareOnTelegram() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var telegramShareURL = 'https://telegram.me/share/url?url=' + encodeURIComponent(sharedURL);
+            window.open(telegramShareURL, '_blank');
+        }
+
+        function shareOnWhatsApp() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var whatsAppShareURL = 'whatsapp://send?text=' + encodeURIComponent(sharedURL);
+            window.open(whatsAppShareURL, '_blank');
+        }
+
+        function shareOnReddit() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var redditShareURL = 'https://www.reddit.com/submit?url=' + encodeURIComponent(sharedURL);
+            window.open(redditShareURL, '_blank');
+        }
+
+        function shareViaEmail() {
+            var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+            var emailSubject = 'Check out this link';
+            var emailBody = 'I found this interesting link and thought you might like it: ' + sharedURL;
+            var mailToLink = 'mailto:?subject=' + encodeURIComponent(emailSubject) + '&body=' + encodeURIComponent(emailBody);
+            window.location.href = mailToLink;
+        }
+
+        function shareNative() {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                // Mobile device, trigger native sharing
+                var sharedURL = "{{ request.build_absolute_uri|cut:request.path }}{% url 'index' %}?code_invitation={{ profil.code }}"; //location.href;
+                navigator.share({ url: sharedURL })
+                .then(() => console.log('Shared successfully.'))
+                .catch((error) => console.log('Error sharing:', error));
+            } else {
+                console.log('Native sharing not supported on this device.');
+            }
+        }
+    </script>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 asgiref==3.8.1
+babel==2.16.0
 certifi==2024.8.30
 charset-normalizer==3.3.2
 cinetpay-sdk==0.1.1
@@ -6,6 +7,7 @@ Django==4.2.16
 django-allauth==64.2.1
 django-autoslug==1.9.9
 django-cities-light==3.10.1
+django-countries==7.6.1
 django-dump-die==0.1.7
 django-phonenumber-field==8.0.0
 django-phonenumbers==1.0.1

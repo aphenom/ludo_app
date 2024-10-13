@@ -16,12 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import api_get_partie_privee_via_by_code, creer_partie_privee, facebook_login_with_state, index, index_partie, participer_partie, register_device
+from .views import annuler, api_get_partie_privee_via_by_code, cgu, creer_partie_privee, facebook_login_with_state, faq, index, index_partie, participer_partie, privacy, register_device
 
 
 urlpatterns = [
 
     path('', index, name='index'),
+    path('annuler/', annuler, name='annuler'),
+    path('faq/', faq, name='faq'),
+    path('privacy/', privacy, name='privacy'),
+    path('cgu/', cgu, name='cgu'),
 
     # Django admin
     path('admin/', admin.site.urls),

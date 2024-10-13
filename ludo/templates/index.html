@@ -449,6 +449,11 @@
                     $("#rejoindre_partie_privee-btn-rejoindre").trigger("click");
                 {% endif %}
 
+                // partie public selectionnee
+                {% if public_partie_code %}
+                    $('a.jeu-action[data-partie="{{public_partie_code}}"]')[0].click();
+                {% endif %}
+
             });
 
         </script>

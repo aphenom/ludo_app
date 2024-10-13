@@ -8,6 +8,7 @@ import requests
 
 from core.models import Mise
 from ludo.enum import TypeReferenceNotification, TypeTransaction, Visibilite
+from player.forms import ProfilForm
 from ludo.utils import ContextConfig, CurrentConfig, CurrentTauxCommission, CurrentTauxTransaction, DetermineCagnotte, DetermineCommission, DetermineFraisGenere
 from player.models import HistoriqueNotification, Participation, Partie, Profil, Transaction
 from django.contrib.auth.decorators import login_required
@@ -26,9 +27,11 @@ def dashboard(request):
 
     tab = request.GET.get('tab', None)
 
-    participations = Participation.objects.filter(partie__etat_validation=True, partie__etat_suppression=False, etat_validation=True, etat_suppression=False)
+    profil = ContextConfig(request)['profil']
 
-    transactions = Transaction.objects.filter(
+    participations = Participation.objects.filter(profil=profil, partie__etat_validation=True, partie__etat_suppression=False, etat_validation=True, etat_suppression=False)
+
+    transactions = Transaction.objects.filter(profil=profil).filter(
         Q((Q(type=TypeTransaction.Retrait) | Q(type=TypeTransaction.Mise)), etat_suppression=False) 
         | Q((Q(type=TypeTransaction.Depot) | Q(type=TypeTransaction.Gain)), etat_validation=True))
 
@@ -45,21 +48,36 @@ def profil(request):
         try:
             # Récupérer les données de l'utilisateur à partir du modèle SocialAccount
             profil = Profil.objects.get(user=user)
-
-            partie_privee = Partie.objects.filter(organise_par=profil, visibilite = Visibilite.Privee, etat_demarrage = False, etat_validation=True, etat_suppression=False).first()
-
-            participation_en_cours = Participation.objects.filter(partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
-            
-            participation_terminees = Participation.objects.filter(partie__etat_fin = True, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=True, etat_validation=True, etat_suppression=False)
-            
-            if participation_en_cours:
-                partie_en_cours = participation_en_cours.partie
-            # Afficher les informations du compte social
-            print(profil)
         except Profil.DoesNotExist:
             print("L'utilisateur n'a pas de compte social lié à Facebook")
-            
+
+    if request.method == 'POST': # S'il s'agit d'une requête POST
+        form = ProfilForm(request.POST, request.FILES, instance=profil) # Nous reprenons les données
+        if form.is_valid() : # Nous vérifions que les données envoyées sont valides
+            form = form.save(commit=False)
+            if profil.invite_par is None and form.code_invite_par:
+                invite_par = Profil.objects.filter(code=form.code_invite_par, etat_suppression=False).exclude(pk=profil.pk).filter()
+                if invite_par:
+                    form.invite_par = invite_par
+                else:
+                    form.code_invite_par = None
+            form.save()
+            return HttpResponseRedirect(reverse('player:player_profil'))
+
+    else: # Si ce n'est pas du POST, c'est probablement une requête     GET
+        form = ProfilForm(instance=profil) # Nous créons un formulaire prérempli 
+
     return render(request, 'player/profil.html', locals())
+
+
+@login_required
+def invitation(request):
+
+    profil = ContextConfig(request)['profil']
+
+    invites = Profil.objects.filter(invite_par = profil, etat_suppression=False)
+
+    return render(request, 'player/invitation.html', locals())
 
 
 @login_required
@@ -176,9 +194,16 @@ def rechargement_callback(request, code):
     return HttpResponseRedirect(response)
 
 
+@login_required
 def retrait(request, pays, canal, contact, montant, email):
 
     response = reverse('player:player_dashboard')+"?tab=withdraw-tab"
+
+    pays = pays
+    canal = canal
+    contact = contact
+    montant = montant 
+    email = email
 
     config = CurrentConfig()
 
@@ -245,11 +270,11 @@ def retrait(request, pays, canal, contact, montant, email):
                 }
                 payload_contact = {"data": json.dumps([
                     {
-                        "prefix": "225",
-                        "phone": "0707020400",
-                        "name": "Test A",
-                        "surname": "Test B AP",
-                        "email": "test@madoha.com"
+                        "prefix": pays,
+                        "phone": contact,
+                        "name": profil.nom,
+                        "surname": profil.prenom,
+                        "email": email
                     }
                 ])} 
                 response_contact = requests.post(url_contact, data=payload_contact, headers=headers_contact)
@@ -272,7 +297,7 @@ def retrait(request, pays, canal, contact, montant, email):
                             "amount": montant_retrait,
                             "client_transaction_id": transaction.code,
                             "notify_url": reverse('player:player_retrait_callback',args=[transaction.code]),
-                            #"payment_method": "http://yourdomain.com/transfer/notify",
+                            "payment_method": canal if canal != "telecom" else "",
                         }
                     ])} 
 
@@ -283,6 +308,10 @@ def retrait(request, pays, canal, contact, montant, email):
 
                     if data_send["code"] == 0:
                         response = reverse('player:player_dashboard')+"?tab=transaction-tab"
+                    else:
+                        messages.error(request, str(data_send))
+                        transaction.etat_suppression = True
+                        transaction.save()
 
         except Exception as e:
             # Gérer les exceptions liées aux vérifications
@@ -291,7 +320,6 @@ def retrait(request, pays, canal, contact, montant, email):
             # dd(payload)
 
     return HttpResponseRedirect(response)
-
 
         
 def retrait_callback(request, code):
@@ -344,10 +372,26 @@ def retrait_callback(request, code):
                 if data_check["data"][0]["treatment_status"] == "VAL":
                     transaction.etat_validation = True
                     transaction.etat_suppression = False
+                    notification = HistoriqueNotification(
+                        profil=transaction.profil,
+                        objet = transaction.description,
+                        message = "Ton rétrait de {} {} a été effectué avec succès !".format(intcomma(floatformat(transaction.retrait,-2)), config.currency if config and config.currency else "FCFA"),
+                        type_reference = TypeReferenceNotification.Transaction,
+                        id_reference = transaction.pk
+                    )
+                    notification.save()
                 if data_check["data"][0]["treatment_status"] == "REJ":
                     transaction.etat_validation = False
                     transaction.etat_suppression = True
                     transaction.description = data_check["data"][0]["comment"]
+                    notification = HistoriqueNotification(
+                        profil=transaction.profil,
+                        objet = transaction.description,
+                        message = "Ton rétrait de {} {} a été rejetée !".format(intcomma(floatformat(transaction.retrait,-2)), config.currency if config and config.currency else "FCFA"),
+                        type_reference = TypeReferenceNotification.Transaction,
+                        id_reference = transaction.pk
+                    )
+                    notification.save()
                 transaction.save()
 
     except Exception as e:
@@ -360,3 +404,4 @@ def retrait_callback(request, code):
     # print(retour)
     # JsonResponse(retour) 
     return HttpResponseRedirect(response)
+

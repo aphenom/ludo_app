@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cities_light', '0011_alter_city_country_alter_city_region_and_more'),
+        #('cities_light', '0011_alter_city_country_alter_city_region_and_more'),
         ('player', '0001_initial'),
     ]
 

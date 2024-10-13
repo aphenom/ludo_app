@@ -5,7 +5,7 @@ import random
 import string 
 from tinymce.models import HTMLField
 from phonenumber_field.modelfields import PhoneNumberField
-from cities_light.models import Country
+from django_countries.fields import CountryField
 from core.models import Config, Mise, TauxCommission, TauxTransaction
 from ludo.enum import Genre, TypeReferenceNotification, TypeTransaction, Visibilite
 
@@ -21,7 +21,7 @@ class Profil(models.Model):
     contact = PhoneNumberField("numéro principal", null=True, blank=True)
     contact_retrait = PhoneNumberField("numéro retrait", null=True, blank=True)
     email = models.EmailField("email", max_length=100, null=True, blank=True, unique=True)
-    pays_residence = models.ForeignKey(Country, models.SET_NULL, null=True, blank=True, related_name="pays_profils", related_query_name="pays_profil", verbose_name = "pays")
+    pays_residence = CountryField(null=True, blank=True, verbose_name = "pays")
     photo = models.FileField(upload_to='uploaded_media/photo_player', verbose_name="photo", null=True, blank=True)
     
     code_invite_par = models.CharField(max_length=25, null=True, blank=True)

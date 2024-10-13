@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django_dump_die',
     'tinymce', 
     "phonenumber_field",
-    'cities_light',
+    'django_countries',
     'django.contrib.humanize',
     # 'cinetpay_sdk',
     # Votre app custom pour gérer les utilisateurs
@@ -239,8 +239,3 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 PHONENUMBER_DEFAULT_REGION = 'CI'
 
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
-
-CITIES_LIGHT_INCLUDE_COUNTRIES = ['FR']
-
-CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]

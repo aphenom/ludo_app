@@ -6,6 +6,7 @@ app_name = 'player'
 urlpatterns = [
     path('dashboard/', views.dashboard, name='player_dashboard'),
     path('profil/', views.profil, name='player_profil'),
+    path('invitation/', views.invitation, name='player_invitation'),
     path('rechargement/<str:montant>/', views.rechargement, name='player_rechargement'),
     path('rechargement_callback/<str:code>/', views.rechargement_callback, name='player_rechargement_callback'),
     path('retrait/<str:pays>/<str:canal>/<str:contact>/<str:montant>/<str:email>/', views.retrait, name='player_retrait'),

@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.db.models import Q, Sum
 
 from core.models import Config, TauxCommission, TauxTransaction
-from player.models import HistoriqueNotification, Profil, Transaction
+from player.models import HistoriqueNotification, Participation, Profil, Transaction
 from .enum import Genre, TypeTransaction
 
 import requests
@@ -15,7 +15,11 @@ import json
 
 def ContextConfig(request):
     
-    config = Config.objects.filter(etat_validation=True, etat_suppression=False).first() 
+    try:  
+        config = Config.objects.filter(etat_validation=True, etat_suppression=False).first()  
+    except:
+        config = None
+
     user = request.user
 
     try:  
@@ -32,6 +36,10 @@ def ContextConfig(request):
 
     solde = solde if solde else 0
 
+    minimum_depot = config.minimum_depot if config and config.minimum_depot else 100
+
+    minimum_retrait = config.minimum_retrait if config and config.minimum_retrait else 1000
+
     profil = None
     complement_genre = ""
     if user.is_authenticated:
@@ -46,32 +54,12 @@ def ContextConfig(request):
     notifications_attentes = None
     if profil:
         notifications_attentes = HistoriqueNotification.objects.filter(profil=profil, etat_lecture=False, etat_validation=True, etat_suppression=False)
-        
-    #print(solde)
-    """ 
-    if config.parallax and hasattr(config.parallax, 'url'):
-        costum_parallax = config.parallax.url
-    else:
-        costum_parallax = static('images/login/login.jpg') 
 
-    if request.user.is_authenticated:
-        try:
-            company = Company.objects.get(user=request.user)
-            notification_messages = Message.objects.filter(company=company, submessage__isnull=True, is_readed=False, is_active=True).order_by("-created_at")
-        except Company.DoesNotExist:
-            notification_messages = None
-        try:
-            member = Member.objects.get(user=request.user)
-            notification_messages = Message.objects.filter(member=member, submessage__isnull=True, is_readed=False, is_active=True).order_by("-created_at")
-        except Member.DoesNotExist:
-            if notification_messages == None:
-                notification_messages = None
-        test_message = User.objects.filter(pk=request.user.pk, groups__name='message').exists()        
-        if request.user.is_staff == True and (test_message or request.user.is_superuser):
-            notification_messages = Message.objects.filter(Q(submessage__isnull=True, is_active=True, is_from_user=True, is_noreply=False)).order_by("-created_at")         
-    else:
-        notification_messages = None
-    """
+    partie_encours = None
+    if profil:
+        partie_encours = Participation.objects.filter(profil = profil, partie__etat_fin = False, partie__etat_validation=True, partie__etat_suppression=False, etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False).first()
+
+
     return {
         'config' : config, 
         'profil' : profil, 
@@ -80,12 +68,19 @@ def ContextConfig(request):
         'my_current_url' : my_current_url, 
         'code_invitation' : code_invitation, 
         'next' : next,
-        'solde' : solde
+        'solde' : solde,
+        'minimum_depot' : minimum_depot,
+        'minimum_retrait' : minimum_retrait,
+        'partie_encours' : partie_encours
         }      
     # return {'config' : config, 'costum_parallax' : costum_parallax, 'my_current_url':my_current_url, 'notification_messages':notification_messages, 'gtag':settings.GTAG}      
 
 def CurrentConfig():
-    return Config.objects.filter(etat_validation=True, etat_suppression=False).order_by("-pk").first()
+    try:  
+        return Config.objects.filter(etat_validation=True, etat_suppression=False).order_by("-pk").first()
+    except:
+        return None
+    
 
 def CurrentTauxCommission():
     return TauxCommission.objects.filter(etat_validation=True, etat_suppression=False).order_by("-pk").first()

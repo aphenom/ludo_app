@@ -31,6 +31,9 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/plugin/animate.css' %}">
     <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
 
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     {% comment %} <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"> {% endcomment %}
    
     <!-- Google Tag Manager -->
@@ -236,7 +239,7 @@
                                         </a>
                                     </li>
                                     <li {% if my_current_url == "player_invitation" %} class="active" {% endif %}>
-                                        <a href="notifications.html">
+                                        <a href="{% url 'player:player_invitation'%}">
                                             <img src="{% static 'front/images/icon/send-icon.png' %}" alt="invitations"> <span>Invitations</span>
                                         </a>
                                     </li>
@@ -741,6 +744,10 @@
     <script src="{% static 'dashboard/js/plugin/plugin.js' %}"></script>
     <script src="{% static 'dashboard/js/main.js' %}"></script>
     <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script> {% endcomment %}
+
+     <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
     <script>
 
@@ -788,6 +795,11 @@
         function multipleSuperieur(a, b) {
             // Trouver le multiple de b le plus proche de a mais supérieur ou égal à a
             return a > 0 ? Math.ceil(a / b) * b : b;
+        }
+
+        function multipleInferieur(a, b) {
+            // Trouver le multiple de b le plus proche de a mais supérieur ou égal à a
+            return a > 0 ? Math.floor(a / b) * b : b;
         }
     </script>
 {% comment %} 

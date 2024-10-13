@@ -95,14 +95,16 @@
                             </ul>
                             <div class="right-area header-action d-flex align-items-center max-un">
                                 {% if user.is_authenticated %}
-                                <button type="button" class="login privateChoice" data-bs-toggle="modal" data-bs-target="#privateChoiceMod">
-                                    <b><img src="{% static 'front/images/icon/games-tab-icon-5.png' %}" alt="icon"> Jeu Privé</b>
-                                </button>
-                                <a href="{% url 'player:player_dashboard' %}" class="cmn-btn">
-                                   Mon Compte <div class="notifications-btn btn-head dot d-none">
-                                    <img src="/static/dashboard/images/icon/notification.png" class="bell-icon" alt="icon">
-                                </div> 
-                                </a>
+                                    {% if partie_encours is None %}
+                                    <button type="button" class="login privateChoice" data-bs-toggle="modal" data-bs-target="#privateChoiceMod">
+                                        <b><img src="{% static 'front/images/icon/games-tab-icon-5.png' %}" alt="icon"> Jeu Privé</b>
+                                    </button>
+                                    {% endif %}
+                                    <a href="{% url 'player:player_dashboard' %}" class="cmn-btn">
+                                    Mon Compte <div class="notifications-btn btn-head dot d-none">
+                                        <img src="/static/dashboard/images/icon/notification.png" class="bell-icon" alt="icon">
+                                    </div> 
+                                    </a>
                                 {% else %}
                                 <a href="{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login" class="login">
                                     Connexion
@@ -923,12 +925,12 @@
                             <a href="index.html">
                                 <img src="{% static 'front/images/logo.png' %}" class="logo" alt="logo">
                             </a>
-                            <div class="footer-box d-none">
+                            <div class="footer-box">
                                 <ul class="footer-link d-flex align-items-center gap-4">
-                                    <li><a href="about-us.html">About Us</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                                    <li><a href="terms-conditions.html">Terms of Service</a></li>
+                                    <li><a href="mailto:contact@email.com">contact@email.com</a></li>
+                                    <li><a href="{% url 'faq' %}">FAQ</a></li>
+                                    <li><a href="{% url 'privacy' %}">Politique de confidentialité</a></li>
+                                    <li><a href="{% url 'cgu' %}">Conditions d'utilisation</a></li>
                                 </ul>
                             </div>
                         </div>
