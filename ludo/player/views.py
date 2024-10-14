@@ -22,6 +22,7 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib import messages
 
 
+# page tableau de bord de l'utilisateur
 @login_required
 def dashboard(request):
 
@@ -38,6 +39,7 @@ def dashboard(request):
     return render(request, 'player/dashboard.html', locals())
 
 
+# gestion du profil de l'utilisateur
 @login_required
 def profil(request):
 
@@ -70,6 +72,7 @@ def profil(request):
     return render(request, 'player/profil.html', locals())
 
 
+# gestion des invitations
 @login_required
 def invitation(request):
 
@@ -80,6 +83,7 @@ def invitation(request):
     return render(request, 'player/invitation.html', locals())
 
 
+# initier le rechargement de compte
 @login_required
 def rechargement(request, montant):
     
@@ -140,6 +144,7 @@ def rechargement(request, montant):
     return HttpResponseRedirect(response)
 
 
+# callback rechargement de compte
 def rechargement_callback(request, code):
     
     response = reverse('player:player_dashboard')+"?tab=transaction-tab"
@@ -194,6 +199,7 @@ def rechargement_callback(request, code):
     return HttpResponseRedirect(response)
 
 
+# initier retrait du compte
 @login_required
 def retrait(request, pays, canal, contact, montant, email):
 
@@ -321,7 +327,8 @@ def retrait(request, pays, canal, contact, montant, email):
 
     return HttpResponseRedirect(response)
 
-        
+
+# callback retrait du compte        
 def retrait_callback(request, code):
     
     response = reverse('player:player_dashboard')+"?tab=transaction-tab"

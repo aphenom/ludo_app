@@ -21,6 +21,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
 
+# fonctiannilite de connexion facebook
 def facebook_login_with_state(request):
     # Ajouter des paramètres que tu souhaites passer dans l'URL de redirection
     next_url = request.GET.get('next', ContextConfig(request)['next'])
@@ -39,6 +40,7 @@ def facebook_login_with_state(request):
 
 
 #@login_required
+# index de la plateforme
 def index(request):
 
     # send_notification_to_device("6d37c0e08f34c443388e8f32005290525e9632a7", "welcome", "to you ohhh")
@@ -58,8 +60,8 @@ def index(request):
     # Récupérer l'utilisateur connecté
     user = request.user
 
-    # a supprimer en prod
     user = User.objects.all().first()
+    # a supprimer en prod
     login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
 
     # Exemple d'utilisation : récupérer l'utilisateur connecté via Facebook
@@ -192,7 +194,7 @@ def participer_partie(request, leurre, type, code):
             mise=partie.montant_mise,
             montant=(-1)*partie.montant_mise,
             etat_validation=True,
-            description="Mise pour la partie",
+            description="Mise pour une partie",
             type=TypeTransaction.Mise,  # Assurez-vous que TypeTransaction.Mise est bien défini
             type_api="Système",
             partie=partie,
@@ -277,7 +279,7 @@ def creer_partie_privee(request, nombre_participants, leurre, montant_mise):
             mise=montant_mise,
             montant=(-1)*montant_mise,
             etat_validation=True,
-            description="Mise pour la partie",
+            description="Mise pour une partie",
             type=TypeTransaction.Mise,  # Assurez-vous que TypeTransaction.Mise est bien défini
             type_api="Système",
             partie=partie,
@@ -322,7 +324,7 @@ def index_partie(request, leurre, code):
         
         # ici tout est bon il accede à l'interface passé toutes les vérifications donc peut participer
         if participation_en_cours_match:
-            return render(request, 'partie-details.html', locals())
+            return render(request, 'index_partie.html', locals())
 
         raise ValueError("Problème de concordance.")
 
@@ -337,6 +339,153 @@ def index_partie(request, leurre, code):
     return redirect(reverse('index'))
 
 
+# checking servant lorsque le joueur attend le demarrage du jeu
+@login_required
+def check_participation_et_partie(request, code_partie):
+
+    response_data = {}
+
+    peut_supprimer_participation = False
+
+    profil = ContextConfig(request)['profil']  # Si le profil est lié à l'utilisateur
+    
+    # Vérification de la participation en cours
+    participation_en_cours = Participation.objects.filter(
+        profil=profil, 
+        partie__code=code_partie,
+        etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+    ).first()
+
+    if participation_en_cours is None:
+        return JsonResponse(response_data)
+    
+    # Récupération de la partie en cours
+    partie_en_cours = Partie.objects.filter(
+        pk=participation_en_cours.partie.pk,
+        etat_fin=False, 
+        etat_validation=True, 
+        etat_suppression=False
+    ).first()
+
+    if partie_en_cours is None:
+        return JsonResponse(response_data)
+
+    # dernier membre ayant rejoint la partie pour voir le delais d'attente pour possible retrait
+    last_participation = Participation.objects.filter(
+        partie=partie_en_cours,
+        etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+    ).order_by("-pk")
+    if partie_en_cours.visibilite == Visibilite.Public:
+        difference_delais = timezone.now() - last_participation.first().date_creation
+        temps_derniere_participation = difference_delais.total_seconds() / 60
+        if temps_derniere_participation >= 5:
+            peut_supprimer_participation = True
+    else:
+        if partie_en_cours.organise_par != profil:
+            difference_delais = timezone.now() - last_participation.first().date_creation
+            temps_derniere_participation = difference_delais.total_seconds() / 60
+            if temps_derniere_participation >= 5:
+                peut_supprimer_participation = True
+        else:
+            if last_participation.count() == 1:
+                    peut_supprimer_participation = True
+    
+    # Structure de la réponse
+    response_data = {
+        'participation_en_cours': True,
+        'partie_en_cours': True,
+        'partie_etat_demarrage': partie_en_cours.etat_demarrage,
+        'places_disponibles': partie_en_cours.places_disponibles,
+        'peut_supprimer_participation': peut_supprimer_participation
+    }
+
+    return JsonResponse(response_data)
+
+
+# annuler participation au jeu quand c'est possible
+@login_required
+def annuler_participation(request, code_partie):
+
+    peut_supprimer_participation = False
+
+    profil = ContextConfig(request)['profil']  # Si le profil est lié à l'utilisateur
+
+    config = CurrentConfig()
+    
+    # Vérification de la participation en cours
+    participation_en_cours = Participation.objects.filter(
+        profil=profil, 
+        partie__code=code_partie,
+        etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+    ).first()
+
+    if participation_en_cours is None:
+        return redirect(reverse('index'))
+    
+    # Récupération de la partie en cours
+    partie_en_cours = Partie.objects.filter(
+        pk=participation_en_cours.partie.pk,
+        etat_demarrage=False, 
+        etat_fin=False, 
+        etat_validation=True, 
+        etat_suppression=False
+    ).first()
+
+    if partie_en_cours is None:
+        return redirect(reverse('index'))
+
+    # dernier membre ayant rejoint la partie pour voir le delais d'attente pour possible retrait
+    last_participation = Participation.objects.filter(
+        partie=partie_en_cours,
+        etat_fin=False, etat_exclusion=False, etat_validation=True, etat_suppression=False
+    ).order_by("-pk")
+    if partie_en_cours.visibilite == Visibilite.Public:
+        difference_delais = timezone.now() - last_participation.first().date_creation
+        temps_derniere_participation = difference_delais.total_seconds() / 60
+        if temps_derniere_participation >= 5:
+            peut_supprimer_participation = True
+    else:
+        if partie_en_cours.organise_par != profil:
+            difference_delais = timezone.now() - last_participation.first().date_creation
+            temps_derniere_participation = difference_delais.total_seconds() / 60
+            if temps_derniere_participation >= 5:
+                peut_supprimer_participation = True
+        else:
+            if last_participation.count() == 1:
+                    peut_supprimer_participation = True
+
+    # tous les feux sont au vert on supprime la partie
+    if peut_supprimer_participation == True:
+        participation_en_cours.etat_validation == False
+        participation_en_cours.etat_suppression == True
+        participation_en_cours.save()
+        # remboursons la mise
+        transaction_mise = Transaction(
+            config=config,
+            depot=partie_en_cours.montant_mise,
+            montant=partie_en_cours.montant_mise,
+            etat_validation=True,
+            description="Remboursement de mise pour une participation annulée.",
+            type=TypeTransaction.Depot,  # Assurez-vous que TypeTransaction.Mise est bien défini
+            type_api="Système",
+            partie=partie_en_cours,
+            profil=profil
+        )
+        transaction_mise.save()
+    
+    # Structure de la réponse
+    response_data = {
+        'participation_en_cours': True,
+        'partie_en_cours': True,
+        'partie_etat_demarrage': partie_en_cours.etat_demarrage,
+        'places_disponibles': partie_en_cours.places_disponibles,
+        'peut_supprimer_participation': peut_supprimer_participation
+    }
+
+    return redirect(reverse('index'))
+
+
+# permet de generer des parties pour l'utilisateur et accessible pour tout le reseau
 def generation_parties(request):
     
     liste_mises = Mise.objects.filter(etat_validation=True, etat_suppression=False)
@@ -389,6 +538,7 @@ def generation_parties(request):
     return choix_parties_privees
 
 
+# gestion de la connexion du bon profil en fonction de facebook
 def checking_user(user, social_account, code_invitation):
     # Tu peux accéder aux données du profil Facebook de l'utilisateur ici
     facebook_data = social_account.extra_data
@@ -435,7 +585,7 @@ def checking_user(user, social_account, code_invitation):
         profil.save()    
 
 
-
+# enregistrement de l'appareil du visiteur """"
 @csrf_exempt
 def register_device(request):
     if request.method == "POST":

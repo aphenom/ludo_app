@@ -289,7 +289,7 @@
                                                 </ul>
                                             {% endif %}
                                             <h5>Faire un retrait</h5>
-                                            <span><i>Remplis ce formulaire correctement pour faire un retrait !</i></span> 
+                                            <span><i>Renseigne ce formulaire correctement pour faire un retrait !</i></span> 
                                             <ul class="quick-value d-none">
                                                 <li><h5>25</h5></li>
                                                 <li><h5 class="active">50</h5></li>
@@ -383,6 +383,7 @@
                                             <tr>
                                                 <th scope="col">Date/Heure</th>
                                                 <th scope="col">Type</th>
+                                                <th scope="col">Description</th>
                                                 <th scope="col">Montant ({{ config.currency|default:'FCFA' }})</th>
                                                 <th scope="col">Etat</th>
                                             </tr>
@@ -395,6 +396,9 @@
                                                 </th>
                                                 <td>
                                                     <p>{{ transaction.type }}</p>
+                                                </td>
+                                                <td>
+                                                    <p>{{ transaction.description }}</p>
                                                 </td>
                                                 <td data-order="{{ transaction.montant }}">
                                                     <p {% if transaction.montant > 0 %} class="text-success fw-bold" {% else %} class="text-danger fw-bold" {% endif %}>{{ transaction.montant|floatformat:-2|intcomma }}</p>

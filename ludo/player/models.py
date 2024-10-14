@@ -24,7 +24,7 @@ class Profil(models.Model):
     pays_residence = CountryField(null=True, blank=True, verbose_name = "pays")
     photo = models.FileField(upload_to='uploaded_media/photo_player', verbose_name="photo", null=True, blank=True)
     
-    code_invite_par = models.CharField(max_length=25, null=True, blank=True)
+    code_invite_par = models.CharField('Invité par (Code)', max_length=25, null=True, blank=True)
 
     date_creation = models.DateTimeField('date création', auto_now_add=True)
     date_modification = models.DateTimeField('date modification', null=True, blank=True, auto_now=True)

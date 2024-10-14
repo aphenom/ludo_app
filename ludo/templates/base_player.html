@@ -99,7 +99,7 @@
                                         <h5>Notifications</h5>
                                         <span class="mdr">{{  notifications_attentes.count|intcomma }}</span>
                                     </div>
-                                    <ul>
+                                    <ul class="d-none">
                                         <li>
                                             <a href="javascript:void(0)" class="d-flex">
                                                 <div class="img-area">
@@ -234,7 +234,7 @@
 									
                                     </li>
                                     <li {% if my_current_url == "player_notification" %} class="active" {% endif %}>
-                                        <a href="notifications.html">
+                                        <a href="#">
                                             <img src="{% static 'dashboard/images/icon/notification.png' %}" alt="notifications"> <span>Notifications</span>
                                         </a>
                                     </li>
