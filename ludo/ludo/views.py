@@ -60,9 +60,9 @@ def index(request):
     # Récupérer l'utilisateur connecté
     user = request.user
 
-    user = User.objects.all().first()
     # a supprimer en prod
-    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+    # user = User.objects.all().first()
+    # login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
 
     # Exemple d'utilisation : récupérer l'utilisateur connecté via Facebook
     if user.is_authenticated:
@@ -91,7 +91,7 @@ def index(request):
     # dd(choix_parties_privees)
 
     # recuperons les parties valides pretes a recevoir des joueurs
-    liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False)
+    liste_parties = Partie.objects.filter(visibilite = Visibilite.Public, etat_demarrage = False, etat_validation=True, etat_suppression=False).order_by("-montant_cagnotte")
 
     # partie privee pour utilisateur connecté
     # Si l'utilisateur est authentifié via Facebook
@@ -456,8 +456,8 @@ def annuler_participation(request, code_partie):
 
     # tous les feux sont au vert on supprime la partie
     if peut_supprimer_participation == True:
-        participation_en_cours.etat_validation == False
-        participation_en_cours.etat_suppression == True
+        participation_en_cours.etat_validation = False
+        participation_en_cours.etat_suppression = True
         participation_en_cours.save()
         # remboursons la mise
         transaction_mise = Transaction(
@@ -472,15 +472,6 @@ def annuler_participation(request, code_partie):
             profil=profil
         )
         transaction_mise.save()
-    
-    # Structure de la réponse
-    response_data = {
-        'participation_en_cours': True,
-        'partie_en_cours': True,
-        'partie_etat_demarrage': partie_en_cours.etat_demarrage,
-        'places_disponibles': partie_en_cours.places_disponibles,
-        'peut_supprimer_participation': peut_supprimer_participation
-    }
 
     return redirect(reverse('index'))
 

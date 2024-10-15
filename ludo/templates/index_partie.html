@@ -488,7 +488,9 @@
                                 $("#message-participation").text("Nous attendons " + response.places_disponibles + " participant" + pluriel_places + " avant de démarrer ta partie.");
                                 if(response.peut_supprimer_participation){
                                     let deleteUrl = "{% url 'annuler_participation' partie.code %}";
-                                    $("#btn-area-annuler-participation").html('<a href="'+ deleteUrl +'" class="btn btn-outline-danger annuler-partipation-action">Annuler ma participation</a>');
+                                    if ($("#btn-area-annuler-participation").html() == ""){
+                                        $("#btn-area-annuler-participation").html('<a href="'+ deleteUrl +'" class="btn btn-outline-danger annuler-partipation-action">Annuler ma participation</a>');
+                                    }
                                 }
                                 else{
                                     $("#btn-area-annuler-participation").html("");

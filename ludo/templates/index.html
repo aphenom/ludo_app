@@ -108,11 +108,11 @@
                                 </div>
                                 <div class="btn-area mt-4">
                                     <a href="{% if user.is_authenticated %}#{% else %}{% provider_login_url 'facebook' %}?next={{request.path}}&code_invitation={{code_invitation|default:''}}&process=login{% endif %}" 
-                                    class="cmn-btn mise jeu-action" data-bs-toggle="modal" data-bs-target="#loginMod"
+                                    {% if user.is_authenticated %} class="cmn-btn mise jeu-action" data-bs-toggle="modal" data-bs-target="#loginMod"
                                     data-partie="{{partie.code}}" data-mise={{partie.montant_mise|floatformat:-2}} 
                                     data-nombre_participants="{{ partie.nombre_participants }}" data-gain={{partie.montant_cagnotte|floatformat:-2}}
                                     data-solde="{{solde|floatformat:-2|intcomma}}" data-currency="{{ config.currency|default:'FCFA' }}"
-                                    data-minimum_depot="{{ config.minimum_depot|default:100 }}">Jouer</a>
+                                    data-minimum_depot="{{ config.minimum_depot|default:100 }}" {% else %} class="cmn-btn" {% endif %}>Jouer</a>
                                 </div>
                                 <div class="abs-area">
                                     <img src="{% static 'front/images/tournament-illus.png' %}" alt="image">
