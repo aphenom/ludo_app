@@ -61,8 +61,8 @@ def index(request):
     user = request.user
 
     # a supprimer en prod
-    # user = User.objects.all().first()
-    # login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+    user = User.objects.all().first()
+    login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
 
     # Exemple d'utilisation : récupérer l'utilisateur connecté via Facebook
     if user.is_authenticated:
